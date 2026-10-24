@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="te">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AgriSaarthi AI — రైతు నేస్తం (Farmer Decision Assistant)</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary-green: #1b5e20;
+      --primary-dark: #0d3810;
+      --accent-gold: #f9a825;
+      --accent-light: #fff9c4;
+      --bg-cream: #fbfbf8;
+      --surface-white: #ffffff;
+      --card-border: #e2e8f0;
+      --text-main: #1e293b;
+      --text-muted: #64748b;
+      --user-bubble: #e8f5e9;
+      --agent-bubble: #ffffff;
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+      --shadow-lg: 0 10px 25px rgba(0,0,0,0.12);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Noto Sans Telugu', 'Inter', -apple-system, sans-serif;
+      background-color: var(--bg-cream);
+      color: var(--text-main);
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-green) 100%);
+      color: #ffffff;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: var(--shadow-md);
+      z-index: 10;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      font-size: 28px;
+      background: rgba(255, 255, 255, 0.15);
+      width: 48px;
+      height: 48px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.25);
+    }
+
+    .brand-text h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 20px;
+      font-weight: 700;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-text p {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .header-controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .lang-toggle {
+      display: flex;
+      background: rgba(0, 0, 0, 0.25);
+      border-radius: 20px;
+      padding: 3px;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: #e2e8f0;
+      padding: 6px 14px;
+      border-radius: 16px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+
+    .lang-btn.active {
+      background: #ffffff;
+      color: var(--primary-dark);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .badge-status {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      background: rgba(255, 255, 255, 0.15);
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .badge-status::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background-color: #4ade80;
+      border-radius: 50%;
+      display: inline-block;
+      box-shadow: 0 0 8px #4ade80;
+    }
+
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      max-width: 960px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 16px;
+      overflow: hidden;
+    }
+
+    .chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      scroll-behavior: smooth;
+    }
+
+    .message-row {
+      display: flex;
+      flex-direction: column;
+      max-width: 82%;
+    }
+
+    .message-row.user {
+      align-self: flex-end;
+    }
+
+    .message-row.agent {
+      align-self: flex-start;
+    }
+
+    .message-bubble {
+      padding: 14px 18px;
+      border-radius: 16px;
+      line-height: 1.6;
+      font-size: 15px;
+      box-shadow: var(--shadow-sm);
+      position: relative;
+    }
+
+    .message-row.user .message-bubble {
+      background: var(--user-bubble);
+      color: var(--primary-dark);
+      border: 1px solid #c8e6c9;
+      border-bottom-right-radius: 4px;
+    }
+
+    .message-row.agent .message-bubble {
+      background: var(--agent-bubble);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      border-bottom-left-radius: 4px;
+    }
+
+    .message-bubble h3, .message-bubble h4 {
+      margin-top: 10px;
+      margin-bottom: 6px;
+      color: var(--primary-dark);
+    }
+
+    .message-bubble ul, .message-bubble ol {
+      margin-left: 20px;
+      margin-top: 6px;
+      margin-bottom: 6px;
+    }
+
+    .message-bubble hr {
+      border: 0;
+      border-top: 1px solid #e2e8f0;
+      margin: 12px 0;
+    }
+
+    .message-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .message-row.user .message-meta {
+      justify-content: flex-end;
+    }
+
+    .speech-controls {
+      display: flex;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .speech-btn {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      padding: 4px 10px;
+      border-radius: 12px;
+      font-size: 12px;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      color: var(--text-main);
+      transition: background 0.15s;
+    }
+
+    .speech-btn:hover {
+      background: #e2e8f0;
+    }
+
+    .suggestions {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding: 8px 4px 12px 4px;
+      white-space: nowrap;
+      scrollbar-width: thin;
+    }
+
+    .suggestion-chip {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      color: var(--primary-green);
+      font-size: 12.5px;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 18px;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .suggestion-chip:hover {
+      background: #f0fdf4;
+      border-color: #86efac;
+      transform: translateY(-1px);
+    }
+
+    .input-panel {
+      background: var(--surface-white);
+      border-radius: 18px;
+      padding: 10px 14px;
+      border: 1px solid var(--card-border);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .mic-button {
+      background: #f8fafc;
+      border: 2px solid #e2e8f0;
+      color: var(--primary-green);
+      width: 46px;
+      height: 46px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      flex-shrink: 0;
+    }
+
+    .mic-button:hover {
+      background: #f0fdf4;
+      border-color: #22c55e;
+    }
+
+    .mic-button.recording {
+      background: #fee2e2;
+      border-color: #ef4444;
+      color: #dc2626;
+      animation: pulse-ring 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse-ring {
+      0%, 100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+      }
+      50% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
+      }
+    }
+
+    .input-box {
+      flex: 1;
+      border: none;
+      outline: none;
+      font-family: inherit;
+      font-size: 15px;
+      padding: 8px;
+      background: transparent;
+      color: var(--text-main);
+    }
+
+    .send-btn {
+      background: var(--primary-green);
+      color: #ffffff;
+      border: none;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: background 0.2s;
+      flex-shrink: 0;
+    }
+
+    .send-btn:hover {
+      background: var(--primary-dark);
+    }
+
+    .recording-banner {
+      display: none;
+      font-size: 13px;
+      border-radius: 10px;
+      padding: 8px 14px;
+      margin-bottom: 10px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      line-height: 1.4;
+    }
+
+    .recording-banner.banner-listening {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      color: #166534;
+    }
+
+    .recording-banner.banner-error {
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+    }
+
+    .banner-stop-btn {
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+      border-radius: 6px;
+      padding: 4px 10px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .banner-dismiss-btn {
+      background: transparent;
+      border: none;
+      color: inherit;
+      font-size: 14px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0 4px;
+    }
+
+    .notice-bar {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      text-align: center;
+      margin-top: 8px;
+      padding: 0 8px;
+    }
+
+    /* Accessibility high contrast focus */
+    button:focus-visible, input:focus-visible {
+      outline: 2px solid var(--accent-gold);
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="brand">
+      <div class="brand-icon">🌾</div>
+      <div class="brand-text">
+        <h1 id="app-title">AgriSaarthi AI (అగ్రిసారథి)</h1>
+        <p id="app-subtitle">రైతు నేస్తం • Fetch-A-Thon 3.0 ACP Decision Agent</p>
+      </div>
+    </div>
+    <div class="header-controls">
+      <div class="lang-toggle" role="group" aria-label="Language selection">
+        <button id="btn-lang-te" class="lang-btn active" onclick="setLanguage('te')">తెలుగు</button>
+        <button id="btn-lang-en" class="lang-btn" onclick="setLanguage('en')">English</button>
+      </div>
+      <div class="badge-status" title="ACP v0.3.0 Agentverse Mailbox Active">ACP v0.3.0 Live</div>
+    </div>
+  </header>
+
+  <main>
+    <div class="chat-container" id="chat-messages" role="log" aria-live="polite">
+      <!-- Initial Welcome Message -->
+      <div class="message-row agent">
+        <div class="message-bubble" id="welcome-bubble">
+          🌾 <strong>నమస్కారం! నేను అగ్రిసారథి AI (AgriSaarthi AI)</strong>, మీ నమ్మకమైన వ్యవసాయ సలహాదారుని.<br><br>
+          మీ భూమి పరిమాణం, నేల రకం, నీటి వసతి, నాట్లు వేసే కాలం (సీజన్) మరియు బడ్జెట్‌కు తగిన అత్యుత్తమ పంటలను ఎంచుకోవడంలో నేను మీకు సహాయపడతాను.<br><br>
+          <em>కింది మైక్రోఫోన్ బటన్ నొక్కి మాట్లాడండి లేదా టైప్ చేయండి:</em>
+        </div>
+        <div class="message-meta">
+          <span>AgriSaarthi AI</span>
+          <div class="speech-controls">
+            <button class="speech-btn" onclick="speakMessage(this, 'welcome-bubble')">🔊 వినండి (Listen)</button>
+            <button class="speech-btn" onclick="speakMessage(this, 'welcome-bubble')">🔄 మళ్ళీ (Replay)</button>
+            <button class="speech-btn" onclick="stopSpeech()">⏹️ ఆపు (Stop)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Suggested Quick Prompts -->
+    <div class="suggestions" id="suggestions-bar">
+      <button class="suggestion-chip" onclick="fillPrompt('తెలంగాణలో 4 ఎకరాల నల్ల నేల ఉంది, ఖరీఫ్ సీజన్, బోరు బావి నీరు, బడ్జెట్ 1 లక్ష')">
+        🌾 తెలంగాణ: 4 ఎకరాలు నల్ల నేల, బోరు (1 లక్ష)
+      </button>
+      <button class="suggestion-chip" onclick="fillPrompt('4 acres black soil in Telangana, kharif, borewell, budget 100000')">
+        🌾 Telangana: 4 acres black soil (English)
+      </button>
+      <button class="suggestion-chip" onclick="fillPrompt('గుంటూరులో 3 ఎకరాలు నల్ల నేల, ఖరీఫ్, కాలువ నీరు, బడ్జెట్ 80 వేలు')">
+        🌾 గుంటూరు: 3 ఎకరాలు కాలువ నీరు (80 వేలు)
+      </button>
+      <button class="suggestion-chip" onclick="fillPrompt('లైవ్ వాతావరణం లేదా మండి ధరలు చూశారా?')">
+        📊 లైవ్ వాతావరణం & మండి ధరలు చూశారా?
+      </button>
+      <button class="suggestion-chip" onclick="fillPrompt('పత్తి పంట గురించి సమగ్ర వివరాలు చెప్పండి')">
+        🔍 పత్తి పంట సమగ్ర వివరాలు
+      </button>
+      <button class="suggestion-chip" onclick="fillPrompt('Reply in English')">
+        🌐 Reply in English
+      </button>
+      <button class="suggestion-chip" onclick="fillPrompt('తెలుగులో సమాధానం చెప్పండి')">
+        🌐 తెలుగులో చెప్పండి
+      </button>
+    </div>
+
+    <div class="recording-banner" id="recording-banner">
+      🎙️ రైతు గళం వింటున్నాను... దయచేసి మాట్లాడండి (Listening to your voice...)
+    </div>
+
+    <!-- Farmer Input Panel -->
+    <div class="input-panel">
+      <button id="mic-btn" class="mic-button" title="మైక్రోఫోన్ ద్వారా మాట్లాడండి (Speak via Microphone)" onclick="toggleSpeechRecognition()" aria-label="Voice input">
+        🎙️
+      </button>
+      <input type="text" id="user-input" class="input-box" placeholder="మీ వ్యవసాయ వివరాలు మాట్లాడండి లేదా టైప్ చేయండి..." onkeydown="handleKey(event)" autocomplete="off">
+      <button class="send-btn" title="పంపండి (Send)" onclick="sendMessage()" aria-label="Send message">
+        ➤
+      </button>
+    </div>
+
+    <div class="notice-bar">
+      💡 CACP & ICAR ప్రామాణిక నివేదికలు మరియు MSP 2024–2025 ఆధారితం. లైవ్ వాతావరణం/మండి స్క్రాపింగ్ లేదు (అంచనాలు మాత్రమే).
+      <br>
+      ℹ️ గమనిక: బ్రౌజర్ ఇంజిన్ ఆధారంగా తెలుగు వాయిస్ రికగ్నిషన్ లభ్యత మారవచ్చు (Google Chrome/Edge సిఫార్సు). వాయిస్ సరిగ్గా రానిచో నేరుగా టైప్ చేసి పంపవచ్చు.
+    </div>
+  </main>
+
+  <script>
+    let currentLang = 'te'; // 'te' or 'en'
+    let recognition = null;
+    let isRecording = false;
+    let userRequestedListening = false;
+    let baseInputText = '';
+    let currentUtterance = null;
+
+    function getSpeechRecognition() {
+      return window.SpeechRecognition || window.webkitSpeechRecognition || null;
+    }
+
+    // Initialize Web Speech Recognition
+    function initSpeech() {
+      const SpeechRecognition = getSpeechRecognition();
+      if (!SpeechRecognition) {
+        showVoiceStatus(
+          currentLang === 'te'
+            ? 'ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సదుపాయం లేదు. దయచేసి టైప్ చేసి పంపండి.'
+            : 'Speech recognition is not supported in this browser. Please use typed input.',
+          'error'
+        );
+        return null;
+      }
+
+      const rec = new SpeechRecognition();
+      rec.continuous = true;
+      rec.interimResults = true;
+      rec.maxAlternatives = 1;
+      rec.lang = currentLang === 'te' ? 'te-IN' : 'en-IN';
+
+      rec.onstart = function() {
+        isRecording = true;
+        updateMicUI(true);
+        showVoiceStatus(
+          currentLang === 'te'
+            ? '🎙️ వింటున్నాను... మీరు మాట్లాడేది వింటూ రికార్డ్ చేస్తున్నాను (ఆపడానికి మైక్ లేదా "ఆపు" నొక్కండి)'
+            : '🎙️ Listening... Speak naturally (click mic or "Stop" when done)',
+          'listening'
+        );
+      };
+
+      rec.onresult = function(event) {
+        let finalChunk = '';
+        let interimChunk = '';
+
+        for (let i = 0; i < event.results.length; ++i) {
+          const res = event.results[i];
+          if (res.isFinal) {
+            finalChunk += res[0].transcript;
+          } else {
+            interimChunk += res[0].transcript;
+          }
+        }
+
+        const inputEl = document.getElementById('user-input');
+        let combined = baseInputText ? baseInputText.trim() + ' ' : '';
+        combined += finalChunk.trim();
+        if (interimChunk.trim()) {
+          combined += (combined ? ' ' : '') + interimChunk.trim();
+        }
+        inputEl.value = combined;
+      };
+
+      rec.onerror = function(event) {
+        console.warn('Speech recognition error event:', event.error);
+        handleSpeechError(event.error);
+      };
+
+      rec.onend = function() {
+        isRecording = false;
+        updateMicUI(false);
+
+        // If user didn't intentionally stop and wants continuous listening through a pause
+        if (userRequestedListening) {
+          try {
+            rec.lang = currentLang === 'te' ? 'te-IN' : 'en-IN';
+            rec.start();
+            return;
+          } catch (e) {
+            userRequestedListening = false;
+          }
+        }
+
+        const inputEl = document.getElementById('user-input');
+        if (inputEl) {
+          inputEl.value = inputEl.value.replace(/\s+/g, ' ').trim();
+        }
+        hideVoiceStatusIfNormal();
+      };
+
+      return rec;
+    }
+
+    function toggleSpeechRecognition() {
+      const SpeechRecognition = getSpeechRecognition();
+      if (!SpeechRecognition) {
+        handleSpeechError('unsupported');
+        return;
+      }
+
+      if (isRecording || userRequestedListening) {
+        stopSpeechRecognition();
+      } else {
+        startSpeechRecognition();
+      }
+    }
+
+    function startSpeechRecognition() {
+      userRequestedListening = true;
+      const inputEl = document.getElementById('user-input');
+      baseInputText = inputEl ? inputEl.value.trim() : '';
+
+      if (!recognition) {
+        recognition = initSpeech();
+      }
+      if (!recognition) return;
+
+      recognition.lang = currentLang === 'te' ? 'te-IN' : 'en-IN';
+
+      try {
+        recognition.start();
+      } catch (err) {
+        console.warn('Recognition start error, resetting instance:', err);
+        try {
+          recognition.abort();
+        } catch (_) {}
+        recognition = initSpeech();
+        if (recognition) {
+          try {
+            recognition.start();
+          } catch (e) {
+            userRequestedListening = false;
+            handleSpeechError('cannot-start');
+          }
+        }
+      }
+    }
+
+    function stopSpeechRecognition() {
+      userRequestedListening = false;
+      if (recognition) {
+        try {
+          recognition.stop();
+        } catch (e) {
+          try { recognition.abort(); } catch (_) {}
+        }
+      }
+      isRecording = false;
+      updateMicUI(false);
+      hideVoiceStatusIfNormal();
+    }
+
+    function handleSpeechError(errorCode) {
+      userRequestedListening = false;
+      isRecording = false;
+      updateMicUI(false);
+
+      let msg = '';
+      if (errorCode === 'not-allowed' || errorCode === 'permission-denied') {
+        msg = currentLang === 'te'
+          ? '⚠️ మైక్రోఫోన్ అనుమతి నిరాకరించబడింది. దయచేసి బ్రౌజర్ అడ్రస్ బార్‌లో మైక్రోఫోన్ అనుమతించండి.'
+          : '⚠️ Microphone permission denied. Please allow microphone access in browser settings.';
+      } else if (errorCode === 'no-speech') {
+        msg = currentLang === 'te'
+          ? 'ℹ️ ఎటువంటి మాటలు వినబడలేదు. దయచేసి మైక్రోఫోన్‌కు దగ్గరగా మాట్లాడండి (లేదా టైప్ చేయండి).'
+          : 'ℹ️ No speech detected. Please speak closer to your microphone or use typed input.';
+      } else if (errorCode === 'network') {
+        msg = currentLang === 'te'
+          ? '⚠️ బ్రౌజర్ స్పీచ్ నెట్‌వర్క్ సమస్య. దయచేసి టైప్ చేసి పంపండి.'
+          : '⚠️ Speech recognition network service issue. Please use typed input.';
+      } else if (errorCode === 'audio-capture') {
+        msg = currentLang === 'te'
+          ? '⚠️ మైక్రోఫోన్ కనెక్ట్ కాలేదు లేదా ఆడియో క్యాప్చర్ విఫలమైంది.'
+          : '⚠️ Microphone capture failed. Please check your audio input device.';
+      } else if (errorCode === 'language-not-supported') {
+        msg = currentLang === 'te'
+          ? '⚠️ ఈ బ్రౌజర్‌లో తెలుగు వాయిస్ ఇంజిన్ అందుబాటులో లేదు. దయచేసి టైప్ చేయండి.'
+          : '⚠️ Selected voice language is not supported by your browser engine. Please type your message.';
+      } else if (errorCode === 'unsupported') {
+        msg = currentLang === 'te'
+          ? '⚠️ ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సదుపాయం లేదు. దయచేసి టైప్ చేయండి.'
+          : '⚠️ Speech recognition is not supported in this browser. Please type your message.';
+      } else {
+        msg = currentLang === 'te'
+          ? `⚠️ వాయిస్ ఇన్‌పుట్ ఆగిపోయింది (${errorCode}). దయచేసి టైప్ చేసి పంపండి.`
+          : `⚠️ Voice input stopped (${errorCode}). Please use typed input.`;
+      }
+
+      showVoiceStatus(msg, 'error');
+    }
+
+    function updateMicUI(listening) {
+      const micBtn = document.getElementById('mic-btn');
+      if (micBtn) {
+        if (listening) {
+          micBtn.classList.add('recording');
+          micBtn.title = currentLang === 'te' ? 'మాట్లాడటం ఆపండి (Click to Stop)' : 'Click to Stop Listening';
+          micBtn.setAttribute('aria-label', micBtn.title);
+        } else {
+          micBtn.classList.remove('recording');
+          micBtn.title = currentLang === 'te' ? 'మైక్రోఫోన్ ద్వారా మాట్లాడండి (Speak via Microphone)' : 'Speak via Microphone';
+          micBtn.setAttribute('aria-label', micBtn.title);
+        }
+      }
+    }
+
+    function showVoiceStatus(message, type) {
+      const banner = document.getElementById('recording-banner');
+      if (!banner) return;
+      banner.style.display = 'flex';
+      banner.className = 'recording-banner ' + (type === 'error' ? 'banner-error' : 'banner-listening');
+      banner.innerHTML = `
+        <span style="flex:1;">${escapeHtml(message)}</span>
+        ${type === 'listening' ? `<button type="button" class="banner-stop-btn" onclick="stopSpeechRecognition()">${currentLang === 'te' ? '⏹️ ఆపు (Stop)' : '⏹️ Stop'}</button>` : `<button type="button" class="banner-dismiss-btn" onclick="document.getElementById('recording-banner').style.display='none'">✕</button>`}
+      `;
+    }
+
+    function hideVoiceStatusIfNormal() {
+      const banner = document.getElementById('recording-banner');
+      if (banner && !banner.classList.contains('banner-error')) {
+        banner.style.display = 'none';
+      }
+    }
+
+    function setLanguage(lang) {
+      if (isRecording || userRequestedListening) {
+        stopSpeechRecognition();
+      }
+      currentLang = lang;
+      document.getElementById('btn-lang-te').classList.toggle('active', lang === 'te');
+      document.getElementById('btn-lang-en').classList.toggle('active', lang === 'en');
+
+      const input = document.getElementById('user-input');
+      if (lang === 'te') {
+        input.placeholder = "మీ వ్యవసాయ వివరాలు మాట్లాడండి లేదా టైప్ చేయండి...";
+      } else {
+        input.placeholder = "Speak or type your farm details (State, Acres, Soil, Water, Budget)...";
+      }
+
+      if (recognition) {
+        recognition.lang = lang === 'te' ? 'te-IN' : 'en-IN';
+      }
+      updateMicUI(false);
+    }
+
+    function fillPrompt(text) {
+      document.getElementById('user-input').value = text;
+      sendMessage();
+    }
+
+    function handleKey(e) {
+      if (e.key === 'Enter') {
+        sendMessage();
+      }
+    }
+
+    async function sendMessage() {
+      const input = document.getElementById('user-input');
+      const text = input.value.trim();
+      if (!text) return;
+
+      input.value = '';
+      appendUserMessage(text);
+
+      // Check if user explicitly asked for English or Telugu
+      if (text.toLowerCase().includes('english')) {
+        setLanguage('en');
+      } else if (text.includes('తెలుగు') || text.toLowerCase().includes('telugu')) {
+        setLanguage('te');
+      }
+
+      // Show typing indicator
+      const typingId = appendTypingIndicator();
+
+      try {
+        const response = await fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            text: text,
+            sender: 'farmer_voice_web_user'
+          })
+        });
+
+        const data = await response.json();
+        removeTypingIndicator(typingId);
+        appendAgentMessage(data.reply || 'సమాధానం ప్రాసెస్ చేయలేకపోయాము.');
+      } catch (err) {
+        removeTypingIndicator(typingId);
+        appendAgentMessage('🌾 **నెట్‌వర్క్ సమాచారం**: AgriSaarthi స్థానిక ఏజెంట్‌కు కనెక్ట్ కావడం లేదు. దయచేసి వెబ్ సర్వర్ రన్ అవుతుందో లేదో సరిచూసుకోండి.');
+      }
+    }
+
+    function appendUserMessage(text) {
+      const container = document.getElementById('chat-messages');
+      const row = document.createElement('div');
+      row.className = 'message-row user';
+      row.innerHTML = `
+        <div class="message-bubble">${escapeHtml(text)}</div>
+        <div class="message-meta"><span>రైతు (Farmer)</span> • <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>
+      `;
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendAgentMessage(markdownText) {
+      const container = document.getElementById('chat-messages');
+      const bubbleId = 'bubble-' + Date.now();
+      const row = document.createElement('div');
+      row.className = 'message-row agent';
+
+      const formattedHtml = formatMarkdown(markdownText);
+      row.innerHTML = `
+        <div class="message-bubble" id="${bubbleId}">${formattedHtml}</div>
+        <div class="message-meta">
+          <span>AgriSaarthi AI</span> • <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+          <div class="speech-controls">
+            <button class="speech-btn" onclick="speakMessage(this, '${bubbleId}')">🔊 వినండి (Listen)</button>
+            <button class="speech-btn" onclick="speakMessage(this, '${bubbleId}')">🔄 మళ్ళీ (Replay)</button>
+            <button class="speech-btn" onclick="stopSpeech()">⏹️ ఆపు (Stop)</button>
+          </div>
+        </div>
+      `;
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function appendTypingIndicator() {
+      const container = document.getElementById('chat-messages');
+      const typingId = 'typing-' + Date.now();
+      const row = document.createElement('div');
+      row.className = 'message-row agent';
+      row.id = typingId;
+      row.innerHTML = `
+        <div class="message-bubble" style="color: var(--text-muted); font-style: italic;">
+          🌾 విశ్లేషిస్తున్నాను... (Analyzing farm parameters & agronomic suitability)...
+        </div>
+      `;
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+      return typingId;
+    }
+
+    function removeTypingIndicator(id) {
+      const el = document.getElementById(id);
+      if (el) el.remove();
+    }
+
+    function speakMessage(btn, bubbleId) {
+      stopSpeech();
+      const bubble = document.getElementById(bubbleId);
+      if (!bubble) return;
+
+      const plainText = bubble.innerText;
+      if (!window.speechSynthesis) {
+        alert('ఈ బ్రౌజర్‌లో టెక్స్ట్-టు-స్పీచ్ సదుపాయం లేదు.');
+        return;
+      }
+
+      currentUtterance = new SpeechSynthesisUtterance(plainText);
+      const hasTelugu = /[\u0C00-\u0C7F]/.test(plainText);
+      currentUtterance.lang = hasTelugu ? 'te-IN' : 'en-IN';
+      currentUtterance.rate = 0.95;
+
+      window.speechSynthesis.speak(currentUtterance);
+    }
+
+    function stopSpeech() {
+      if (window.speechSynthesis) {
+        window.speechSynthesis.cancel();
+      }
+    }
+
+    function formatMarkdown(text) {
+      let html = text
+        .replace(/### (.*)/g, '<h3>$1</h3>')
+        .replace(/#### (.*)/g, '<h4>$1</h4>')
+        .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+        .replace(/\*(.*?)\*/g, '<em>$1</em>')
+        .replace(/`(.*?)`/g, '<code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">$1</code>')
+        .replace(/\n\n/g, '<br><br>')
+        .replace(/\n- /g, '<br>• ')
+        .replace(/\n/g, '<br>');
+      return html;
+    }
+
+    function escapeHtml(string) {
+      const entityMap = {
+        '&': '&amp;',
+        '<': '&lt;',
+        '>': '&gt;',
+        '"': '&quot;',
+        "'": '&#39;',
+      };
+      return String(string).replace(/[&<>"']/g, s => entityMap[s]);
+    }
+
+    // Initialize speech on load
+    window.addEventListener('DOMContentLoaded', initSpeech);
+  </script>
+</body>
+</html>
