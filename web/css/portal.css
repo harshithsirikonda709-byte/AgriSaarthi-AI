@@ -1,0 +1,530 @@
+/* ==========================================================================
+   AgriSaarthi AI — Complete Farmer Web Portal Stylesheet
+   Clean, accessible, responsive green/white/neutral agricultural design
+   for phones, tablets, and desktops.
+   ========================================================================== */
+
+body.portal-body {
+  height: auto;
+  min-height: 100vh;
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+
+/* Primary Navigation Bar */
+.portal-nav {
+  background: #ffffff;
+  border-bottom: 2px solid var(--border-green);
+  padding: 0 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  box-shadow: var(--shadow-sm);
+  position: sticky;
+  top: 0;
+  z-index: 19;
+  overflow-x: auto;
+}
+
+.portal-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 0;
+}
+
+.nav-item-btn {
+  background: transparent;
+  border: 1.5px solid transparent;
+  color: var(--text-muted);
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  padding: 8px 13px;
+  border-radius: 10px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  min-height: 40px;
+}
+
+.nav-item-btn:hover {
+  background: var(--leaf-50);
+  color: var(--forest-800);
+}
+
+.nav-item-btn.active {
+  background: var(--forest-800);
+  color: #ffffff;
+  border-color: var(--forest-800);
+}
+
+.portal-nav-auth {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 0;
+  flex-shrink: 0;
+}
+
+.nav-user-pill {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--forest-800);
+  background: var(--leaf-50);
+  border: 1px solid var(--border-green);
+  padding: 6px 12px;
+  border-radius: 18px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  white-space: nowrap;
+}
+
+.btn-nav-action {
+  background: var(--forest-800);
+  color: #ffffff;
+  border: none;
+  padding: 8px 14px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  min-height: 38px;
+}
+
+.btn-nav-action.btn-outline {
+  background: #ffffff;
+  color: var(--forest-800);
+  border: 1.5px solid var(--forest-700);
+}
+
+.btn-nav-action.btn-danger-outline {
+  background: #ffffff;
+  color: #b91c1c;
+  border: 1.5px solid #fca5a5;
+}
+
+/* Page Views Container */
+.portal-page {
+  display: none;
+  max-width: 1140px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 22px 20px 44px 20px;
+}
+
+.portal-page.active {
+  display: block;
+}
+
+/* Keep voice assistant page flex-structured */
+#page-voice.portal-page.active {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 125px);
+  min-height: 540px;
+  padding: 10px 18px 16px 18px;
+}
+
+/* Hero & Banners */
+.hero-banner {
+  background: linear-gradient(135deg, var(--forest-900) 0%, var(--forest-800) 60%, var(--leaf-600) 100%);
+  color: #ffffff;
+  border-radius: 20px;
+  padding: 32px 28px;
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.hero-banner h2 {
+  font-size: 26px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.hero-banner p {
+  font-size: 15.5px;
+  color: #e2e8f0;
+  max-width: 780px;
+  line-height: 1.6;
+}
+
+.hero-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 6px;
+}
+
+/* Buttons */
+.btn-primary-agri {
+  background: var(--forest-800);
+  color: #ffffff;
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  transition: background 0.15s;
+}
+
+.btn-primary-agri:hover {
+  background: var(--forest-900);
+}
+
+.btn-primary-agri:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.btn-hero-light {
+  background: #ffffff;
+  color: var(--forest-900);
+  border: none;
+  padding: 12px 22px;
+  border-radius: 12px;
+  font-size: 15px;
+  font-weight: 700;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+}
+
+.btn-hero-outline {
+  background: rgba(255, 255, 255, 0.14);
+  color: #ffffff;
+  border: 1.5px solid rgba(255, 255, 255, 0.45);
+  padding: 12px 20px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 46px;
+}
+
+.btn-secondary-agri {
+  background: #ffffff;
+  color: var(--forest-800);
+  border: 1.5px solid var(--forest-700);
+  padding: 11px 18px;
+  border-radius: 12px;
+  font-size: 14.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.btn-secondary-agri:hover {
+  background: var(--leaf-50);
+}
+
+/* Grid Layouts & Cards */
+.grid-2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 18px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+}
+
+.grid-4 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+}
+
+.portal-card {
+  background: #ffffff;
+  border: 1.5px solid var(--card-border);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+}
+
+.portal-card.card-green-accent {
+  border-color: var(--border-green);
+  background: linear-gradient(180deg, #ffffff 0%, #f8fdf9 100%);
+}
+
+.portal-card h3 {
+  font-size: 17px;
+  font-weight: 700;
+  color: var(--forest-900);
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.portal-card p {
+  font-size: 14px;
+  color: var(--text-muted);
+  line-height: 1.55;
+}
+
+/* Quick Action Cards on Dashboard */
+.quick-action-card {
+  background: #ffffff;
+  border: 1.5px solid var(--border-green);
+  border-radius: 16px;
+  padding: 18px;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+  transition: border-color 0.15s, background 0.15s;
+  min-height: 120px;
+}
+
+.quick-action-card:hover {
+  background: var(--leaf-50);
+  border-color: var(--leaf-500);
+}
+
+.quick-action-icon {
+  font-size: 28px;
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  background: var(--leaf-100);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.quick-action-title {
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--forest-900);
+}
+
+.quick-action-desc {
+  font-size: 13px;
+  color: var(--text-muted);
+  line-height: 1.45;
+}
+
+/* Forms & Inputs */
+.auth-card {
+  max-width: 500px;
+  margin: 16px auto;
+  background: #ffffff;
+  border: 1.5px solid var(--card-border);
+  border-radius: 18px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-md);
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 14px;
+}
+
+.form-group label {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+
+.form-control {
+  width: 100%;
+  padding: 11px 13px;
+  font-size: 15px;
+  font-family: inherit;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  background: #ffffff;
+  color: var(--text-main);
+  min-height: 44px;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: var(--forest-700);
+  box-shadow: 0 0 0 3px rgba(22, 101, 52, 0.15);
+}
+
+/* Alerts & State Notices */
+.status-alert {
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 14px;
+  line-height: 1.5;
+  margin-bottom: 16px;
+  display: none;
+}
+
+.status-alert.show {
+  display: block;
+}
+
+.status-alert.alert-error {
+  background: #fef2f2;
+  border: 1.5px solid #fca5a5;
+  color: #991b1b;
+}
+
+.status-alert.alert-success {
+  background: #f0fdf4;
+  border: 1.5px solid #86efac;
+  color: #166534;
+}
+
+.status-alert.alert-info {
+  background: #eff6ff;
+  border: 1.5px solid #93c5fd;
+  color: #1e3a8a;
+}
+
+.status-alert.alert-warning {
+  background: #fffbeb;
+  border: 1.5px solid #fcd34d;
+  color: #92400e;
+}
+
+/* Crop Recommendation Result Cards */
+.rec-crop-card {
+  background: #ffffff;
+  border: 1.5px solid var(--border-green);
+  border-radius: 16px;
+  padding: 18px;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+
+.rec-crop-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #e2e8f0;
+  padding-bottom: 10px;
+}
+
+.score-pill {
+  background: var(--forest-800);
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 13.5px;
+  padding: 5px 12px;
+  border-radius: 20px;
+}
+
+.metric-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.metric-box {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.metric-box .m-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.metric-box .m-val {
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--forest-900);
+  margin-top: 2px;
+}
+
+/* Section Headers */
+.section-header-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.section-header-bar h2 {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--forest-900);
+}
+
+/* History List */
+.history-item {
+  border-bottom: 1px solid #e2e8f0;
+  padding: 12px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.history-item:last-child {
+  border-bottom: none;
+}
+
+/* Responsive Breakpoints */
+@media (max-width: 920px) {
+  .grid-4 { grid-template-columns: repeat(2, 1fr); }
+  .grid-3 { grid-template-columns: repeat(2, 1fr); }
+  .metric-strip { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .grid-4, .grid-3, .grid-2, .form-grid {
+    grid-template-columns: 1fr;
+  }
+  .hero-banner {
+    padding: 22px 18px;
+  }
+  .hero-banner h2 {
+    font-size: 21px;
+  }
+  .portal-page {
+    padding: 14px 12px 36px 12px;
+  }
+}
+

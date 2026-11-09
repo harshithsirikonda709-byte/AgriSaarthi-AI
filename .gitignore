@@ -57,5 +57,26 @@ keys.json
 .coverage
 htmlcov/
 
-# Logs
+# Logs and local SQLite databases
 *.log
+*.db
+*.sqlite
+*.sqlite3
+
+# Environment variables and secrets
+.env
+.env.*
+!.env.example
+private_keys.json
+
+# Python virtual environments
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
+
+# Testing cache
+.pytest_cache/
+.coverage

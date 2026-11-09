@@ -39,27 +39,33 @@ AgriSaarthi/
 │   ├── models.py             # Validated uagents.Model schemas (Pydantic)
 │   ├── engine.py             # 4-step crop recommendation engine
 │   ├── agent.py              # Autonomous Fetch.ai uAgent with ACP & Mailbox
-│   ├── chat_protocol.py      # Bilingual ACP v0.3.0 protocol & multi-intent router
+│   ├── chat_protocol.py      # Bilingual ACP v0.3.0 protocol, multi-intent & crop problem triage
+│   ├── ollama_client.py      # Local Ollama client (qwen2.5:0.5b) with strict agricultural safety
 │   └── data/
 │       ├── __init__.py       # Data package init
-│       └── crops.py          # Documented Indian crop reference database
+│       ├── crops.py          # Documented Indian crop reference database
+│       └── crop_diagnostics.py # Verified crop disorders & ICAR reference knowledge layer
 ├── web/
-│   └── index.html            # Farmer voice web interface (STT/TTS in Telugu & English)
+│   └── index.html            # Farmer web interface (Speech STT/TTS, diagnostic cards, Telugu/English)
 ├── scripts/
 │   ├── demo_query.py         # Multi-scenario verification and demo runner
-│   └── run_farmer_ui.py      # Zero-dependency local web server for farmer UI
+│   ├── run_farmer_ui.py      # Local web server with live Ollama & chat API
+│   └── test_ollama_live.py   # Live verification script for local Ollama integration
 ├── tests/
 │   ├── __init__.py
 │   ├── test_models.py        # Schema validation unit tests
 │   ├── test_engine.py        # Agronomic scoring & budget logic unit tests
 │   ├── test_agent.py         # Agent initialization & mailbox tests
 │   ├── test_chat_protocol.py # Bilingual ACP, Telenglish & multi-turn tests
+│   ├── test_ollama.py        # Ollama integration & timeout/fallback tests
+│   ├── test_crop_problems.py # Structured crop problem workflow & uncertainty tests
 │   └── test_ui_server.py     # Web UI server tests
-├── .env.example              # Environment variables template
+├── .env.example              # Environment variables template (OLLAMA_MODEL=qwen2.5:0.5b)
 ├── .gitignore                # Git ignore rules (protects .env and private keys)
 ├── requirements.txt          # Python dependencies
 └── README.md                 # Setup, run, and Agentverse instructions
 ```
+
 
 ---
 
@@ -208,14 +214,81 @@ Open **http://127.0.0.1:8080** in Google Chrome or Microsoft Edge:
 
 ---
 
+## 🦙 Local Open-Weight LLM Integration (Ollama)
+
+AgriSaarthi AI integrates a locally running, open-weight language model via the **Ollama API** (`http://localhost:11434`) to provide natural language explanations and follow-up guidance in **Telugu** and **English**, while remaining strictly grounded in the verified agricultural engine.
+
+### 1. Model Specifications & License
+- **Model Name**: `qwen2.5:0.5b` (Qwen2.5 0.5B Instruct)
+- **Model License**: **Apache License 2.0** (Open Source / Open-Weight, permissive, free for commercial and non-commercial deployment)
+- **Size**: ~397 MB (runs entirely on local CPU, zero cloud dependencies, zero paid AI APIs)
+- **Multilingual Support**: Fluent in Telugu (`తెలుగు`) and English (`en-IN`)
+
+### 2. Download and Setup Instructions
+1. Install [Ollama](https://ollama.com) on your system (Windows / Linux / macOS).
+2. Start the local Ollama server:
+   ```powershell
+   ollama serve
+   ```
+   *(Ollama typically starts automatically as a background desktop service).*
+3. Pull the open-weight model:
+   ```powershell
+   ollama pull qwen2.5:0.5b
+   ```
+4. Verify the model is installed and ready:
+   ```powershell
+   ollama list
+   ```
+
+### 3. Environment Configuration
+Add or configure the following variables in your `.env` file:
+```env
+# Local Open-Weight LLM Integration (Ollama)
+OLLAMA_BASE_URL=http://localhost:11434
+OLLAMA_MODEL=qwen2.5:0.5b
+OLLAMA_TIMEOUT=30
+OLLAMA_MAX_TOKENS=256
+```
+
+### 4. Agricultural Grounding & Safety Principles
+The language model is strictly bound by system instructions and pipeline architecture:
+- **Preserved Deterministic Engine**: The model does **NOT** invent suitability scores, crop costs, yields, or profits. All numerical data comes from `AgriSaarthiEngine` using authentic CACP/ICAR benchmarks.
+- **No Hallucinated Live Feeds**: Does not invent real-time weather observations or daily APMC spot mandi prices.
+- **No Unauthorized Fertilizer Dosages**: Does not prescribe chemical dosages or pesticide mixtures without laboratory soil health card tests.
+- **Uncertainty & Expert Referrals**: When diagnostic confidence is uncertain, explicitly advises consulting the local **Krishi Vigyan Kendra (KVK)** or village agriculture extension officer.
+- **Missing Information Follow-up**: Asks polite, conversational follow-up questions in Telugu/English when farm holding, soil, water, season, or budget parameters are missing.
+
+### 5. Fault Tolerance & Reliability
+- **Connection Failures**: If the local Ollama server is offline or the model is not installed, the application **never crashes**.
+- **Transparent Attribution**: Failed model calls output an explicit diagnostic notice (`⚠️ [Ollama Notice: Model unavailable (...). Showing verified AgriSaarthi Engine advisory.]`) and gracefully display the deterministic agricultural recommendation. It never falsely claims a fallback response came from the language model.
+- **Live UI Badge**: The web interface header features a live status indicator (`🦙 Ollama: qwen2.5:0.5b (Ready)`) that automatically monitors model health.
+
+### 6. Reproducible Verification & Test Suite
+To prove that the application connects to and calls the running Ollama model:
+
+1. **Live End-to-End Verification Script**:
+   ```powershell
+   python scripts/test_ollama_live.py
+   ```
+   *Connects to http://localhost:11434, queries `qwen2.5:0.5b`, executes multi-turn conversations in English and Telugu, and validates model output.*
+
+2. **Automated Unit Tests (with Mocked HTTP)**:
+   ```powershell
+   pytest tests/test_ollama.py -v
+   ```
+   *Tests model success, connection errors, timeouts, HTTP 404/500 errors, grounding, and fallback routines.*
+
+---
+
 ## 📊 Status Summary
 
 | Component | Status | Details |
 |---|---|---|
+| **Local Open-Weight LLM (Ollama)** | ✅ Verified | `qwen2.5:0.5b` (Apache 2.0), local CPU inference, grounded explanations |
 | **Bilingual NLP (Telugu, English, Telenglish)** | ✅ Verified | Understands scripts, dialects, local units (ఎకరాలు, లక్షలు, వేలు), districts |
-| **Voice Interface (STT & TTS)** | ✅ Verified | Web Speech API (`te-IN`, `en-IN`), replay & stop controls, typed fallback |
+| **Voice Interface (STT & TTS)** | ✅ Verified | Web Speech API (`te-IN`, `en-IN`), replay & stop controls, live model badge |
 | **Recommendation Engine & Dataset** | ✅ Verified | 11 authentic ICAR/CACP crops, 4-step agronomic pipeline, zero invented APIs |
 | **ACP (`AgentChatProtocol:0.3.0`)** | ✅ Verified | Full Fetch.ai spec compliance, multi-turn context preservation, session store |
-| **Automated Unit Tests** | ✅ Verified | **41/41 passing tests** covering Telugu, English, mixed queries, UI server |
+| **Automated Unit Tests** | ✅ Verified | **63/63 passing tests** covering Ollama, Telugu, English, mixed queries, UI server |
 | **Secrets & Safety** | ✅ Verified | `.env` and `private_keys.json` excluded in `.gitignore`, no secret leaks |
 | **Agentverse Mailbox** | ✅ Verified | Polling active on Testnet (`https://agentverse.ai/v2/agents/mailbox/submit`) |
