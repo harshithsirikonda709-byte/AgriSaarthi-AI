@@ -34,6 +34,20 @@ from agrisaarthi.models import (
 )
 from agrisaarthi.engine import AgriSaarthiEngine
 from agrisaarthi.data.crops import CROP_DATABASE, CropProfile
+from agrisaarthi.data.crop_diagnostics import (
+    CropDisorderReference,
+    CROP_DISORDER_DATABASE,
+    find_matching_crop_disorder,
+)
+from agrisaarthi.ollama_client import (
+    OllamaClient,
+    explain_crop_recommendation_with_ollama,
+    answer_follow_up_with_ollama,
+    ask_missing_info_with_ollama,
+    explain_crop_problem_follow_up_with_ollama,
+    diagnose_crop_problem_with_ollama,
+    build_system_prompt,
+)
 
 logger = logging.getLogger("agrisaarthi.chat")
 
@@ -190,6 +204,7 @@ class SessionContext:
         self.last_request: Optional[FarmerProfileRequest] = None
         self.last_response: Optional[RecommendationResponse] = None
         self.pending_profile: Dict[str, Any] = {}
+        self.active_crop_problem: Optional[Dict[str, Any]] = None
         self.history: List[Dict[str, str]] = []
 
     def update(self, req: FarmerProfileRequest, resp: RecommendationResponse) -> None:
@@ -202,6 +217,25 @@ class SessionContext:
 
     def clear_pending_profile(self) -> None:
         self.pending_profile.clear()
+
+    def start_crop_problem(
+        self,
+        crop: str,
+        symptom: str,
+        disorder_ref: Optional[Any],
+        questions: List[str],
+    ) -> None:
+        self.active_crop_problem = {
+            "crop": crop,
+            "symptom": symptom,
+            "stage": "awaiting_answers",
+            "disorder_ref": disorder_ref,
+            "questions": questions,
+            "answers": [],
+        }
+
+    def clear_crop_problem(self) -> None:
+        self.active_crop_problem = None
 
     def set_language(self, lang: str) -> None:
         if lang in ("en", "te"):
@@ -467,6 +501,46 @@ def is_new_recommendation_attempt(text: str) -> bool:
         "పంటల సిఫార్సు", "ఏ పంట వేయాలి", "ఏ పంటలు వేయాలి", "వ్యవసాయ సలహా", "మంచి పంట ఏది", "పంటల సూచన",
     ]
     return any(t in lower for t in explicit_triggers)
+
+
+def is_crop_problem_query(text: str) -> bool:
+    """
+    Detect whether user is reporting a crop disease, pest, nutrient deficiency,
+    or physical symptom (e.g. yellow leaves, leaf curl, wilting, drying).
+    Differentiates from farm profile recommendation requests.
+    """
+    lower = text.lower()
+
+    symptom_keywords = [
+        "yellow", "yellowing", "turning yellow", "yellow leaves", "leaves turning",
+        "drying", "dry", "spots", "spot", "leaf curl", "curling", "puckering",
+        "pest", "pests", "disease", "diseases", "wilting", "wilt", "stunted",
+        "blight", "rust", "rotting", "rot", "insects", "insect", "worm", "worms",
+        "caterpillar", "damage", "fungus", "dropping", "discoloration", "reddening",
+        "chlorosis", "scorching", "burnt", "necrosis", "mildew", "khaira", "lalya",
+        # Telugu keywords
+        "పసుపు", "పసుపు రంగు", "ఆకులు పసుపు", "ఆకులు ఎర్రబడటం", "ఎర్రబడటం", "ముడత",
+        "ముడుచుకు", "తెగులు", "తెగుళ్ళు", "పురుగు", "పురుగులు", "ఎండిపోవడం", "ఎండి",
+        "వాడిపోవడం", "వాడి", "మచ్చలు", "ఆకు మచ్చలు", "కాండం తొలిచే", "బాధపడుతోంది",
+        "ఆకులు రాలిపోతున్నాయి", "కుళ్లు", "బూడిద తెగులు", "తుప్పు తెగులు", "ఆకు ఎండు తెగులు",
+    ]
+
+    crop_keywords = [
+        "paddy", "rice", "cotton", "wheat", "chilli", "mirchi", "maize", "corn",
+        "groundnut", "peanut", "gram", "chickpea", "mustard", "soybean", "sugarcane",
+        "leaves", "leaf", "plant", "crop", "stem", "root",
+        # Telugu
+        "వరి", "పత్తి", "మిరప", "గోధుమ", "మొక్కజొన్న", "వేరుశనగ", "శనగ", "సోయాబీన్",
+        "చెరకు", "ఆకులు", "ఆకు", "మొక్క", "మొక్కలు", "పంట", "కొమ్మలు", "వేర్లు"
+    ]
+
+    has_symptom = any(s in lower for s in symptom_keywords)
+    has_crop = any(c in lower for c in crop_keywords)
+
+    if has_symptom and (has_crop or "crop" in lower or "plant" in lower or "leaf" in lower or "ఆకు" in lower or "పంట" in lower):
+        return True
+
+    return False
 
 
 # =============================================================================
@@ -917,7 +991,7 @@ def _handle_source_or_data_query(query: str, session: SessionContext, lang: str 
     return "\n\n---\n\n".join(sections)
 
 
-def _handle_follow_up_query(query: str, session: SessionContext, lang: str = "en") -> str:
+def _handle_follow_up_query_deterministic(query: str, session: SessionContext, lang: str = "en") -> str:
     """
     Answer follow-up questions referencing previous recommendation context
     without asking the user to resubmit their farm profile.
@@ -1107,6 +1181,44 @@ def _handle_follow_up_query(query: str, session: SessionContext, lang: str = "en
     return "\n".join(lines)
 
 
+def _handle_follow_up_query(
+    query: str,
+    session: SessionContext,
+    lang: str = "en",
+    ollama_client: Optional[OllamaClient] = None,
+) -> str:
+    """
+    Answer follow-up questions referencing previous recommendation context.
+    Uses local Ollama language model when available, grounded in verified recommendation context.
+    Falls back gracefully with diagnostic notices to deterministic advisory if Ollama is unavailable.
+    """
+    req = session.last_request
+    resp = session.last_response
+    if not req or not resp:
+        return _handle_follow_up_query_deterministic(query, session, lang=lang)
+
+    deterministic_reply = _handle_follow_up_query_deterministic(query, session, lang=lang)
+
+    client = ollama_client or OllamaClient()
+    is_ready, status_desc = client.check_availability()
+    if is_ready:
+        llm_reply, err = answer_follow_up_with_ollama(
+            query=query,
+            profile=req,
+            response=resp,
+            client=client,
+            lang=lang,
+        )
+        if llm_reply:
+            return f"🤖 **[Ollama: {client.model}]**\n\n{llm_reply}\n\n---\n\n{deterministic_reply}"
+        else:
+            notice = f"⚠️ *[Ollama Notice: Model '{client.model}' follow-up unavailable ({err}). Using deterministic advisory.]*\n\n"
+            return notice + deterministic_reply
+    else:
+        notice = f"⚠️ *[Ollama Notice: Local model '{client.model}' unavailable ({status_desc}). Using deterministic advisory.]*\n\n"
+        return notice + deterministic_reply
+
+
 def format_acp_recommendation_telugu(response: RecommendationResponse, req: FarmerProfileRequest) -> str:
     """Formats the decision response into simple, farmer-friendly Telugu for ACP."""
     budget_per_acre = req.budget_inr / req.land_size_acres
@@ -1282,7 +1394,7 @@ def _generate_welcome_message(lang: str = "en") -> str:
     )
 
 
-def _generate_missing_fields_message(missing: List[str], original_text: str, lang: str = "en") -> str:
+def _generate_missing_fields_message_deterministic(missing: List[str], original_text: str, lang: str = "en") -> str:
     """Generate diagnostic message when specific fields are missing for a new recommendation."""
     missing_te_map = {
         "state": "రాష్ట్రం లేదా జిల్లా (ఉదా: తెలంగాణ, ఆంధ్రప్రదేశ్, వరంగల్, గుంటూరు)",
@@ -1337,6 +1449,278 @@ def _generate_missing_fields_message(missing: List[str], original_text: str, lan
     )
 
 
+def _generate_missing_fields_message(
+    missing: List[str],
+    original_text: str,
+    lang: str = "en",
+    ollama_client: Optional[OllamaClient] = None,
+) -> str:
+    """
+    Generate missing fields prompt using local Ollama model when available.
+    Preserves diagnostic field checklist and falls back gracefully when Ollama is unavailable.
+    """
+    deterministic_msg = _generate_missing_fields_message_deterministic(missing, original_text, lang=lang)
+
+    client = ollama_client or OllamaClient()
+    is_ready, status_desc = client.check_availability()
+    if is_ready:
+        llm_msg, err = ask_missing_info_with_ollama(
+            missing_fields=missing,
+            user_message=original_text,
+            client=client,
+            lang=lang,
+        )
+        if llm_msg:
+            return f"🤖 **[Ollama: {client.model}]**\n\n{llm_msg}\n\n---\n\n{deterministic_msg}"
+        else:
+            notice = f"⚠️ *[Ollama Notice: Assistant model '{client.model}' unavailable ({err}).]*\n\n"
+            return notice + deterministic_msg
+    else:
+        notice = f"⚠️ *[Ollama Notice: Local model '{client.model}' unavailable ({status_desc}).]*\n\n"
+        return notice + deterministic_msg
+
+
+def _handle_crop_problem_initial(
+    query: str,
+    session: SessionContext,
+    lang: str = "en",
+    ollama_client: Optional[OllamaClient] = None,
+) -> str:
+    """
+    Handles initial crop problem observation by identifying the issue,
+    retrieving verified reference data from CROP_DISORDER_DATABASE if available,
+    asking a maximum of 3 targeted follow-up questions, and warning about uncertainty.
+    """
+    client = ollama_client or OllamaClient()
+    matched_ref = find_matching_crop_disorder(query)
+
+    if matched_ref:
+        crop_name = matched_ref.crop_name
+        symptom_name = matched_ref.symptom_name
+        questions = matched_ref.follow_up_questions_te if lang == "te" else matched_ref.follow_up_questions
+        source_name = matched_ref.source_name
+        source_ref = matched_ref.source_reference
+    else:
+        # Fallback for crops/symptoms not yet in the verified knowledge base
+        crop_name = "Crop"
+        symptom_name = query
+        source_name = "ICAR Agricultural Extension Standard Triage Guidelines"
+        source_ref = "ICAR Diagnostic Field Protocol & Crop Health Advisory"
+        if lang == "te":
+            questions = [
+                "పంట వయస్సు ఎంత మరియు ప్రస్తుతం ఏ పెరుగుదల దశలో ఉంది (ఉదా. విత్తిన ఎన్ని రోజులు)?",
+                "ఈ లక్షణం మొక్కపై ఎక్కడ కనిపిస్తోంది (కింది పాత ఆకులపై, పై లేత ఆకులపై, లేదా కాండంపై)?",
+                "ఇటీవలి నీటి మరియు పొలం పరిస్థితులు ఎలా ఉన్నాయి (అధిక నీరు నిలవడం, వర్షాభావం లేదా ఎరువుల వాడకం)?"
+            ]
+        else:
+            questions = [
+                "What is the crop age and growth stage (how many days after sowing or transplanting)?",
+                "Where on the plant do the symptoms first appear (older bottom leaves, younger top leaves, or stem)?",
+                "What have recent water and field conditions been (waterlogging/stagnation, dry spell, or recent fertilizer application)?"
+            ]
+
+    # Save to session to await answers (strictly max 3 questions)
+    session.start_crop_problem(
+        crop=crop_name,
+        symptom=symptom_name,
+        disorder_ref=matched_ref,
+        questions=questions[:3],
+    )
+
+    # 1. Ask Ollama to formulate a conversational follow-up
+    is_ready, status_desc = client.check_availability()
+    ollama_intro = ""
+    if is_ready:
+        llm_reply, err = explain_crop_problem_follow_up_with_ollama(
+            crop=crop_name,
+            symptom=symptom_name,
+            questions=questions[:3],
+            client=client,
+            lang=lang,
+        )
+        if llm_reply:
+            ollama_intro = f"🤖 **[Ollama: {client.model}]**\n\n{llm_reply}\n\n---\n\n"
+
+    # 2. Build structured checklist format ensuring max 3 questions and clear guidance
+    if lang == "te":
+        q_lines = "\n".join(f"{idx}. **{q}**" for idx, q in enumerate(questions[:3], 1))
+        deterministic_block = (
+            f"🌾 **అగ్రిసారథి పంట సమస్య విశ్లేషణ**: **{crop_name}** - *{symptom_name}*\n\n"
+            f"ఒకే లక్షణానికి (ఉదా. ఆకులు పసుపుబారడం) పోషక లోపాలు, నీటి ఎద్దడి లేదా తెగుళ్లు వంటి పలు కారణాలు ఉండవచ్చు. "
+            f"సరియైన కారణాన్ని గుర్తించడానికి దయచేసి క్రింది **3 ముఖ్యమైన ప్రశ్నలకు** సమాధానం ఇవ్వండి:\n\n"
+            f"❓ **[రోగనిర్ధారణ ప్రశ్నలు (గరిష్టంగా 3)]**\n"
+            f"{q_lines}\n\n"
+            f"⚠️ **[ముఖ్య గమనిక & అనిశ్చితి]**:\n"
+            f"- కేవలం పై లక్షణాల ఆధారంగా ఖచ్చితమైన రోగ నిర్ధారణ సాధ్యం కాదు.\n"
+            f"- కారణం నిర్ధారించకుండా రసాయన పురుగుమందులు వాడవద్దు.\n"
+            f"- మీ సమాధానాలు చెప్పిన తర్వాత శాస్త్రీయ ఆధారాలు మరియు సురక్షితమైన చర్యలు సూచించబడతాయి.\n"
+            f"- అవసరమైతే తాజా ఆకుల నమూనాతో స్థానిక కృషి విజ్ఞాన కేంద్రం (KVK) లేదా వ్యవసాయ అధికారిని సంప్రదించండి.\n\n"
+            f"📚 *ఆధార నివేదిక: {source_name} ({source_ref})*"
+        )
+    else:
+        q_lines = "\n".join(f"{idx}. **{q}**" for idx, q in enumerate(questions[:3], 1))
+        deterministic_block = (
+            f"🌾 **AgriSaarthi Crop Problem Triage**: **{crop_name}** - *{symptom_name}*\n\n"
+            f"A single visible symptom like leaf yellowing or curling can stem from multiple possible causes "
+            f"(such as nutrient deficiencies, water stagnation, or fungal/pest damage). "
+            f"To narrow down the possibilities safely, please answer these **3 diagnostic questions**:\n\n"
+            f"❓ **[Diagnostic Follow-Up Questions (Max 3)]**\n"
+            f"{q_lines}\n\n"
+            f"⚠️ **[Advisory Notice & Uncertainty]**:\n"
+            f"- Visual symptoms alone cannot confirm a definitive diagnosis without laboratory or soil testing.\n"
+            f"- Do not apply chemical pesticides or unverified spray dosages without confirmation.\n"
+            f"- Once you reply with these details, safe cultural steps and evidence will be provided.\n"
+            f"- For serious infestations, physically visit your local Krishi Vigyan Kendra (KVK) or Agriculture Officer.\n\n"
+            f"📚 *Reference: {source_name} ({source_ref})*"
+        )
+
+    return ollama_intro + deterministic_block
+
+
+def _handle_crop_problem_diagnosis(
+    clean_text: str,
+    session: SessionContext,
+    lang: str = "en",
+    ollama_client: Optional[OllamaClient] = None,
+) -> str:
+    """
+    Evaluates farmer's responses to the 3 diagnostic questions.
+    Synthesizes possible causes, supporting evidence, safe next steps,
+    uncertainty warnings, and official reference citations.
+    """
+    client = ollama_client or OllamaClient()
+    active_problem = session.active_crop_problem or {}
+    crop_name = active_problem.get("crop", "Crop")
+    symptom_name = active_problem.get("symptom", "Symptom")
+    matched_ref: Optional[CropDisorderReference] = active_problem.get("disorder_ref")
+
+    # Clear active problem from session now that it is being processed
+    session.clear_crop_problem()
+
+    if matched_ref:
+        source_name = matched_ref.source_name
+        source_ref = matched_ref.source_reference
+        possible_causes = matched_ref.possible_causes
+        safe_actions = matched_ref.safe_actions_te if lang == "te" else matched_ref.safe_actions
+    else:
+        source_name = "ICAR General Agricultural Advisory & Triage"
+        source_ref = "ICAR Agricultural Extension Handbook & Soil Health Management"
+        possible_causes = [
+            {
+                "name_en": "Nutrient Deficiency or Soil Exhaustion",
+                "name_te": "పోషక లోపం లేదా నేల అలసట",
+                "evidence_en": "Discoloration or yellowing on older or younger leaves depending on mobile vs immobile nutrients.",
+                "evidence_te": "పోషకాల కదలికను బట్టి పాత లేదా లేత ఆకులపై రంగు మారడం.",
+                "clues_en": "Affects widespread patches; no physical webbing or fungal powdery spots.",
+                "clues_te": "విస్తారమైన మడులలో కనిపిస్తుంది; బూజు లేదా పురుగుల గూళ్లు ఉండవు.",
+            },
+            {
+                "name_en": "Water Stagnation / Root Oxygen Depletion",
+                "name_te": "నీరు నిలవడం / వేర్లకు ప్రాణవాయువు అందకపోవడం",
+                "evidence_en": "Yellowing or wilting following heavy rains or poor field drainage.",
+                "evidence_te": "అధిక వర్షాలు లేదా నీటిపారుదల సరిగ్గా లేనప్పుడు ఆకులు వాడటం లేదా పసుపు రంగులోకి మారడం.",
+                "clues_en": "Field soil remains saturated; roots may appear brownish rather than white and healthy.",
+                "clues_te": "నేలలో తేమ అధికంగా ఉంటుంది; వేర్లు తెల్లగా కాకుండా గోధుమ రంగులోకి మారతాయి.",
+            },
+            {
+                "name_en": "Pathogen or Pest Stress",
+                "name_te": "తెగులు లేదా పురుగుల దాడి",
+                "evidence_en": "Localized patches, leaf spots, curling, webbing, or lesions spreading along leaf veins.",
+                "evidence_te": "నిర్దిష్ట ప్రాంతాల్లో మచ్చలు, ఆకు ముడత, పురుగు గూళ్లు లేదా ఈనెల వెంట వ్యాపించే మచ్చలు.",
+                "clues_en": "Visible puncture marks, fungal powder, or insect frass.",
+                "clues_te": "ఆకులపై సూది రంధ్రాలు, బూజు లేదా పురుగు మలము కనిపిస్తాయి.",
+            },
+        ]
+        if lang == "te":
+            safe_actions = [
+                "మురుగు నీటి కాలువలు శుభ్రం చేసి అదనపు నీటిని వెంటనే బయటకు పంపండి.",
+                "ఖచ్చితమైన నిర్ధారణ లేకుండా ఎటువంటి రసాయన పురుగుమందులు పిచికారీ చేయవద్దు.",
+                "సమతుల్య సేంద్రీయ ఎరువులు మరియు సూక్ష్మ పోషకాలను వాడండి; అధిక యూరియా వాడకాన్ని ఆపండి.",
+                "తాజా ఆకుల నమూనాను సేకరించి స్థానిక కృషి విజ్ఞాన కేంద్రం (KVK) నిపుణులకు చూపించండి."
+            ]
+        else:
+            safe_actions = [
+                "Improve field drainage immediately and drain excess standing water.",
+                "Avoid spraying unverified chemical pesticides before confirming the pathogen or pest.",
+                "Withhold excessive urea/nitrogen; apply balanced organic matter or compost.",
+                "Collect fresh leaf samples in a clean paper envelope and take them to your nearest KVK or VAO."
+            ]
+
+    # Run Ollama synthesis
+    is_ready, status_desc = client.check_availability()
+    ollama_synthesis = ""
+    if is_ready:
+        llm_reply, err = diagnose_crop_problem_with_ollama(
+            crop=crop_name,
+            symptom=symptom_name,
+            farmer_answers=clean_text,
+            possible_causes=possible_causes,
+            safe_actions=safe_actions,
+            source_name=source_name,
+            source_reference=source_ref,
+            client=client,
+            lang=lang,
+        )
+        if llm_reply:
+            ollama_synthesis = f"🤖 **[Ollama: {client.model}]**\n\n{llm_reply}\n\n---\n\n"
+
+    # Build structured deterministic synthesis
+    if lang == "te":
+        causes_blocks = []
+        for c in possible_causes:
+            causes_blocks.append(
+                f"• **{c.get('name_te', c.get('name_en'))}**:\n"
+                f"  - ఆధారాలు / లక్షణాలు: {c.get('evidence_te', c.get('evidence_en'))}\n"
+                f"  - గుర్తింపు సంకేతాలు: {c.get('clues_te', c.get('clues_en'))}"
+            )
+        causes_text = "\n\n".join(causes_blocks)
+        actions_text = "\n".join(f"{idx}. {act}" for idx, act in enumerate(safe_actions, 1))
+
+        deterministic_block = (
+            f"🌾 **పంట సమస్య విశ్లేషణ & సురక్షిత సిఫార్సులు**: **{crop_name}**\n\n"
+            f"రైతు తెలిపిన వివరాలు: *\"{clean_text}\"*\n\n"
+            f"🔍 **[శాస్త్రీయ ఆధారాల ప్రకారం సాధ్యమైన కారణాలు]**\n"
+            f"{causes_text}\n\n"
+            f"🛡️ **[సురక్షిత తక్షణ చర్యలు (సేంద్రీయ & యాజమాన్య పద్ధతులు)]**\n"
+            f"{actions_text}\n\n"
+            f"⚠️ **[అనిశ్చితి & తప్పనిసరి నిపుణుల తనిఖీ]**:\n"
+            f"- ఈ సలహా సాధారణ మార్గదర్శనం కోసం మాత్రమే. ప్రయోగశాల పరీక్ష లేకుండా ఖచ్చితమైన నిర్ధారణ సాధ్యం కాదు.\n"
+            f"- వాతావరణం, నేల పరిస్థితులు లేదా తెగులు ఉనికి క్షేత్రస్థాయిలో ధృవీకరించబడలేదు.\n"
+            f"- సరైన మోతాదు మరియు రసాయన నియంత్రణ కోసం మీ సమీప **కృషి విజ్ఞాన కేంద్రం (KVK)** లేదా వ్యవసాయ విస్తరణ అధికారి (AEO/VAO) ని ప్రత్యక్షంగా సంప్రదించండి.\n\n"
+            f"📚 **[ధృవీకరించబడిన వ్యవసాయ మూలం]**:\n"
+            f"- సంస్థ: {source_name}\n"
+            f"- ప్రచురణ: {source_ref}"
+        )
+    else:
+        causes_blocks = []
+        for c in possible_causes:
+            causes_blocks.append(
+                f"• **{c.get('name_en')}**:\n"
+                f"  - Evidence / Symptoms: {c.get('evidence_en')}\n"
+                f"  - Distinguishing Clues: {c.get('clues_en')}"
+            )
+        causes_text = "\n\n".join(causes_blocks)
+        actions_text = "\n".join(f"{idx}. {act}" for idx, act in enumerate(safe_actions, 1))
+
+        deterministic_block = (
+            f"🌾 **Crop Problem Assessment & Safe Next Steps**: **{crop_name}**\n\n"
+            f"Farmer's Observed Conditions: *\"{clean_text}\"*\n\n"
+            f"🔍 **[Possible Causes Based on Verified Evidence]**\n"
+            f"{causes_text}\n\n"
+            f"🛡️ **[Safe Next Steps (Cultural & Non-Chemical Management)]**\n"
+            f"{actions_text}\n\n"
+            f"⚠️ **[Uncertainty Warning & Required Expert Inspection]**:\n"
+            f"- Visual inspection is not a laboratory diagnosis. Weather, soil pH, and viral/fungal pathogens have NOT been physically verified.\n"
+            f"- Do not apply random chemical pesticides without an official prescription from an agricultural authority.\n"
+            f"- Always take an affected plant specimen (leaves and root zone) to your local **Krishi Vigyan Kendra (KVK)** or Agricultural Extension Officer for physical verification.\n\n"
+            f"📚 **[Verified Agricultural Reference]**:\n"
+            f"- Institution: {source_name}\n"
+            f"- Reference: {source_ref}"
+        )
+
+    return ollama_synthesis + deterministic_block
+
+
 # =============================================================================
 # Master Message Processor (Dispatches Across Intents & Languages)
 # =============================================================================
@@ -1346,15 +1730,19 @@ def process_chat_message(
     sender: str,
     engine_cls=AgriSaarthiEngine,
     ctx: Optional[Context] = None,
+    ollama_client: Optional[OllamaClient] = None,
 ) -> str:
     """
     Main entry point for ACP messages.
     Determines intent, language, preserves session context, and generates the appropriate response.
+    Integrates local Ollama open-weight language model for explanations and follow-ups while
+    preserving strict grounding in AgriSaarthiEngine recommendations.
     """
     clean_text = text.strip()
     # Strip leading @mentions from chat platforms (e.g. @agrisaarthi-ai)
     clean_text = re.sub(r"^@\S+\s*", "", clean_text)
     session = get_session(sender)
+    client = ollama_client or OllamaClient()
 
     if not clean_text:
         return _generate_welcome_message(lang=session.preferred_language)
@@ -1386,19 +1774,34 @@ def process_chat_message(
     if is_greeting(clean_text):
         return _generate_welcome_message(lang=lang)
 
-    # 2. Source, Data Origin, Live Weather, Mandi Prices, Methodology Questions
+    # 2. Check for active multi-turn crop problem workflow
+    if session.active_crop_problem and session.active_crop_problem.get("stage") == "awaiting_answers":
+        if clean_text.lower() in ["cancel", "reset", "start over", "clear", "రద్దు", "వద్దు"]:
+            session.clear_crop_problem()
+            if lang == "te":
+                return "🌾 పంట సమస్య విశ్లేషణ రద్దు చేయబడింది. నేను మీకు ఎలా సహాయపడగలను?"
+            return "🌾 Crop diagnostic consultation cancelled. How can I help your farm today?"
+        logger.info(f"Routing '{clean_text[:40]}...' to CROP_PROBLEM_DIAGNOSIS handler (lang={lang})")
+        return _handle_crop_problem_diagnosis(clean_text, session, lang=lang, ollama_client=client)
+
+    # 3. New crop problem or pest/symptom observation
+    if is_crop_problem_query(clean_text):
+        logger.info(f"Routing '{clean_text[:40]}...' to CROP_PROBLEM_INITIAL handler (lang={lang})")
+        return _handle_crop_problem_initial(clean_text, session, lang=lang, ollama_client=client)
+
+    # 4. Source, Data Origin, Live Weather, Mandi Prices, Methodology Questions
     if is_source_or_data_query(clean_text):
         logger.info(f"Routing '{clean_text[:40]}...' to SOURCE_OR_DATA_QUERY handler (lang={lang})")
         return _handle_source_or_data_query(clean_text, session, lang=lang)
 
     # 3. Queries explicitly asking about past recommendations
     if is_query_about_previous_recommendation(clean_text):
-        return _handle_follow_up_query(clean_text, session, lang=lang)
+        return _handle_follow_up_query(clean_text, session, lang=lang, ollama_client=client)
 
     # 4. Follow-up inquiries on previous recommendation
     if session.last_response is not None and is_follow_up_query(clean_text, session):
         logger.info(f"Routing '{clean_text[:40]}...' to FOLLOW_UP handler (lang={lang})")
-        return _handle_follow_up_query(clean_text, session, lang=lang)
+        return _handle_follow_up_query(clean_text, session, lang=lang, ollama_client=client)
 
     # 5. New recommendation attempt or completion of pending profile
     has_pending = bool(session.pending_profile)
@@ -1410,7 +1813,25 @@ def process_chat_message(
             try:
                 response = engine_cls.execute(profile_req)
                 session.update(profile_req, response)
-                return format_acp_recommendation(response, profile_req, lang=lang)
+                base_text = format_acp_recommendation(response, profile_req, lang=lang)
+
+                is_ready, status_desc = client.check_availability()
+                if is_ready:
+                    llm_expl, err = explain_crop_recommendation_with_ollama(
+                        profile=profile_req,
+                        response=response,
+                        client=client,
+                        lang=lang,
+                        user_query=clean_text,
+                    )
+                    if llm_expl:
+                        return f"🤖 **[Ollama: {client.model}]**\n\n{llm_expl}\n\n---\n\n{base_text}"
+                    else:
+                        notice = f"⚠️ *[Ollama Notice: Model explanation failed ({err}). Showing verified AgriSaarthi Engine advisory.]*\n\n"
+                        return notice + base_text
+                else:
+                    notice = f"⚠️ *[Ollama Notice: Local model '{client.model}' unavailable ({status_desc}). Showing verified AgriSaarthi Engine advisory.]*\n\n"
+                    return notice + base_text
             except Exception as e:
                 logger.exception(f"Error executing recommendation engine: {e}")
                 if lang == "te":
@@ -1421,14 +1842,34 @@ def process_chat_message(
 
     # 6. Fallback: If session context exists, try follow-up query; otherwise provide guidance
     if session.last_response is not None:
-        return _handle_follow_up_query(clean_text, session, lang=lang)
+        return _handle_follow_up_query(clean_text, session, lang=lang, ollama_client=client)
 
     # If message has agricultural words, request the missing fields
     extracted, missing = _extract_entities_from_text(clean_text)
     if missing and len(missing) < 6:
         if session:
             session.update_pending_profile(extracted)
-        return _generate_missing_fields_message(missing, clean_text, lang=lang)
+        return _generate_missing_fields_message(missing, clean_text, lang=lang, ollama_client=client)
+
+    # 7. General agricultural assistance & uncertainty guidance with Ollama
+    is_ready, status_desc = client.check_availability()
+    if is_ready:
+        try:
+            prompt = (
+                f"FARMER QUERY: \"{clean_text}\"\n\n"
+                f"TASK: Answer the farmer's question in {'Telugu (తెలుగు)' if lang == 'te' else 'English'}. "
+                f"If they are asking what to grow, explain what farm information is needed (state, land size, soil, water, season, budget). "
+                f"If they describe a pest, disease, or symptom, state uncertainty openly and advise consulting the local Krishi Vigyan Kendra (KVK) or agricultural officer. "
+                f"Do NOT invent chemical fertilizer dosages or unverified market prices."
+            )
+            general_reply = client.chat(
+                messages=[{"role": "user", "content": prompt}],
+                system=build_system_prompt(lang=lang),
+            )
+            if general_reply:
+                return f"🤖 **[Ollama: {client.model}]**\n\n{general_reply}"
+        except Exception:
+            pass
 
     return _generate_welcome_message(lang=lang)
 

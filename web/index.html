@@ -9,20 +9,51 @@
   <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
   <style>
     :root {
+      /* Agricultural Forest & Leaf Palette */
+      --forest-950: #0a1f13;
+      --forest-900: #0d2818;
+      --forest-800: #134e27;
+      --forest-700: #166534;
       --primary-green: #1b5e20;
-      --primary-dark: #0d3810;
-      --accent-gold: #f9a825;
-      --accent-light: #fff9c4;
-      --bg-cream: #fbfbf8;
+      --primary-dark: #0a3311;
+      --leaf-600: #15803d;
+      --leaf-500: #22c55e;
+      --leaf-400: #4ade80;
+      --leaf-100: #dcfce7;
+      --leaf-50: #f0fdf4;
+
+      /* Soft Cream & Clean White Backgrounds */
+      --cream-bg: #faf8f2;
+      --bg-cream: #faf8f2;
       --surface-white: #ffffff;
       --card-border: #e2e8f0;
-      --text-main: #1e293b;
-      --text-muted: #64748b;
-      --user-bubble: #e8f5e9;
-      --agent-bubble: #ffffff;
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
-      --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
-      --shadow-lg: 0 10px 25px rgba(0,0,0,0.12);
+      --border-subtle: #e2e8f0;
+      --border-green: #bbf7d0;
+
+      /* Earth Golds & Accents */
+      --earth-gold: #d97706;
+      --earth-gold-light: #fef3c7;
+      --accent-gold: #f59e0b;
+
+      /* Text Colors */
+      --text-main: #0f172a;
+      --text-muted: #475569;
+      --text-light: #64748b;
+
+      /* Chat Bubbles */
+      --user-bubble-bg: #eaf7ed;
+      --user-bubble-border: #bbf7d0;
+      --agent-bubble-bg: #ffffff;
+
+      /* Voice Recording States */
+      --status-listening: #dc2626;
+      --status-processing: #d97706;
+      --status-unavailable: #ef4444;
+
+      /* Shadows */
+      --shadow-sm: 0 1px 3px rgba(13, 40, 24, 0.05);
+      --shadow-md: 0 4px 16px rgba(13, 40, 24, 0.08);
+      --shadow-lg: 0 10px 30px rgba(13, 40, 24, 0.12);
     }
 
     * {
@@ -32,134 +63,264 @@
     }
 
     body {
-      font-family: 'Noto Sans Telugu', 'Inter', -apple-system, sans-serif;
-      background-color: var(--bg-cream);
+      font-family: 'Noto Sans Telugu', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--cream-bg);
+      background-image: radial-gradient(circle at 10% 10%, rgba(34, 197, 94, 0.05) 0%, transparent 40%),
+                        radial-gradient(circle at 90% 90%, rgba(217, 119, 6, 0.04) 0%, transparent 40%);
       color: var(--text-main);
       display: flex;
       flex-direction: column;
       height: 100vh;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
+    /* Top Agricultural Brand Header */
     header {
-      background: linear-gradient(135deg, var(--primary-dark) 0%, var(--primary-green) 100%);
+      background: linear-gradient(135deg, var(--forest-950) 0%, var(--forest-800) 65%, var(--forest-700) 100%);
       color: #ffffff;
-      padding: 14px 24px;
+      padding: 12px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       box-shadow: var(--shadow-md);
-      z-index: 10;
+      border-bottom: 2px solid rgba(74, 222, 128, 0.28);
+      z-index: 20;
     }
 
     .brand {
       display: flex;
       align-items: center;
-      gap: 12px;
+      gap: 14px;
     }
 
-    .brand-icon {
-      font-size: 28px;
-      background: rgba(255, 255, 255, 0.15);
+    .brand-icon-box {
+      font-size: 26px;
+      background: linear-gradient(135deg, rgba(74, 222, 128, 0.25) 0%, rgba(22, 101, 52, 0.4) 100%);
       width: 48px;
       height: 48px;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 0 15px rgba(74, 222, 128, 0.25);
     }
 
     .brand-text h1 {
-      font-family: 'Outfit', sans-serif;
-      font-size: 20px;
+      font-family: 'Outfit', 'Noto Sans Telugu', sans-serif;
+      font-size: 19px;
       font-weight: 700;
-      letter-spacing: -0.3px;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .brand-text h1 span.telugu-name {
+      font-size: 17px;
+      color: #86efac;
+      font-weight: 600;
     }
 
     .brand-text p {
-      font-size: 13px;
-      opacity: 0.9;
+      font-size: 12.5px;
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      gap: 6px;
     }
 
     .header-controls {
       display: flex;
       align-items: center;
-      gap: 14px;
+      gap: 12px;
     }
 
-    .lang-toggle {
+    .system-badges {
       display: flex;
-      background: rgba(0, 0, 0, 0.25);
-      border-radius: 20px;
-      padding: 3px;
-      border: 1px solid rgba(255,255,255,0.2);
-    }
-
-    .lang-btn {
-      background: transparent;
-      border: none;
-      color: #e2e8f0;
-      padding: 6px 14px;
-      border-radius: 16px;
-      cursor: pointer;
-      font-size: 13px;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-
-    .lang-btn.active {
-      background: #ffffff;
-      color: var(--primary-dark);
-      box-shadow: var(--shadow-sm);
+      align-items: center;
+      gap: 8px;
     }
 
     .badge-status {
       display: flex;
       align-items: center;
       gap: 6px;
-      font-size: 12px;
-      background: rgba(255, 255, 255, 0.15);
-      padding: 6px 12px;
+      font-size: 11.5px;
+      font-weight: 600;
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 5px 12px;
       border-radius: 20px;
       font-family: 'Inter', sans-serif;
+      color: #e2e8f0;
     }
 
-    .badge-status::before {
-      content: '';
+    .badge-status .status-dot {
       width: 8px;
       height: 8px;
-      background-color: #4ade80;
+      background-color: var(--leaf-400);
       border-radius: 50%;
       display: inline-block;
-      box-shadow: 0 0 8px #4ade80;
+      box-shadow: 0 0 8px var(--leaf-400);
     }
 
+    .badge-status.badge-ollama {
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.18);
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .badge-status.badge-ollama:hover {
+      background: rgba(255, 255, 255, 0.28);
+      transform: translateY(-1px);
+    }
+
+    .badge-status.badge-ollama.online .status-dot {
+      background-color: #38bdf8;
+      box-shadow: 0 0 8px #38bdf8;
+    }
+
+    .badge-status.badge-ollama.offline .status-dot {
+      background-color: #f87171;
+      box-shadow: 0 0 8px #f87171;
+    }
+
+    .lang-toggle {
+      display: flex;
+      background: rgba(0, 0, 0, 0.35);
+      border-radius: 22px;
+      padding: 3px;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+    }
+
+    .lang-btn {
+      background: transparent;
+      border: none;
+      color: #e2e8f0;
+      padding: 5px 14px;
+      border-radius: 18px;
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .lang-btn.active {
+      background: #ffffff;
+      color: var(--forest-900);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    }
+
+    /* Dashboard Hub Bar */
+    .dashboard-hub {
+      background: #ffffff;
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 8px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+
+    .hub-pill {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--forest-800);
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      padding: 4px 12px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .hub-pill.pill-amber {
+      background: #fffbeb;
+      border-color: #fde68a;
+      color: #b45309;
+    }
+
+    .hub-pill.pill-blue {
+      background: #eff6ff;
+      border-color: #bfdbfe;
+      color: #1d4ed8;
+    }
+
+    .voice-status-pill {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 4px 12px;
+      border-radius: 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .voice-status-pill.status-idle {
+      background: #f1f5f9;
+      border: 1px solid #cbd5e1;
+      color: #475569;
+    }
+
+    .voice-status-pill.status-listening {
+      background: #fef2f2;
+      border: 1.5px solid #f87171;
+      color: #dc2626;
+      animation: pulse-ring-badge 1.4s infinite;
+    }
+
+    .voice-status-pill.status-processing {
+      background: #fffbeb;
+      border: 1.5px solid #f59e0b;
+      color: #b45309;
+    }
+
+    .voice-status-pill.status-unavailable {
+      background: #fef2f2;
+      border: 1px solid #fca5a5;
+      color: #b91c1c;
+    }
+
+    /* Main Workspace */
     main {
       flex: 1;
       display: flex;
       flex-direction: column;
-      max-width: 960px;
+      max-width: 1040px;
       width: 100%;
       margin: 0 auto;
-      padding: 16px;
+      padding: 10px 18px 16px 18px;
       overflow: hidden;
     }
 
     .chat-container {
       flex: 1;
       overflow-y: auto;
-      padding: 12px;
+      padding: 8px 6px 14px 6px;
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 14px;
       scroll-behavior: smooth;
     }
 
     .message-row {
       display: flex;
       flex-direction: column;
-      max-width: 82%;
+      max-width: 86%;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
     }
 
     .message-row.user {
@@ -172,49 +333,32 @@
 
     .message-bubble {
       padding: 14px 18px;
-      border-radius: 16px;
-      line-height: 1.6;
-      font-size: 15px;
+      border-radius: 18px;
+      line-height: 1.62;
+      font-size: 14.5px;
       box-shadow: var(--shadow-sm);
       position: relative;
     }
 
     .message-row.user .message-bubble {
-      background: var(--user-bubble);
-      color: var(--primary-dark);
-      border: 1px solid #c8e6c9;
+      background: var(--user-bubble-bg);
+      color: var(--forest-950);
+      border: 1.5px solid var(--user-bubble-border);
       border-bottom-right-radius: 4px;
     }
 
     .message-row.agent .message-bubble {
-      background: var(--agent-bubble);
+      background: var(--agent-bubble-bg);
       color: var(--text-main);
-      border: 1px solid var(--card-border);
+      border: 1.5px solid var(--card-border);
       border-bottom-left-radius: 4px;
-    }
-
-    .message-bubble h3, .message-bubble h4 {
-      margin-top: 10px;
-      margin-bottom: 6px;
-      color: var(--primary-dark);
-    }
-
-    .message-bubble ul, .message-bubble ol {
-      margin-left: 20px;
-      margin-top: 6px;
-      margin-bottom: 6px;
-    }
-
-    .message-bubble hr {
-      border: 0;
-      border-top: 1px solid #e2e8f0;
-      margin: 12px 0;
+      box-shadow: var(--shadow-md);
     }
 
     .message-meta {
       font-size: 11px;
-      color: var(--text-muted);
-      margin-top: 4px;
+      color: var(--text-light);
+      margin-top: 5px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -227,43 +371,150 @@
     .speech-controls {
       display: flex;
       gap: 6px;
-      margin-top: 8px;
+      margin-top: 6px;
     }
 
     .speech-btn {
-      background: #f1f5f9;
+      background: #f8fafc;
       border: 1px solid #cbd5e1;
-      padding: 4px 10px;
+      padding: 3px 9px;
       border-radius: 12px;
-      font-size: 12px;
+      font-size: 11.5px;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 4px;
       color: var(--text-main);
-      transition: background 0.15s;
+      transition: background 0.15s, border-color 0.15s;
     }
 
     .speech-btn:hover {
       background: #e2e8f0;
+      border-color: #94a3b8;
+    }
+
+    /* Structured Agricultural Response Cards */
+    .card-question {
+      background: linear-gradient(135deg, #eff6ff 0%, #e0f2fe 100%);
+      border: 1.5px solid #93c5fd;
+      border-radius: 12px;
+      padding: 12px 15px;
+      margin: 10px 0;
+      color: #1e3a8a;
+      box-shadow: 0 2px 6px rgba(147, 197, 253, 0.15);
+    }
+
+    .card-warning {
+      background: linear-gradient(135deg, #fffdf0 0%, #fffbeb 100%);
+      border: 1.5px solid #fcd34d;
+      border-radius: 12px;
+      padding: 12px 15px;
+      margin: 10px 0;
+      color: #92400e;
+      box-shadow: 0 2px 6px rgba(252, 211, 77, 0.15);
+    }
+
+    .card-reference {
+      background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+      border: 1.5px solid #86efac;
+      border-radius: 12px;
+      padding: 12px 15px;
+      margin: 10px 0;
+      color: #166534;
+      box-shadow: 0 2px 6px rgba(134, 239, 172, 0.15);
+    }
+
+    .card-causes {
+      background: #faf5ff;
+      border-left: 4px solid #a855f7;
+      border-radius: 8px;
+      padding: 11px 15px;
+      margin: 9px 0;
+      color: #581c87;
+    }
+
+    .card-actions {
+      background: #f0fdfa;
+      border-left: 4px solid #14b8a6;
+      border-radius: 8px;
+      padding: 11px 15px;
+      margin: 9px 0;
+      color: #134e4a;
+    }
+
+    .card-ollama {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      padding: 10px 14px;
+      margin-bottom: 11px;
+    }
+
+    .card-header {
+      font-weight: 700;
+      margin-bottom: 7px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 14px;
+    }
+
+    .badge-tag {
+      display: inline-block;
+      font-size: 11px;
+      font-weight: 600;
+      background: #e2e8f0;
+      color: #334155;
+      padding: 2px 8px;
+      border-radius: 10px;
+    }
+
+    /* Category Navigation Tabs */
+    .category-tabs {
+      display: flex;
+      gap: 8px;
+      padding: 4px 2px 8px 2px;
+      overflow-x: auto;
+      flex-shrink: 0;
+    }
+
+    .category-tab {
+      background: rgba(27, 94, 32, 0.08);
+      border: 1.5px solid rgba(27, 94, 32, 0.22);
+      font-size: 12.5px;
+      font-weight: 600;
+      color: var(--forest-800);
+      cursor: pointer;
+      padding: 6px 14px;
+      border-radius: 16px;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .category-tab.active {
+      background: var(--forest-800);
+      color: #ffffff;
+      border-color: var(--forest-800);
+      box-shadow: 0 2px 6px rgba(19, 78, 39, 0.25);
     }
 
     .suggestions {
       display: flex;
       gap: 8px;
       overflow-x: auto;
-      padding: 8px 4px 12px 4px;
+      padding: 2px 2px 8px 2px;
       white-space: nowrap;
       scrollbar-width: thin;
+      flex-shrink: 0;
     }
 
     .suggestion-chip {
       background: #ffffff;
       border: 1px solid #cbd5e1;
-      color: var(--primary-green);
-      font-size: 12.5px;
+      color: var(--forest-800);
+      font-size: 12px;
       font-weight: 500;
-      padding: 6px 14px;
+      padding: 5px 13px;
       border-radius: 18px;
       cursor: pointer;
       box-shadow: var(--shadow-sm);
@@ -275,25 +526,111 @@
 
     .suggestion-chip:hover {
       background: #f0fdf4;
-      border-color: #86efac;
+      border-color: var(--leaf-400);
       transform: translateY(-1px);
     }
 
+    .suggestion-chip.chip-problem {
+      background: #fffbeb;
+      border-color: #fde68a;
+      color: #b45309;
+    }
+
+    .suggestion-chip.chip-problem:hover {
+      background: #fef3c7;
+      border-color: #f59e0b;
+    }
+
+    /* Recording Status Banner */
+    .recording-banner {
+      display: none;
+      font-size: 13px;
+      border-radius: 12px;
+      padding: 9px 15px;
+      margin-bottom: 8px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      line-height: 1.4;
+      animation: fadeIn 0.2s ease-out;
+      flex-shrink: 0;
+    }
+
+    .recording-banner.banner-listening {
+      background: #fef2f2;
+      border: 1.5px solid #f87171;
+      color: #991b1b;
+      box-shadow: 0 2px 8px rgba(239, 68, 68, 0.15);
+    }
+
+    .recording-banner.banner-processing {
+      background: #fffbeb;
+      border: 1.5px solid #fde68a;
+      color: #92400e;
+      box-shadow: 0 2px 8px rgba(245, 158, 11, 0.12);
+    }
+
+    .recording-banner.banner-unavailable,
+    .recording-banner.banner-error {
+      background: #fef2f2;
+      border: 1.5px solid #fecaca;
+      color: #991b1b;
+    }
+
+    .banner-stop-btn {
+      background: #dc2626;
+      color: #ffffff;
+      border: none;
+      border-radius: 8px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      box-shadow: 0 2px 6px rgba(220, 38, 38, 0.3);
+      transition: background 0.15s;
+    }
+
+    .banner-stop-btn:hover {
+      background: #b91c1c;
+    }
+
+    .banner-dismiss-btn {
+      background: transparent;
+      border: none;
+      color: inherit;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 0 6px;
+    }
+
+    /* Floating Farmer Input Dock */
     .input-panel {
       background: var(--surface-white);
-      border-radius: 18px;
-      padding: 10px 14px;
-      border: 1px solid var(--card-border);
+      border-radius: 22px;
+      padding: 7px 10px 7px 12px;
+      border: 2px solid #cbd5e1;
       box-shadow: var(--shadow-md);
       display: flex;
       align-items: center;
-      gap: 10px;
+      gap: 12px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      flex-shrink: 0;
+    }
+
+    .input-panel:focus-within {
+      border-color: var(--leaf-500);
+      box-shadow: 0 4px 18px rgba(34, 197, 94, 0.18);
     }
 
     .mic-button {
-      background: #f8fafc;
-      border: 2px solid #e2e8f0;
-      color: var(--primary-green);
+      background: #f0fdf4;
+      border: 2px solid #86efac;
+      color: var(--forest-800);
       width: 46px;
       height: 46px;
       border-radius: 50%;
@@ -302,31 +639,58 @@
       justify-content: center;
       font-size: 20px;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
       flex-shrink: 0;
+      position: relative;
     }
 
     .mic-button:hover {
-      background: #f0fdf4;
-      border-color: #22c55e;
+      background: #dcfce7;
+      border-color: var(--leaf-500);
+      transform: scale(1.05);
     }
 
-    .mic-button.recording {
+    /* State: Listening (Active Voice Capture) */
+    .mic-button.listening,
+    .mic-button.state-listening {
       background: #fee2e2;
       border-color: #ef4444;
       color: #dc2626;
-      animation: pulse-ring 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+      animation: pulse-ring-mic 1.4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
     }
 
-    @keyframes pulse-ring {
+    @keyframes pulse-ring-mic {
       0%, 100% {
         transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.4);
+        box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
       }
       50% {
         transform: scale(1.08);
         box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
       }
+    }
+
+    /* State: Processing (Converting Speech) */
+    .mic-button.processing,
+    .mic-button.state-processing {
+      background: #fef3c7;
+      border-color: #f59e0b;
+      color: #d97706;
+      animation: pulse-amber-mic 1.2s infinite ease-in-out;
+    }
+
+    @keyframes pulse-amber-mic {
+      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
+      50% { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+    }
+
+    /* State: Microphone Unavailable / Permission Denied */
+    .mic-button.mic-unavailable,
+    .mic-button.state-unavailable {
+      background: #f1f5f9;
+      border-color: #cbd5e1;
+      color: #94a3b8;
+      cursor: not-allowed;
     }
 
     .input-box {
@@ -335,13 +699,18 @@
       outline: none;
       font-family: inherit;
       font-size: 15px;
-      padding: 8px;
+      padding: 6px;
       background: transparent;
       color: var(--text-main);
     }
 
+    .input-box::placeholder {
+      color: #94a3b8;
+      font-size: 14.5px;
+    }
+
     .send-btn {
-      background: var(--primary-green);
+      background: linear-gradient(135deg, var(--forest-800) 0%, var(--leaf-600) 100%);
       color: #ffffff;
       border: none;
       width: 44px;
@@ -351,169 +720,748 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
-      transition: background 0.2s;
+      font-size: 17px;
+      transition: background 0.2s, transform 0.15s, box-shadow 0.15s;
       flex-shrink: 0;
+      box-shadow: 0 2px 8px rgba(21, 128, 61, 0.25);
     }
 
     .send-btn:hover {
-      background: var(--primary-dark);
+      background: linear-gradient(135deg, var(--forest-900) 0%, var(--forest-700) 100%);
+      transform: scale(1.05);
+      box-shadow: 0 4px 12px rgba(21, 128, 61, 0.35);
     }
 
-    .recording-banner {
-      display: none;
-      font-size: 13px;
-      border-radius: 10px;
-      padding: 8px 14px;
-      margin-bottom: 10px;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-      line-height: 1.4;
-    }
-
-    .recording-banner.banner-listening {
-      background: #f0fdf4;
-      border: 1px solid #86efac;
-      color: #166534;
-    }
-
-    .recording-banner.banner-error {
-      background: #fef2f2;
-      border: 1px solid #fecaca;
-      color: #991b1b;
-    }
-
-    .banner-stop-btn {
+    .retry-btn {
       background: #dc2626;
       color: #ffffff;
       border: none;
-      border-radius: 6px;
-      padding: 4px 10px;
-      font-size: 12px;
+      padding: 6px 14px;
+      border-radius: 8px;
       font-weight: 600;
       cursor: pointer;
-      white-space: nowrap;
+      font-size: 12.5px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: background 0.15s;
     }
 
-    .banner-dismiss-btn {
-      background: transparent;
-      border: none;
-      color: inherit;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-      padding: 0 4px;
+    .retry-btn:hover {
+      background: #b91c1c;
+    }
+
+    .typing-dots {
+      display: inline-flex;
+      gap: 5px;
+      align-items: center;
+      margin-left: 6px;
+      vertical-align: middle;
+    }
+
+    .typing-dot {
+      width: 6px;
+      height: 6px;
+      background: var(--forest-800);
+      border-radius: 50%;
+      animation: typing-bounce 1.2s infinite ease-in-out;
+    }
+
+    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+    @keyframes typing-bounce {
+      0%, 80%, 100% { transform: translateY(0); }
+      40% { transform: translateY(-5px); }
     }
 
     .notice-bar {
       font-size: 11.5px;
       color: var(--text-muted);
       text-align: center;
-      margin-top: 8px;
+      margin-top: 6px;
       padding: 0 8px;
+      line-height: 1.45;
+      flex-shrink: 0;
     }
 
-    /* Accessibility high contrast focus */
     button:focus-visible, input:focus-visible {
       outline: 2px solid var(--accent-gold);
       outline-offset: 2px;
     }
-  </style>
-</head>
-<body>
 
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      header { padding: 10px 14px; }
+      .brand-icon-box { width: 40px; height: 40px; font-size: 22px; }
+      .brand-text h1 { font-size: 16px; }
+      .brand-text p { font-size: 11px; }
+      .system-badges { display: none; }
+      .dashboard-hub { padding: 6px 14px; }
+      main { padding: 8px 10px 12px 10px; }
+      .message-row { max-width: 92%; }
+      .message-bubble { padding: 12px 14px; font-size: 14px; }
+      .input-panel { padding: 4px 6px 4px 10px; }
+      .mic-button { width: 42px; height: 42px; font-size: 18px; }
+      .send-btn { width: 40px; height: 40px; }
+    }
+  </style>
+  <link rel="stylesheet" href="/css/portal.css">
+  <script src="/config.js"></script>
+</head>
+<body class="portal-body">
+
+  <!-- Top Agricultural Brand Header -->
   <header>
-    <div class="brand">
-      <div class="brand-icon">🌾</div>
+    <div class="brand" style="cursor:pointer;" onclick="navigateTo('home')">
+      <div class="brand-icon-box" title="AgriSaarthi AI Crop Sprout">🌾</div>
       <div class="brand-text">
-        <h1 id="app-title">AgriSaarthi AI (అగ్రిసారథి)</h1>
-        <p id="app-subtitle">రైతు నేస్తం • Fetch-A-Thon 3.0 ACP Decision Agent</p>
+        <h1 id="app-title">AgriSaarthi AI <span class="telugu-name">(అగ్రిసారథి)</span></h1>
+        <p id="app-subtitle">రైతు నిర్ణయ సహాయకుడు • Fetch.ai ACP Decision Agent & Crop Health AI</p>
       </div>
     </div>
     <div class="header-controls">
-      <div class="lang-toggle" role="group" aria-label="Language selection">
-        <button id="btn-lang-te" class="lang-btn active" onclick="setLanguage('te')">తెలుగు</button>
-        <button id="btn-lang-en" class="lang-btn" onclick="setLanguage('en')">English</button>
+      <div class="system-badges">
+        <div class="badge-status badge-ollama" id="ollama-status-badge" onclick="checkOllamaStatus()" title="Local Open-Weight Model via Ollama (Click to refresh)">
+          <span class="status-dot"></span> 🦙 Ollama: Checking...
+        </div>
+        <div class="badge-status" title="ACP v0.3.0 Agentverse Mailbox Active">
+          <span class="status-dot"></span> ACP v0.3.0 Live
+        </div>
       </div>
-      <div class="badge-status" title="ACP v0.3.0 Agentverse Mailbox Active">ACP v0.3.0 Live</div>
+      <div class="lang-toggle" role="group" aria-label="Language selection">
+        <button type="button" id="btn-lang-te" class="lang-btn active" onclick="setLanguage('te')">తెలుగు</button>
+        <button type="button" id="btn-lang-en" class="lang-btn" onclick="setLanguage('en')">English</button>
+      </div>
     </div>
   </header>
 
-  <main>
-    <div class="chat-container" id="chat-messages" role="log" aria-live="polite">
-      <!-- Initial Welcome Message -->
-      <div class="message-row agent">
-        <div class="message-bubble" id="welcome-bubble">
-          🌾 <strong>నమస్కారం! నేను అగ్రిసారథి AI (AgriSaarthi AI)</strong>, మీ నమ్మకమైన వ్యవసాయ సలహాదారుని.<br><br>
-          మీ భూమి పరిమాణం, నేల రకం, నీటి వసతి, నాట్లు వేసే కాలం (సీజన్) మరియు బడ్జెట్‌కు తగిన అత్యుత్తమ పంటలను ఎంచుకోవడంలో నేను మీకు సహాయపడతాను.<br><br>
-          <em>కింది మైక్రోఫోన్ బటన్ నొక్కి మాట్లాడండి లేదా టైప్ చేయండి:</em>
+  <!-- Primary Farmer Portal Navigation Bar -->
+  <nav class="portal-nav" aria-label="Primary Navigation">
+    <div class="portal-nav-links">
+      <button type="button" class="nav-item-btn active" data-page="home" onclick="navigateTo('home')">🏠 హోమ్ (Home)</button>
+      <button type="button" class="nav-item-btn" id="nav-btn-dashboard" data-page="dashboard" style="display:none;" onclick="navigateTo('dashboard')">📊 డాష్‌బోర్డ్ (Dashboard)</button>
+      <button type="button" class="nav-item-btn" data-page="advisory" onclick="navigateTo('advisory')">🌱 పంట సలహా (Crop Advisory)</button>
+      <button type="button" class="nav-item-btn" data-page="health" onclick="navigateTo('health')">🔬 పంట ఆరోగ్యం (Crop Health)</button>
+      <button type="button" class="nav-item-btn" data-page="weather" onclick="navigateTo('weather')">🌦️ వాతావరణం (Weather & Alerts)</button>
+      <button type="button" class="nav-item-btn" data-page="voice" onclick="navigateTo('voice')">🎙️ AI వాయిస్ సహాయకుడు (Voice AI)</button>
+      <button type="button" class="nav-item-btn" id="nav-btn-profile" data-page="profile" style="display:none;" onclick="navigateTo('profile')">👤 నా ప్రొఫైల్ (Profile)</button>
+    </div>
+    <div class="portal-nav-auth">
+      <div id="nav-auth-guest" style="display:flex; gap:8px;">
+        <button type="button" class="btn-nav-action btn-outline" onclick="navigateTo('login')">🔑 లాగిన్ (Login)</button>
+        <button type="button" class="btn-nav-action" onclick="navigateTo('register')">📝 రైతు నమోదు (Register)</button>
+      </div>
+      <div id="nav-auth-user" style="display:none; align-items:center; gap:8px;">
+        <span class="nav-user-pill">👨‍🌾 <span id="nav-farmer-name">Farmer</span></span>
+        <button type="button" class="btn-nav-action btn-danger-outline" onclick="handleLogout()">🚪 లాగ్ అవుట్ (Logout)</button>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Agricultural AI Dashboard Hub Bar -->
+  <div class="dashboard-hub">
+    <div class="hub-pill">
+      <span>🌾</span> <strong>పంట సలహాదారు (Crop Advisory):</strong> 11 ICAR/CACP పంటలు
+    </div>
+    <div class="hub-pill pill-amber">
+      <span>🛡️</span> <strong>పంట రక్షణ & తెగుళ్లు (Crop Health):</strong> లక్షణాలు & నివారణ
+    </div>
+    <div class="hub-pill pill-blue">
+      <span>🤖</span> <strong>ఏజెంట్ ఆర్కెస్ట్రేషన్:</strong> Fetch.ai ACP + Local AI
+    </div>
+    <div id="voice-status-pill" class="voice-status-pill status-idle">
+      🎙️ వాయిస్ సిద్ధంగా ఉంది (Voice Ready)
+    </div>
+  </div>
+
+  <!-- =====================================================================
+       PAGE 1: PUBLIC HOME PAGE
+       ===================================================================== -->
+  <section id="page-home" class="portal-page active" aria-labelledby="home-hero-heading">
+    <div class="hero-banner">
+      <h2 id="home-hero-heading">🌾 అగ్రిసారథి AI (AgriSaarthi AI) — భారతీయ రైతుల కోసం స్మార్ట్ వ్యవసాయ నిర్ణయ వేదిక</h2>
+      <p>
+        ICAR మరియు CACP (MSP 2024–2025) ప్రామాణిక గణాంకాల ఆధారంగా మీ నేల, నీటి వసతి, సీజన్ మరియు బడ్జెట్‌కు తగిన పంట సిఫార్సులు,
+        పంట తెగుళ్ల రోగనిర్ధారణ, వాస్తవ వాతావరణ సమాచారం మరియు తెలుగు/ఇంగ్లీష్ వాయిస్ అసిస్టెంట్.
+      </p>
+      <div class="hero-actions" id="home-cta-guest">
+        <button type="button" class="btn-hero-light" onclick="navigateTo('register')">📝 కొత్త రైతు నమోదు (Register Free)</button>
+        <button type="button" class="btn-hero-outline" onclick="navigateTo('login')">🔑 రైతు లాగిన్ (Farmer Login)</button>
+        <button type="button" class="btn-hero-outline" onclick="navigateTo('voice')">🎙️ AI వాయిస్ సహాయకుడిని ప్రయత్నించండి (Try Voice AI)</button>
+      </div>
+      <div class="hero-actions" id="home-cta-authenticated" style="display:none;">
+        <button type="button" class="btn-hero-light" onclick="navigateTo('dashboard')">📊 నా రైతు డాష్‌బోర్డ్‌కు వెళ్ళండి (Open My Dashboard)</button>
+        <button type="button" class="btn-hero-outline" onclick="navigateTo('advisory')">🌱 పంట సలహా పొందండి (Crop Advisory)</button>
+        <button type="button" class="btn-hero-outline" onclick="navigateTo('voice')">🎙️ AI వాయిస్ సహాయకుడు (Voice Assistant)</button>
+      </div>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:24px;">
+      <div class="portal-card card-green-accent">
+        <h3>🌱 పంట సలహా (Crop Advisory)</h3>
+        <p>మీ రాష్ట్రం, జిల్లా, ఎకరాలు, నేల రకం, నీటి వసతి మరియు బడ్జెట్ ఆధారంగా 4-దశల శాస్త్రీయ విశ్లేషణ మరియు నికర లాభం అంచనా.</p>
+        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('advisory')">పంట సలహా చూడండి →</button>
+      </div>
+      <div class="portal-card card-green-accent">
+        <h3>🔬 పంట ఆరోగ్యం (Crop Health)</h3>
+        <p>వరి, పత్తి, మిరప, గోధుమ, మొక్కజొన్న పంటల్లో ఆకులు పసుపుబారడం, ముడత మరియు పురుగుల సమస్యలకు ICAR ఆధారిత నిర్ధారణ.</p>
+        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('health')">పంట ఆరోగ్యం తనిఖీ →</button>
+      </div>
+      <div class="portal-card card-green-accent">
+        <h3>🌦️ వాతావరణం & హెచ్చరికలు</h3>
+        <p>Open-Meteo వాస్తవ వాతావరణ డేటాతో మీ జిల్లా ఉష్ణోగ్రత, వర్షపాతం, గాలి వేగం మరియు 3-రోజుల వ్యవసాయ ముందస్తు సూచనలు.</p>
+        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('weather')">వాతావరణం చూడండి →</button>
+      </div>
+      <div class="portal-card card-green-accent">
+        <h3>🎙️ తెలుగు & ఇంగ్లీష్ వాయిస్ AI</h3>
+        <p>టైప్ చేయడం ఇబ్బందిగా ఉంటే మైక్రోఫోన్ నొక్కి తెలుగులో లేదా ఇంగ్లీష్‌లో మాట్లాడండి. సమాధానాన్ని బిగ్గరగా వినండి.</p>
+        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('voice')">మైక్రోఫోన్‌తో మాట్లాడండి →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       PAGE 2: FARMER LOGIN PAGE
+       ===================================================================== -->
+  <section id="page-login" class="portal-page" aria-labelledby="login-heading">
+    <div class="auth-card">
+      <h2 id="login-heading" style="color:var(--forest-900); margin-bottom:6px;">🔑 రైతు లాగిన్ (Farmer Login)</h2>
+      <p style="font-size:14px; color:var(--text-muted); margin-bottom:18px;">
+        మీ వ్యక్తిగత డాష్‌బోర్డ్, పొలం వివరాలు మరియు గత సలహాలను చూడటానికి లాగిన్ అవ్వండి.
+      </p>
+      <div id="login-alert" class="status-alert" role="alert"></div>
+      <form onsubmit="handleLoginSubmit(event)">
+        <div class="form-group">
+          <label for="login-identifier">📱 మొబైల్ నంబర్ (10 అంకెలు) లేదా యూజర్‌నేమ్ (Mobile Number or Username)</label>
+          <input type="text" id="login-identifier" class="form-control" placeholder="ఉదా: 9876543210 లేదా raju_farmer" required autocomplete="username">
         </div>
-        <div class="message-meta">
-          <span>AgriSaarthi AI</span>
-          <div class="speech-controls">
-            <button class="speech-btn" onclick="speakMessage(this, 'welcome-bubble')">🔊 వినండి (Listen)</button>
-            <button class="speech-btn" onclick="speakMessage(this, 'welcome-bubble')">🔄 మళ్ళీ (Replay)</button>
-            <button class="speech-btn" onclick="stopSpeech()">⏹️ ఆపు (Stop)</button>
+        <div class="form-group">
+          <label for="login-password">🔒 పాస్‌వర్డ్ (Password)</label>
+          <input type="password" id="login-password" class="form-control" placeholder="మీ పాస్‌వర్డ్ నమోదు చేయండి" required autocomplete="current-password">
+        </div>
+        <button type="submit" id="login-submit-btn" class="btn-primary-agri" style="width:100%; margin-top:6px;">
+          🔑 లాగిన్ అవ్వండి (Sign In)
+        </button>
+      </form>
+      <div style="text-align:center; margin-top:18px; font-size:14px; color:var(--text-muted);">
+        ఇంకా ఖాతా లేదా? (New to AgriSaarthi?)
+        <button type="button" style="background:none; border:none; color:var(--forest-800); font-weight:700; cursor:pointer; text-decoration:underline;" onclick="navigateTo('register')">
+          కొత్త రైతు నమోదు (Create Farmer Account)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       PAGE 3: FARMER REGISTRATION PAGE
+       ===================================================================== -->
+  <section id="page-register" class="portal-page" aria-labelledby="register-heading">
+    <div class="auth-card" style="max-width:560px;">
+      <h2 id="register-heading" style="color:var(--forest-900); margin-bottom:6px;">📝 కొత్త రైతు నమోదు (Farmer Registration)</h2>
+      <p style="font-size:14px; color:var(--text-muted); margin-bottom:18px;">
+        ఉచిత రైతు ఖాతాను సృష్టించండి. తదుపరి దశలో మీ పొలం వివరాలను జతచేయవచ్చు (లేదా ఇప్పుడే దాటవేయవచ్చు).
+      </p>
+      <div id="register-alert" class="status-alert" role="alert"></div>
+      <form onsubmit="handleRegisterSubmit(event)">
+        <div class="form-group">
+          <label for="reg-fullname">👨‍🌾 పూర్తి పేరు (Full Name) *</label>
+          <input type="text" id="reg-fullname" class="form-control" placeholder="ఉదా: రామారావు (Rama Rao)" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-identifier">📱 10-అంకెల మొబైల్ నంబర్ లేదా యూజర్‌నేమ్ (10-Digit Mobile or Username) *</label>
+          <input type="text" id="reg-identifier" class="form-control" placeholder="ఉదా: 9876543210" required autocomplete="username">
+        </div>
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="reg-password">🔒 పాస్‌వర్డ్ (కనీసం 6 అక్షరాలు / Min 6 chars) *</label>
+            <input type="password" id="reg-password" class="form-control" placeholder="******" minlength="6" required autocomplete="new-password">
           </div>
+          <div class="form-group">
+            <label for="reg-confirm-password">🔒 పాస్‌వర్డ్ నిర్ధారణ (Confirm Password) *</label>
+            <input type="password" id="reg-confirm-password" class="form-control" placeholder="******" minlength="6" required autocomplete="new-password">
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="reg-lang">🌐 ప్రాధాన్య భాష (Preferred Language)</label>
+          <select id="reg-lang" class="form-control">
+            <option value="te">తెలుగు (Telugu)</option>
+            <option value="en">English (ఇంగ్లీష్)</option>
+          </select>
+        </div>
+        <button type="submit" id="reg-submit-btn" class="btn-primary-agri" style="width:100%; margin-top:6px;">
+          📝 ఖాతా సృష్టించి కొనసాగండి (Register & Continue)
+        </button>
+      </form>
+      <div style="text-align:center; margin-top:18px; font-size:14px; color:var(--text-muted);">
+        ఇప్పటికే ఖాతా ఉందా? (Already registered?)
+        <button type="button" style="background:none; border:none; color:var(--forest-800); font-weight:700; cursor:pointer; text-decoration:underline;" onclick="navigateTo('login')">
+          ఇక్కడ లాగిన్ అవ్వండి (Login Here)
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       PAGE 4: FARMER DASHBOARD (Protected Route)
+       ===================================================================== -->
+  <section id="page-dashboard" class="portal-page" aria-labelledby="dash-welcome-name">
+    <div class="hero-banner" style="padding:24px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
+        <div>
+          <h2 id="dash-welcome-name">🌾 నమస్కారం రైతు సోదరులారా!</h2>
+          <p id="dash-welcome-location" style="margin-top:4px;">📍 ప్రాంతం</p>
+        </div>
+        <button type="button" class="btn-hero-light" onclick="navigateTo('profile')">
+          👤 నా పొలం ప్రొఫైల్ (My Farm Profile)
+        </button>
+      </div>
+    </div>
+
+    <!-- Quick Action Cards -->
+    <h3 style="margin-bottom:12px; color:var(--forest-900);">⚡ తక్షణ సేవలు (Quick Actions)</h3>
+    <div class="grid-4" style="margin-bottom:22px;">
+      <button type="button" class="quick-action-card" onclick="navigateTo('advisory')">
+        <div class="quick-action-icon">🌱</div>
+        <div class="quick-action-title">పంట సలహా (Crop Advisory)</div>
+        <div class="quick-action-desc">మీ నేల, నీరు & బడ్జెట్‌కు తగిన లాభదాయక పంటలు</div>
+      </button>
+      <button type="button" class="quick-action-card" onclick="navigateTo('health')">
+        <div class="quick-action-icon">🔬</div>
+        <div class="quick-action-title">పంట ఆరోగ్యం (Crop Health)</div>
+        <div class="quick-action-desc">ఆకు మచ్చలు, పసుపుబారడం & పురుగుల నిర్ధారణ</div>
+      </button>
+      <button type="button" class="quick-action-card" onclick="navigateTo('weather')">
+        <div class="quick-action-icon">🌦️</div>
+        <div class="quick-action-title">వాతావరణం & హెచ్చరికలు</div>
+        <div class="quick-action-desc">వాస్తవ వర్షపాతం, గాలి వేగం & 3-రోజుల సూచన</div>
+      </button>
+      <button type="button" class="quick-action-card" onclick="navigateTo('voice')">
+        <div class="quick-action-icon">🎙️</div>
+        <div class="quick-action-title">AI వాయిస్ సహాయకుడు</div>
+        <div class="quick-action-desc">తెలుగు / ఇంగ్లీష్‌లో మాట్లాడి సమాధానం వినండి</div>
+      </button>
+    </div>
+
+    <!-- Weather Card & Official Alerts Card -->
+    <div class="grid-2" style="margin-bottom:22px;">
+      <div class="portal-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
+          <h3>🌦️ ప్రాంతీయ వాతావరణం (Real-Time Weather)</h3>
+          <button type="button" class="speech-btn" onclick="navigateTo('weather')">పూర్తి వివరాలు →</button>
+        </div>
+        <div id="dash-weather-content">
+          <p>⏳ వాతావరణ సమాచారం లోడ్ అవుతోంది...</p>
+        </div>
+      </div>
+      <div class="portal-card">
+        <h3>🚨 అధికారిక వాతావరణ హెచ్చరికలు (Weather Alerts)</h3>
+        <div id="dash-alerts-content">
+          <p>⏳ హెచ్చరికల స్థితి లోడ్ అవుతోంది...</p>
         </div>
       </div>
     </div>
 
-    <!-- Suggested Quick Prompts -->
+    <!-- My Farm Summary & Recent Advisory History -->
+    <div class="grid-2">
+      <div class="portal-card card-green-accent">
+        <h3>🚜 నా పొలం వివరాలు (My Farm Summary)</h3>
+        <div id="dash-farm-summary"></div>
+      </div>
+      <div class="portal-card">
+        <h3>📜 ఇటీవలి సలహా చరిత్ర (Recent Advisory History)</h3>
+        <div id="dash-history-content">
+          <p>ఇంకా ఎటువంటి సలహా చరిత్ర లేదు.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- =====================================================================
+       PAGE 5: CROP ADVISORY PAGE
+       ===================================================================== -->
+  <section id="page-advisory" class="portal-page" aria-labelledby="advisory-heading">
+    <div class="section-header-bar">
+      <div>
+        <h2 id="advisory-heading">🌱 శాస్త్రీయ పంట సిఫార్సు (ICAR/CACP Crop Advisory)</h2>
+        <p style="font-size:14px; color:var(--text-muted);">మీ పొలం వివరాలను నమోదు చేసి అనుకూలత స్కోరు, పెట్టుబడి మరియు నికర లాభం అంచనాలను పొందండి.</p>
+      </div>
+      <button type="button" class="btn-secondary-agri" onclick="navigateTo('voice')">🎙️ వాయిస్ ద్వారా అడగండి (Ask via Voice)</button>
+    </div>
+
+    <div id="advisory-alert" class="status-alert" role="alert"></div>
+
+    <div class="portal-card" style="margin-bottom:22px;">
+      <form onsubmit="handleAdvisorySubmit(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="adv-state">🗺️ రాష్ట్రం (State) *</label>
+            <select id="adv-state" class="form-control" required>
+              <option value="Telangana">తెలంగాణ (Telangana)</option>
+              <option value="Andhra Pradesh">ఆంధ్రప్రదేశ్ (Andhra Pradesh)</option>
+              <option value="Punjab">పంజాబ్ (Punjab)</option>
+              <option value="Maharashtra">మహారాష్ట్ర (Maharashtra)</option>
+              <option value="Karnataka">కర్ణాటక (Karnataka)</option>
+              <option value="Rajasthan">రాజస్థాన్ (Rajasthan)</option>
+              <option value="Madhya Pradesh">మధ్యప్రదేశ్ (Madhya Pradesh)</option>
+              <option value="Uttar Pradesh">ఉత్తర ప్రదేశ్ (Uttar Pradesh)</option>
+              <option value="Gujarat">గుజరాత్ (Gujarat)</option>
+              <option value="Haryana">హర్యానా (Haryana)</option>
+              <option value="Tamil Nadu">తమిళనాడు (Tamil Nadu)</option>
+              <option value="Odisha">ఒడిశా (Odisha)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="adv-district">📍 జిల్లా (District)</label>
+            <input type="text" id="adv-district" class="form-control" placeholder="ఉదా: Warangal, Guntur, Karimnagar">
+          </div>
+          <div class="form-group">
+            <label for="adv-acres">📐 భూమి విస్తీర్ణం - ఎకరాల్లో (Land Size in Acres) *</label>
+            <input type="number" id="adv-acres" class="form-control" step="0.1" min="0.1" max="5000" value="4" required>
+          </div>
+          <div class="form-group">
+            <label for="adv-soil">🪨 నేల రకం (Soil Type) *</label>
+            <select id="adv-soil" class="form-control" required>
+              <option value="black">నల్ల రేగడి నేల (Black Soil)</option>
+              <option value="red">ఎర్ర నేల (Red Soil)</option>
+              <option value="alluvial">ఒండ్రు నేల (Alluvial Soil)</option>
+              <option value="sandy_loam">ఇసుక రేగడి నేల (Sandy Loam)</option>
+              <option value="clayey">బంకమట్టి నేల (Clayey Soil)</option>
+              <option value="laterite">లేటరైట్ నేల (Laterite Soil)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="adv-water">💧 నీటి వసతి (Water Availability) *</label>
+            <select id="adv-water" class="form-control" required>
+              <option value="moderate">మధ్యస్థ నీరు - బోరు/బావి (Moderate / Borewell)</option>
+              <option value="high">సమృద్ధిగా నీరు - కాలువ (High / Canal)</option>
+              <option value="low">తక్కువ నీరు - వర్షాధారం (Low / Rainfed)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="adv-season">☀️ సాగు సీజన్ (Season) *</label>
+            <select id="adv-season" class="form-control" required>
+              <option value="kharif">ఖరీఫ్ / వానాకాలం (Kharif)</option>
+              <option value="rabi">రబీ / యాసంగి (Rabi)</option>
+              <option value="zaid">జైద్ / వేసవి (Zaid)</option>
+              <option value="year_round">వార్షిక పంట (Year Round)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="adv-budget">💰 మొత్తం పెట్టుబడి బడ్జెట్ ₹ (Total Budget in INR) *</label>
+            <input type="number" id="adv-budget" class="form-control" step="500" min="1000" value="90000" required>
+          </div>
+          <div class="form-group">
+            <label for="adv-risk">⚖️ రిస్క్ స్థాయి (Risk Tolerance)</label>
+            <select id="adv-risk" class="form-control">
+              <option value="moderate">మధ్యస్థం - సమతుల్య రాబడి (Moderate)</option>
+              <option value="low">తక్కువ రిస్క్ - MSP భద్రత (Low Risk)</option>
+              <option value="high">అధిక రాబడి వాణిజ్య పంటలు (High Return)</option>
+            </select>
+          </div>
+        </div>
+        <button type="submit" id="adv-submit-btn" class="btn-primary-agri">
+          🌾 అనుకూల పంటలను విశ్లేషించండి (Calculate Crop Recommendations)
+        </button>
+      </form>
+    </div>
+
+    <div id="advisory-results-container"></div>
+  </section>
+
+  <!-- =====================================================================
+       PAGE 6: CROP HEALTH & DISEASE PAGE
+       ===================================================================== -->
+  <section id="page-health" class="portal-page" aria-labelledby="health-heading">
+    <div class="section-header-bar">
+      <div>
+        <h2 id="health-heading">🔬 పంట ఆరోగ్యం & రోగనిర్ధారణ (Crop Health & Diagnostics)</h2>
+        <p style="font-size:14px; color:var(--text-muted);">ICAR & వ్యవసాయ విశ్వవిద్యాలయాల ధృవీకరించిన లక్షణాల ఆధారంగా పంట సమస్యలను గుర్తించండి.</p>
+      </div>
+      <button type="button" class="btn-secondary-agri" onclick="navigateTo('voice')">🎙️ వాయిస్ ద్వారా లక్షణాలు చెప్పండి</button>
+    </div>
+
+    <div id="health-alert" class="status-alert" role="alert"></div>
+
+    <!-- Quick Disorder Presets -->
+    <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+      <button type="button" class="suggestion-chip chip-problem" onclick="fillCropHealthPreset('Paddy / Rice', 'yellow leaves')">🌾 వరి ఆకులు పసుపుబారడం (Paddy Yellowing)</button>
+      <button type="button" class="suggestion-chip chip-problem" onclick="fillCropHealthPreset('Cotton', 'red leaves and curling')">🌾 పత్తి ఆకు ఎర్రబడటం & ముడత (Cotton Reddening)</button>
+      <button type="button" class="suggestion-chip chip-problem" onclick="fillCropHealthPreset('Chilli', 'leaf curl upward')">🌶️ మిరప ఆకు ముడత (Chilli Leaf Curl)</button>
+      <button type="button" class="suggestion-chip chip-problem" onclick="fillCropHealthPreset('Wheat', 'yellow stripes rust')">🌾 గోధుమ పసుపు చారలు (Wheat Rust/Yellowing)</button>
+      <button type="button" class="suggestion-chip chip-problem" onclick="fillCropHealthPreset('Maize', 'holes in whorl fall armyworm')">🌽 మొక్కజొన్న కత్తెర పురుగు (Fall Armyworm)</button>
+    </div>
+
+    <div class="portal-card" style="margin-bottom:22px;">
+      <form onsubmit="handleCropHealthSubmit(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="health-crop">🌿 పంట పేరు (Crop Name) *</label>
+            <select id="health-crop" class="form-control">
+              <option value="Paddy / Rice">వరి (Paddy / Rice)</option>
+              <option value="Cotton">పత్తి (Cotton)</option>
+              <option value="Chilli">మిరప (Chilli / Mirchi)</option>
+              <option value="Wheat">గోధుమ (Wheat)</option>
+              <option value="Maize">మొక్కజొన్న (Maize / Corn)</option>
+              <option value="Groundnut">వేరుశనగ (Groundnut)</option>
+              <option value="Soybean">సోయాబీన్ (Soybean)</option>
+              <option value="Chickpea">శనగలు (Chickpea / Chana)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="health-symptom">🔍 కనిపిస్తున్న లక్షణం (Observed Symptom) *</label>
+            <input type="text" id="health-symptom" class="form-control" placeholder="ఉదా: ఆకులు పసుపు రంగులోకి మారుతున్నాయి / yellow leaves" required>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="health-notes">📝 పొలం పరిశీలన వివరాలు - ఐచ్ఛికం (Field Observations: Crop age, top vs bottom leaves, water condition)</label>
+          <input type="text" id="health-notes" class="form-control" placeholder="ఉదా: పంట వయస్సు 25 రోజులు, కింది పాత ఆకులపై ముందుగా కనిపించింది, నీరు నిలిచి ఉంది">
+        </div>
+        <button type="submit" id="health-submit-btn" class="btn-primary-agri">
+          🔬 లక్షణాలను విశ్లేషించండి (Analyze Crop Symptom)
+        </button>
+      </form>
+    </div>
+
+    <div id="health-results-container"></div>
+  </section>
+
+  <!-- =====================================================================
+       PAGE 7: WEATHER AND ALERTS PAGE
+       ===================================================================== -->
+  <section id="page-weather" class="portal-page" aria-labelledby="weather-heading">
+    <div class="section-header-bar">
+      <div>
+        <h2 id="weather-heading">🌦️ వాతావరణం & వ్యవసాయ హెచ్చరికలు (Weather & Alerts)</h2>
+        <p style="font-size:14px; color:var(--text-muted);">వాస్తవ వాతావరణ డేటా (Open-Meteo WMO) మరియు పంట రక్షణ జాగ్రత్తలు. నకిలీ హెచ్చరికలు చూపబడవు.</p>
+      </div>
+    </div>
+
+    <div class="portal-card" style="margin-bottom:20px;">
+      <form onsubmit="loadWeatherPage(event)" style="display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end;">
+        <div class="form-group" style="flex:1; min-width:200px; margin-bottom:0;">
+          <label for="weather-state">🗺️ రాష్ట్రం (State)</label>
+          <select id="weather-state" class="form-control">
+            <option value="Telangana">తెలంగాణ (Telangana)</option>
+            <option value="Andhra Pradesh">ఆంధ్రప్రదేశ్ (Andhra Pradesh)</option>
+            <option value="Punjab">పంజాబ్ (Punjab)</option>
+            <option value="Maharashtra">మహారాష్ట్ర (Maharashtra)</option>
+            <option value="Karnataka">కర్ణాటక (Karnataka)</option>
+            <option value="Rajasthan">రాజస్థాన్ (Rajasthan)</option>
+            <option value="Madhya Pradesh">మధ్యప్రదేశ్ (Madhya Pradesh)</option>
+            <option value="Uttar Pradesh">ఉత్తర ప్రదేశ్ (Uttar Pradesh)</option>
+            <option value="Gujarat">గుజరాత్ (Gujarat)</option>
+            <option value="Tamil Nadu">తమిళనాడు (Tamil Nadu)</option>
+            <option value="Odisha">ఒడిశా (Odisha)</option>
+          </select>
+        </div>
+        <div class="form-group" style="flex:1; min-width:200px; margin-bottom:0;">
+          <label for="weather-district">📍 జిల్లా (District)</label>
+          <input type="text" id="weather-district" class="form-control" placeholder="ఉదా: Warangal, Guntur, Visakhapatnam, Karimnagar">
+        </div>
+        <button type="submit" class="btn-primary-agri">🔄 వాతావరణం చూడండి (Check Live Weather)</button>
+      </form>
+    </div>
+
+    <div id="weather-page-results"></div>
+  </section>
+
+  <!-- =====================================================================
+       PAGE 8: AI VOICE ASSISTANT PAGE (Preserves Existing Chat & Speech DOM)
+       ===================================================================== -->
+  <main id="page-voice" class="portal-page">
+    <!-- Chat Conversation Area -->
+    <div class="chat-container" id="chat-messages" role="log" aria-live="polite">
+      
+      <!-- Welcome Hero Message -->
+      <div class="message-row agent">
+        <div class="message-bubble" id="welcome-bubble">
+          🌾 <strong>నమస్కారం రైతు సోదరులారా! నేను అగ్రిసారథి AI (AgriSaarthi AI)</strong> — మీ వ్యక్తిగత డిజిటల్ వ్యవసాయ సలహాదారుని.<br><br>
+          మీ ప్రాంతం, భూమి విస్తీర్ణం (ఎకరాలు), నేల రకం (నల్ల రేగడి/ఎర్ర నేల), నీటి వసతి (బోరు/కాలువ/వర్షాధారం) మరియు పెట్టుబడి బడ్జెట్‌ను బట్టి అధిక లాభదాయకమైన అనుకూల పంటలను సిఫార్సు చేస్తాను. అలాగే మీ పంట సమస్యలు & తెగుళ్లను గుర్తించడంలో సహాయపడతాను.<br><br>
+          <em>🎙️ కింది మైక్రోఫోన్ బటన్ నొక్కి మాట్లాడండి లేదా నేరుగా టైప్ చేసి పంపండి (మాట్లాడిన తర్వాత అక్షరాలను సరిచూసి పంపవచ్చు):</em>
+        </div>
+        <div class="message-meta">
+          <span>🌾 AgriSaarthi AI</span> • <span>ఇప్పుడే (Now)</span>
+          <div class="speech-controls">
+            <button type="button" class="speech-btn" onclick="speakMessage(this, 'welcome-bubble')">🔊 వినండి (Listen)</button>
+            <button type="button" class="speech-btn" onclick="speakMessage(this, 'welcome-bubble')">🔄 మళ్ళీ (Replay)</button>
+            <button type="button" class="speech-btn" onclick="stopSpeech()">⏹️ ఆపు (Stop)</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Category Tabs: Crop Advisory vs Crop Health -->
+    <div class="category-tabs" role="tablist">
+      <button type="button" class="category-tab active" id="tab-advisory" onclick="switchCategory('advisory')" role="tab" aria-selected="true">
+        🌱 పంట సిఫార్సు (Crop Advisory)
+      </button>
+      <button type="button" class="category-tab" id="tab-problems" onclick="switchCategory('problems')" role="tab" aria-selected="false">
+        🔬 పంట సమస్య & రోగనిర్ధారణ (Crop Health & Disease)
+      </button>
+    </div>
+
+    <!-- Dynamic Suggestion Prompt Chips -->
     <div class="suggestions" id="suggestions-bar">
-      <button class="suggestion-chip" onclick="fillPrompt('తెలంగాణలో 4 ఎకరాల నల్ల నేల ఉంది, ఖరీఫ్ సీజన్, బోరు బావి నీరు, బడ్జెట్ 1 లక్ష')">
-        🌾 తెలంగాణ: 4 ఎకరాలు నల్ల నేల, బోరు (1 లక్ష)
-      </button>
-      <button class="suggestion-chip" onclick="fillPrompt('4 acres black soil in Telangana, kharif, borewell, budget 100000')">
-        🌾 Telangana: 4 acres black soil (English)
-      </button>
-      <button class="suggestion-chip" onclick="fillPrompt('గుంటూరులో 3 ఎకరాలు నల్ల నేల, ఖరీఫ్, కాలువ నీరు, బడ్జెట్ 80 వేలు')">
-        🌾 గుంటూరు: 3 ఎకరాలు కాలువ నీరు (80 వేలు)
-      </button>
-      <button class="suggestion-chip" onclick="fillPrompt('లైవ్ వాతావరణం లేదా మండి ధరలు చూశారా?')">
-        📊 లైవ్ వాతావరణం & మండి ధరలు చూశారా?
-      </button>
-      <button class="suggestion-chip" onclick="fillPrompt('పత్తి పంట గురించి సమగ్ర వివరాలు చెప్పండి')">
-        🔍 పత్తి పంట సమగ్ర వివరాలు
-      </button>
-      <button class="suggestion-chip" onclick="fillPrompt('Reply in English')">
-        🌐 Reply in English
-      </button>
-      <button class="suggestion-chip" onclick="fillPrompt('తెలుగులో సమాధానం చెప్పండి')">
-        🌐 తెలుగులో చెప్పండి
-      </button>
+      <!-- Dynamic chips rendered via renderSuggestions() -->
     </div>
 
-    <div class="recording-banner" id="recording-banner">
-      🎙️ రైతు గళం వింటున్నాను... దయచేసి మాట్లాడండి (Listening to your voice...)
+    <!-- Recording Status Banner (Listening, Processing, Unavailable) -->
+    <div class="recording-banner" id="recording-banner" role="status" aria-live="assertive">
+      <span id="recording-banner-text">🎙️ రైతు గళం వింటున్నాను... మాట్లాడండి (Listening to your voice...)</span>
+      <button type="button" class="banner-stop-btn" onclick="stopSpeechRecognition()">⏹️ ఆపు (Stop)</button>
     </div>
 
-    <!-- Farmer Input Panel -->
+    <!-- Farmer Voice & Text Input Dock -->
     <div class="input-panel">
-      <button id="mic-btn" class="mic-button" title="మైక్రోఫోన్ ద్వారా మాట్లాడండి (Speak via Microphone)" onclick="toggleSpeechRecognition()" aria-label="Voice input">
+      <button type="button" id="mic-btn" class="mic-button" title="మైక్రోఫోన్ ద్వారా మాట్లాడండి (Speak via Microphone)" onclick="toggleSpeechRecognition()" aria-label="Voice input">
         🎙️
       </button>
       <input type="text" id="user-input" class="input-box" placeholder="మీ వ్యవసాయ వివరాలు మాట్లాడండి లేదా టైప్ చేయండి..." onkeydown="handleKey(event)" autocomplete="off">
-      <button class="send-btn" title="పంపండి (Send)" onclick="sendMessage()" aria-label="Send message">
+      <button type="button" id="send-btn" class="send-btn" title="పంపండి (Send)" onclick="sendMessage()" aria-label="Send message">
         ➤
       </button>
     </div>
 
     <div class="notice-bar">
-      💡 CACP & ICAR ప్రామాణిక నివేదికలు మరియు MSP 2024–2025 ఆధారితం. లైవ్ వాతావరణం/మండి స్క్రాపింగ్ లేదు (అంచనాలు మాత్రమే).
+      💡 <strong>CACP & ICAR ప్రామాణిక నివేదికలు మరియు MSP 2024–2025 ఆధారితం.</strong> లైవ్ వాతావరణం/మండి స్క్రాపింగ్ లేదు (శాస్త్రీయ అంచనాలు మాత్రమే).
       <br>
-      ℹ️ గమనిక: బ్రౌజర్ ఇంజిన్ ఆధారంగా తెలుగు వాయిస్ రికగ్నిషన్ లభ్యత మారవచ్చు (Google Chrome/Edge సిఫార్సు). వాయిస్ సరిగ్గా రానిచో నేరుగా టైప్ చేసి పంపవచ్చు.
+      ℹ️ గమనిక: బ్రౌజర్ Web Speech API ఆధారంగా తెలుగు (te-IN) & English (en-IN) వాయిస్ రికగ్నిషన్ సపోర్ట్ ఉంది (Chrome/Edge సిఫార్సు). మాట్లాడిన తర్వాత టెక్స్ట్ ఎడిట్ చేసి పంపవచ్చు.
     </div>
   </main>
 
+  <!-- =====================================================================
+       PAGE 9: FARMER PROFILE & FIRST-TIME FARM SETUP PAGE (Protected Route)
+       ===================================================================== -->
+  <section id="page-profile" class="portal-page" aria-labelledby="profile-heading">
+    <div id="onboarding-welcome-banner" class="status-alert alert-success" style="display:none;">
+      🎉 <strong>స్వాగతం! మీ రైతు ఖాతా సిద్ధంగా ఉంది.</strong><br>
+      వ్యక్తిగతీకరించిన పంట సిఫార్సులు మరియు మీ జిల్లా వాతావరణం కోసం కింది వ్యవసాయ వివరాలను పూర్తి చేయండి. (ఐచ్ఛిక ఫీల్డ్‌లను ఇప్పుడే దాటవేసి నేరుగా డాష్‌బోర్డ్‌కు వెళ్ళవచ్చు).
+    </div>
+
+    <div class="portal-card" style="max-width:820px; margin:0 auto;">
+      <div class="section-header-bar">
+        <div>
+          <h2 id="profile-heading">👤 రైతు & వ్యవసాయ భూమి ప్రొఫైల్ (Farmer & Farm Profile)</h2>
+          <p style="font-size:14px; color:var(--text-muted);">మీ ప్రాంతం, నేల రకం, నీటి వసతి మరియు బడ్జెట్ వివరాలను ఎప్పుడైనా మార్చుకోవచ్చు.</p>
+        </div>
+        <button type="button" id="profile-skip-btn" class="btn-secondary-agri" style="display:none;" onclick="skipOnboardingToDashboard()">
+          ⏭️ ఇప్పుడే దాటవేయండి → డాష్‌బోర్డ్ (Skip for Now)
+        </button>
+      </div>
+
+      <div id="profile-alert" class="status-alert" role="alert"></div>
+
+      <form onsubmit="handleProfileSubmit(event)">
+        <div class="form-grid">
+          <div class="form-group">
+            <label for="prof-fullname">👨‍🌾 పూర్తి పేరు (Full Name) *</label>
+            <input type="text" id="prof-fullname" class="form-control" required>
+          </div>
+          <div class="form-group">
+            <label for="prof-state">🗺️ రాష్ట్రం (State)</label>
+            <select id="prof-state" class="form-control">
+              <option value="">-- రాష్ట్రం ఎంచుకోండి (Optional) --</option>
+              <option value="Telangana">తెలంగాణ (Telangana)</option>
+              <option value="Andhra Pradesh">ఆంధ్రప్రదేశ్ (Andhra Pradesh)</option>
+              <option value="Punjab">పంజాబ్ (Punjab)</option>
+              <option value="Maharashtra">మహారాష్ట్ర (Maharashtra)</option>
+              <option value="Karnataka">కర్ణాటక (Karnataka)</option>
+              <option value="Rajasthan">రాజస్థాన్ (Rajasthan)</option>
+              <option value="Madhya Pradesh">మధ్యప్రదేశ్ (Madhya Pradesh)</option>
+              <option value="Uttar Pradesh">ఉత్తర ప్రదేశ్ (Uttar Pradesh)</option>
+              <option value="Gujarat">గుజరాత్ (Gujarat)</option>
+              <option value="Haryana">హర్యానా (Haryana)</option>
+              <option value="Tamil Nadu">తమిళనాడు (Tamil Nadu)</option>
+              <option value="Odisha">ఒడిశా (Odisha)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="prof-district">📍 జిల్లా (District)</label>
+            <input type="text" id="prof-district" class="form-control" placeholder="ఉదా: Warangal, Guntur, Karimnagar">
+          </div>
+          <div class="form-group">
+            <label for="prof-village">🏡 గ్రామం / మండలం (Village / Mandal)</label>
+            <input type="text" id="prof-village" class="form-control" placeholder="ఉదా: పరకాల (Parkal)">
+          </div>
+          <div class="form-group">
+            <label for="prof-acres">📐 భూమి విస్తీర్ణం - ఎకరాలు (Land Size in Acres)</label>
+            <input type="number" id="prof-acres" class="form-control" step="0.1" min="0.1" max="5000" placeholder="ఉదా: 4.0">
+          </div>
+          <div class="form-group">
+            <label for="prof-soil">🪨 ప్రధాన నేల రకం (Dominant Soil Type)</label>
+            <select id="prof-soil" class="form-control">
+              <option value="">-- నేల రకం ఎంచుకోండి (Optional) --</option>
+              <option value="black">నల్ల రేగడి నేల (Black Soil)</option>
+              <option value="red">ఎర్ర నేల (Red Soil)</option>
+              <option value="alluvial">ఒండ్రు నేల (Alluvial Soil)</option>
+              <option value="sandy_loam">ఇసుక రేగడి నేల (Sandy Loam)</option>
+              <option value="clayey">బంకమట్టి నేల (Clayey Soil)</option>
+              <option value="laterite">లేటరైట్ నేల (Laterite Soil)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="prof-water">💧 నీటి వసతి (Water Availability)</label>
+            <select id="prof-water" class="form-control">
+              <option value="">-- నీటి వసతి ఎంచుకోండి (Optional) --</option>
+              <option value="moderate">మధ్యస్థ నీరు - బోరు/బావి (Moderate / Borewell)</option>
+              <option value="high">సమృద్ధిగా నీరు - కాలువ (High / Canal)</option>
+              <option value="low">తక్కువ నీరు - వర్షాధారం (Low / Rainfed)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="prof-season">☀️ ప్రస్తుత సాగు సీజన్ (Target Season)</label>
+            <select id="prof-season" class="form-control">
+              <option value="">-- సీజన్ ఎంచుకోండి (Optional) --</option>
+              <option value="kharif">ఖరీఫ్ / వానాకాలం (Kharif)</option>
+              <option value="rabi">రబీ / యాసంగి (Rabi)</option>
+              <option value="zaid">జైద్ / వేసవి (Zaid)</option>
+              <option value="year_round">వార్షిక పంట (Year Round)</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="prof-budget">💰 సీజన్ పెట్టుబడి బడ్జెట్ ₹ (Planned Budget in INR)</label>
+            <input type="number" id="prof-budget" class="form-control" step="500" min="0" placeholder="ఉదా: 100000">
+          </div>
+          <div class="form-group">
+            <label for="prof-risk">⚖️ రిస్క్ ప్రాధాన్యత (Risk Preference)</label>
+            <select id="prof-risk" class="form-control">
+              <option value="moderate">మధ్యస్థం (Moderate)</option>
+              <option value="low">తక్కువ రిస్క్ (Low - MSP Focus)</option>
+              <option value="high">అధిక రాబడి (High Commercial)</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="prof-crops">🌾 సాధారణంగా పండించే పంటలు (Primary Crops Grown - Optional)</label>
+          <input type="text" id="prof-crops" class="form-control" placeholder="ఉదా: వరి, పత్తి, మిరప (Paddy, Cotton, Chilli)">
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
+          <button type="submit" id="profile-save-btn" class="btn-primary-agri">
+            💾 ప్రొఫైల్ సేవ్ చేయండి (Save Farm Profile)
+          </button>
+          <button type="button" class="btn-secondary-agri" onclick="navigateTo('dashboard')">
+            📊 డాష్‌బోర్డ్‌కు వెళ్ళండి (Back to Dashboard)
+          </button>
+        </div>
+      </form>
+    </div>
+  </section>
+
   <script>
+    // =========================================================================
+    // Core Voice & UI State Management
+    // =========================================================================
     let currentLang = 'te'; // 'te' or 'en'
+    let currentCategory = 'advisory'; // 'advisory' or 'problems'
     let recognition = null;
     let isRecording = false;
     let userRequestedListening = false;
     let baseInputText = '';
     let currentUtterance = null;
+    let voiceState = 'idle'; // 'idle' | 'listening' | 'processing' | 'unavailable'
+    let lastSentMessage = '';
 
     function getSpeechRecognition() {
       return window.SpeechRecognition || window.webkitSpeechRecognition || null;
@@ -523,12 +1471,9 @@
     function initSpeech() {
       const SpeechRecognition = getSpeechRecognition();
       if (!SpeechRecognition) {
-        showVoiceStatus(
-          currentLang === 'te'
-            ? 'ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సదుపాయం లేదు. దయచేసి టైప్ చేసి పంపండి.'
-            : 'Speech recognition is not supported in this browser. Please use typed input.',
-          'error'
-        );
+        setVoiceState('unavailable', currentLang === 'te'
+          ? 'ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సదుపాయం లేదు (Microphone unavailable). దయచేసి టైప్ చేయండి.'
+          : 'Microphone unavailable: Speech recognition is not supported in this browser. Please use typed input.');
         return null;
       }
 
@@ -540,13 +1485,25 @@
 
       rec.onstart = function() {
         isRecording = true;
-        updateMicUI(true);
-        showVoiceStatus(
-          currentLang === 'te'
-            ? '🎙️ వింటున్నాను... మీరు మాట్లాడేది వింటూ రికార్డ్ చేస్తున్నాను (ఆపడానికి మైక్ లేదా "ఆపు" నొక్కండి)'
-            : '🎙️ Listening... Speak naturally (click mic or "Stop" when done)',
-          'listening'
-        );
+        setVoiceState('listening');
+      };
+
+      rec.onspeechstart = function() {
+        if (isRecording) {
+          setVoiceState('listening');
+        }
+      };
+
+      rec.onspeechend = function() {
+        if (isRecording) {
+          setVoiceState('processing');
+        }
+      };
+
+      rec.onaudioend = function() {
+        if (isRecording && voiceState === 'listening') {
+          setVoiceState('processing');
+        }
       };
 
       rec.onresult = function(event) {
@@ -563,12 +1520,16 @@
         }
 
         const inputEl = document.getElementById('user-input');
-        let combined = baseInputText ? baseInputText.trim() + ' ' : '';
-        combined += finalChunk.trim();
-        if (interimChunk.trim()) {
-          combined += (combined ? ' ' : '') + interimChunk.trim();
+        if (inputEl) {
+          let combined = baseInputText ? baseInputText.trim() : '';
+          if (finalChunk.trim()) {
+            combined += (combined ? ' ' : '') + finalChunk.trim();
+          }
+          if (interimChunk.trim()) {
+            combined += (combined ? ' ' : '') + interimChunk.trim();
+          }
+          inputEl.value = combined;
         }
-        inputEl.value = combined;
       };
 
       rec.onerror = function(event) {
@@ -578,10 +1539,13 @@
 
       rec.onend = function() {
         isRecording = false;
-        updateMicUI(false);
 
-        // If user didn't intentionally stop and wants continuous listening through a pause
-        if (userRequestedListening) {
+        // If continuous listening is desired through natural pauses
+        if (userRequestedListening && voiceState !== 'unavailable') {
+          const inputEl = document.getElementById('user-input');
+          if (inputEl) {
+            baseInputText = inputEl.value.trim();
+          }
           try {
             rec.lang = currentLang === 'te' ? 'te-IN' : 'en-IN';
             rec.start();
@@ -591,16 +1555,22 @@
           }
         }
 
+        userRequestedListening = false;
         const inputEl = document.getElementById('user-input');
         if (inputEl) {
           inputEl.value = inputEl.value.replace(/\s+/g, ' ').trim();
+          baseInputText = inputEl.value;
+          inputEl.focus(); // Keep editable so farmer can review or correct before sending
         }
-        hideVoiceStatusIfNormal();
+        if (voiceState !== 'unavailable') {
+          setVoiceState('idle');
+        }
       };
 
       return rec;
     }
 
+    // Toggle speech recognition on/off via microphone button
     function toggleSpeechRecognition() {
       const SpeechRecognition = getSpeechRecognition();
       if (!SpeechRecognition) {
@@ -615,14 +1585,22 @@
       }
     }
 
+    // Start listening
     function startSpeechRecognition() {
+      const SpeechRecognition = getSpeechRecognition();
+      if (!SpeechRecognition) {
+        handleSpeechError('unsupported');
+        return;
+      }
+
       userRequestedListening = true;
       const inputEl = document.getElementById('user-input');
       baseInputText = inputEl ? inputEl.value.trim() : '';
 
-      if (!recognition) {
-        recognition = initSpeech();
+      if (recognition) {
+        try { recognition.abort(); } catch (_) {}
       }
+      recognition = initSpeech();
       if (!recognition) return;
 
       recognition.lang = currentLang === 'te' ? 'te-IN' : 'en-IN';
@@ -630,7 +1608,7 @@
       try {
         recognition.start();
       } catch (err) {
-        console.warn('Recognition start error, resetting instance:', err);
+        console.warn('Recognition start error, refreshing instance:', err);
         try {
           recognition.abort();
         } catch (_) {}
@@ -646,92 +1624,161 @@
       }
     }
 
+    // Stop listening cleanly without form submission
     function stopSpeechRecognition() {
       userRequestedListening = false;
       if (recognition) {
+        setVoiceState('processing');
         try {
           recognition.stop();
         } catch (e) {
           try { recognition.abort(); } catch (_) {}
         }
       }
-      isRecording = false;
-      updateMicUI(false);
-      hideVoiceStatusIfNormal();
+      setTimeout(() => {
+        if (!userRequestedListening && voiceState !== 'unavailable') {
+          setVoiceState('idle');
+          const inputEl = document.getElementById('user-input');
+          if (inputEl) {
+            baseInputText = inputEl.value.trim();
+            inputEl.focus();
+          }
+        }
+      }, 350);
     }
 
+    // Update UI for clear recording states: listening, processing, unavailable, idle
+    function setVoiceState(state, customMessage) {
+      voiceState = state;
+      const micBtn = document.getElementById('mic-btn');
+      const banner = document.getElementById('recording-banner');
+      const statusPill = document.getElementById('voice-status-pill');
+
+      if (micBtn) {
+        micBtn.classList.remove('listening', 'state-listening', 'processing', 'state-processing', 'mic-unavailable', 'state-unavailable');
+      }
+
+      if (state === 'listening') {
+        if (micBtn) {
+          micBtn.classList.add('listening', 'state-listening');
+          micBtn.innerHTML = '🔴';
+          micBtn.setAttribute('aria-label', currentLang === 'te' ? 'వింటున్నాను... ఆపడానికి నొక్కండి' : 'Listening... Click to stop');
+          micBtn.title = currentLang === 'te' ? 'వింటున్నాను... పూర్తి చేయడానికి ఇక్కడ లేదా "ఆపు" నొక్కండి' : 'Listening... Click here or Stop when finished';
+        }
+        if (statusPill) {
+          statusPill.innerHTML = `🎙️ ${currentLang === 'te' ? 'వింటున్నాను (Listening)' : 'Listening...'}`;
+          statusPill.className = 'voice-status-pill status-listening';
+        }
+        if (banner) {
+          banner.style.display = 'flex';
+          banner.className = 'recording-banner banner-listening';
+          banner.innerHTML = `
+            <span style="flex:1;">🎙️ ${currentLang === 'te' ? '<strong>రైతు గళం వింటున్నాను...</strong> మాట్లాడండి (మీ మాటలు కింద బాక్స్‌లో కనిపిస్తాయి)' : '<strong>Listening to your voice...</strong> Speak naturally (words will appear below)'}</span>
+            <button type="button" class="banner-stop-btn" onclick="stopSpeechRecognition()">${currentLang === 'te' ? '⏹️ ఆపు (Stop)' : '⏹️ Stop'}</button>
+          `;
+        }
+      } else if (state === 'processing') {
+        if (micBtn) {
+          micBtn.classList.add('processing', 'state-processing');
+          micBtn.innerHTML = '⏳';
+          micBtn.setAttribute('aria-label', currentLang === 'te' ? 'ప్రాసెస్ చేస్తున్నాము...' : 'Processing speech...');
+          micBtn.title = currentLang === 'te' ? 'ప్రాసెస్ చేస్తోంది...' : 'Processing speech...';
+        }
+        if (statusPill) {
+          statusPill.innerHTML = `⏳ ${currentLang === 'te' ? 'ప్రాసెసింగ్ (Processing)' : 'Processing...'}`;
+          statusPill.className = 'voice-status-pill status-processing';
+        }
+        if (banner) {
+          banner.style.display = 'flex';
+          banner.className = 'recording-banner banner-processing';
+          banner.innerHTML = `
+            <span style="flex:1;">⏳ ${currentLang === 'te' ? 'మాటలను అక్షరాలుగా మారుస్తున్నాము... (సరిచూసి పంపండి)' : 'Processing speech... Words are ready to review and send'}</span>
+            <button type="button" class="banner-stop-btn" onclick="stopSpeechRecognition()">${currentLang === 'te' ? '⏹️ ఆపు (Stop)' : '⏹️ Stop'}</button>
+          `;
+        }
+      } else if (state === 'unavailable') {
+        if (micBtn) {
+          micBtn.classList.add('mic-unavailable', 'state-unavailable');
+          micBtn.innerHTML = '🎙️';
+          micBtn.setAttribute('aria-label', currentLang === 'te' ? 'మైక్రోఫోన్ అందుబాటులో లేదు' : 'Microphone unavailable');
+          micBtn.title = currentLang === 'te' ? 'మైక్రోఫోన్ అందుబాటులో లేదు (టైప్ చేయండి)' : 'Microphone unavailable (Please type)';
+        }
+        if (statusPill) {
+          statusPill.innerHTML = `⚠️ ${currentLang === 'te' ? 'మైక్ అందుబాటులో లేదు' : 'Mic Unavailable'}`;
+          statusPill.className = 'voice-status-pill status-unavailable';
+        }
+        if (banner) {
+          banner.style.display = 'flex';
+          banner.className = 'recording-banner banner-unavailable';
+          const msg = customMessage || (currentLang === 'te' ? 'మైక్రోఫోన్ అందుబాటులో లేదు. దయచేసి నేరుగా టైప్ చేసి పంపండి.' : 'Microphone unavailable. Please use typed input.');
+          banner.innerHTML = `
+            <span style="flex:1;">${escapeHtml(msg)}</span>
+            <button type="button" class="banner-dismiss-btn" onclick="document.getElementById('recording-banner').style.display='none'">✕</button>
+          `;
+        }
+      } else { // 'idle'
+        if (micBtn) {
+          micBtn.innerHTML = '🎙️';
+          micBtn.setAttribute('aria-label', currentLang === 'te' ? 'మైక్రోఫోన్ ద్వారా మాట్లాడండి (Speak via Microphone)' : 'Speak via Microphone');
+          micBtn.title = currentLang === 'te' ? 'మైక్రోఫోన్ ద్వారా మాట్లాడండి (Speak via Microphone)' : 'Speak via Microphone';
+        }
+        if (statusPill) {
+          statusPill.innerHTML = `🎙️ ${currentLang === 'te' ? 'వాయిస్ సిద్ధంగా ఉంది' : 'Voice Ready'}`;
+          statusPill.className = 'voice-status-pill status-idle';
+        }
+        if (banner && !banner.classList.contains('banner-unavailable')) {
+          banner.style.display = 'none';
+        }
+      }
+    }
+
+    // Gracefully handle permission denial, unsupported browsers, and recognition errors
     function handleSpeechError(errorCode) {
       userRequestedListening = false;
       isRecording = false;
-      updateMicUI(false);
 
       let msg = '';
+      let isUnavailable = false;
+
       if (errorCode === 'not-allowed' || errorCode === 'permission-denied') {
+        isUnavailable = true;
         msg = currentLang === 'te'
-          ? '⚠️ మైక్రోఫోన్ అనుమతి నిరాకరించబడింది. దయచేసి బ్రౌజర్ అడ్రస్ బార్‌లో మైక్రోఫోన్ అనుమతించండి.'
-          : '⚠️ Microphone permission denied. Please allow microphone access in browser settings.';
+          ? '⚠️ మైక్రోఫోన్ అనుమతి నిరాకరించబడింది (Microphone unavailable). దయచేసి బ్రౌజర్ అడ్రస్ బార్‌లో మైక్రోఫోన్ అనుమతించండి.'
+          : '⚠️ Microphone unavailable: Permission denied. Please allow microphone access in your browser settings.';
       } else if (errorCode === 'no-speech') {
         msg = currentLang === 'te'
           ? 'ℹ️ ఎటువంటి మాటలు వినబడలేదు. దయచేసి మైక్రోఫోన్‌కు దగ్గరగా మాట్లాడండి (లేదా టైప్ చేయండి).'
           : 'ℹ️ No speech detected. Please speak closer to your microphone or use typed input.';
+        setVoiceState('idle');
+        return;
       } else if (errorCode === 'network') {
         msg = currentLang === 'te'
-          ? '⚠️ బ్రౌజర్ స్పీచ్ నెట్‌వర్క్ సమస్య. దయచేసి టైప్ చేసి పంపండి.'
+          ? '⚠️ బ్రౌజర్ స్పీచ్ నెట్‌వర్క్ సమస్య (Speech service network error). దయచేసి టైప్ చేసి పంపండి.'
           : '⚠️ Speech recognition network service issue. Please use typed input.';
       } else if (errorCode === 'audio-capture') {
+        isUnavailable = true;
         msg = currentLang === 'te'
-          ? '⚠️ మైక్రోఫోన్ కనెక్ట్ కాలేదు లేదా ఆడియో క్యాప్చర్ విఫలమైంది.'
-          : '⚠️ Microphone capture failed. Please check your audio input device.';
+          ? '⚠️ మైక్రోఫోన్ కనెక్ట్ కాలేదు లేదా ఆడియో క్యాప్చర్ విఫలమైంది (Microphone unavailable).'
+          : '⚠️ Microphone unavailable: Audio capture failed. No audio input device detected.';
       } else if (errorCode === 'language-not-supported') {
         msg = currentLang === 'te'
-          ? '⚠️ ఈ బ్రౌజర్‌లో తెలుగు వాయిస్ ఇంజిన్ అందుబాటులో లేదు. దయచేసి టైప్ చేయండి.'
+          ? '⚠️ ఈ బ్రౌజర్‌లో తెలుగు వాయిస్ రికగ్నిషన్ అందుబాటులో లేదు. దయచేసి టైప్ చేయండి.'
           : '⚠️ Selected voice language is not supported by your browser engine. Please type your message.';
       } else if (errorCode === 'unsupported') {
+        isUnavailable = true;
         msg = currentLang === 'te'
-          ? '⚠️ ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సదుపాయం లేదు. దయచేసి టైప్ చేయండి.'
-          : '⚠️ Speech recognition is not supported in this browser. Please type your message.';
+          ? '⚠️ ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సదుపాయం లేదు (Microphone unavailable). దయచేసి Chrome లేదా Edge వాడండి.'
+          : '⚠️ Microphone unavailable: Speech recognition is not supported in this browser. Please use Chrome or Edge.';
       } else {
         msg = currentLang === 'te'
           ? `⚠️ వాయిస్ ఇన్‌పుట్ ఆగిపోయింది (${errorCode}). దయచేసి టైప్ చేసి పంపండి.`
           : `⚠️ Voice input stopped (${errorCode}). Please use typed input.`;
       }
 
-      showVoiceStatus(msg, 'error');
+      setVoiceState(isUnavailable ? 'unavailable' : 'idle', msg);
     }
 
-    function updateMicUI(listening) {
-      const micBtn = document.getElementById('mic-btn');
-      if (micBtn) {
-        if (listening) {
-          micBtn.classList.add('recording');
-          micBtn.title = currentLang === 'te' ? 'మాట్లాడటం ఆపండి (Click to Stop)' : 'Click to Stop Listening';
-          micBtn.setAttribute('aria-label', micBtn.title);
-        } else {
-          micBtn.classList.remove('recording');
-          micBtn.title = currentLang === 'te' ? 'మైక్రోఫోన్ ద్వారా మాట్లాడండి (Speak via Microphone)' : 'Speak via Microphone';
-          micBtn.setAttribute('aria-label', micBtn.title);
-        }
-      }
-    }
-
-    function showVoiceStatus(message, type) {
-      const banner = document.getElementById('recording-banner');
-      if (!banner) return;
-      banner.style.display = 'flex';
-      banner.className = 'recording-banner ' + (type === 'error' ? 'banner-error' : 'banner-listening');
-      banner.innerHTML = `
-        <span style="flex:1;">${escapeHtml(message)}</span>
-        ${type === 'listening' ? `<button type="button" class="banner-stop-btn" onclick="stopSpeechRecognition()">${currentLang === 'te' ? '⏹️ ఆపు (Stop)' : '⏹️ Stop'}</button>` : `<button type="button" class="banner-dismiss-btn" onclick="document.getElementById('recording-banner').style.display='none'">✕</button>`}
-      `;
-    }
-
-    function hideVoiceStatusIfNormal() {
-      const banner = document.getElementById('recording-banner');
-      if (banner && !banner.classList.contains('banner-error')) {
-        banner.style.display = 'none';
-      }
-    }
-
+    // Toggle language between Telugu and English
     function setLanguage(lang) {
       if (isRecording || userRequestedListening) {
         stopSpeechRecognition();
@@ -744,60 +1791,202 @@
       if (lang === 'te') {
         input.placeholder = "మీ వ్యవసాయ వివరాలు మాట్లాడండి లేదా టైప్ చేయండి...";
       } else {
-        input.placeholder = "Speak or type your farm details (State, Acres, Soil, Water, Budget)...";
+        input.placeholder = "Speak or type your crop symptom or farm details...";
+      }
+
+      const tabAdvisory = document.getElementById('tab-advisory');
+      const tabProblems = document.getElementById('tab-problems');
+      if (tabAdvisory && tabProblems) {
+        tabAdvisory.textContent = lang === 'te' ? '🌱 పంట సిఫార్సు (Crop Advisory)' : '🌱 Crop Recommendations';
+        tabProblems.textContent = lang === 'te' ? '🔬 పంట సమస్య & రోగనిర్ధారణ (Crop Health)' : '🔬 Crop Problem & Diagnostics';
       }
 
       if (recognition) {
         recognition.lang = lang === 'te' ? 'te-IN' : 'en-IN';
       }
-      updateMicUI(false);
+      setVoiceState('idle');
+      renderSuggestions();
+    }
+
+    // Switch between Crop Advisory and Crop Health tabs
+    function switchCategory(cat) {
+      currentCategory = cat;
+      document.getElementById('tab-advisory').classList.toggle('active', cat === 'advisory');
+      document.getElementById('tab-problems').classList.toggle('active', cat === 'problems');
+      document.getElementById('tab-advisory').setAttribute('aria-selected', cat === 'advisory');
+      document.getElementById('tab-problems').setAttribute('aria-selected', cat === 'problems');
+      renderSuggestions();
+    }
+
+    // Render suggestion chips
+    function renderSuggestions() {
+      const container = document.getElementById('suggestions-bar');
+      if (!container) return;
+
+      let chips = [];
+      if (currentCategory === 'problems') {
+        if (currentLang === 'te') {
+          chips = [
+            { text: 'నా వరి ఆకులు పసుపు రంగులోకి మారుతున్నాయి', label: '🌾 వరి ఆకులు పసుపుబారడం (Paddy Yellowing)', problem: true },
+            { text: 'పత్తిలో ఆకులు ఎర్రబడటం మరియు ముడత వస్తోంది', label: '🌾 పత్తి ఆకు ముడత / ఎర్రబడటం (Cotton Reddening)', problem: true },
+            { text: 'మిరపలో ఆకు ముడత తెగులు కనిపిస్తోంది', label: '🌾 మిరప ఆకు ముడత (Chilli Leaf Curl)', problem: true },
+            { text: 'గోధుమ ఆకులు పసుపు రంగు & చారలు వస్తున్నాయి', label: '🌾 గోధుమ ఆకులు పసుపు రంగు (Wheat Yellowing)', problem: true },
+            { text: 'మొక్కజొన్న ఆకుల్లో రంధ్రాలు & కత్తెర పురుగు', label: '🌾 మొక్కజొన్న కత్తెర పురుగు (Fall Armyworm)', problem: true },
+            { text: 'పంట వయస్సు 25 రోజులు, కింది ఆకులపై పసుపు రంగు, నీరు నిలిచింది', label: '✍️ సమాధానం: 25 రోజులు, కింది ఆకులు, నీరు నిలిచింది' }
+          ];
+        } else {
+          chips = [
+            { text: 'My paddy leaves are turning yellow.', label: '🌾 Paddy Leaves Turning Yellow', problem: true },
+            { text: 'Cotton leaves are turning red and curling.', label: '🌾 Cotton Leaf Reddening & Curl', problem: true },
+            { text: 'Chilli leaves are curling upward and puckering.', label: '🌾 Chilli Leaf Curl & Puckering', problem: true },
+            { text: 'Wheat leaves are yellowing with stripe patterns.', label: '🌾 Wheat Leaf Yellowing & Stripes', problem: true },
+            { text: '1. 28 days old. 2. Bottom leaves first. 3. Standing water.', label: '✍️ Answer: 28 days, bottom leaves, waterlogged' }
+          ];
+        }
+      } else {
+        if (currentLang === 'te') {
+          chips = [
+            { text: 'తెలంగాణలో 4 ఎకరాల నల్ల నేల ఉంది, ఖరీఫ్ సీజన్, బోరు బావి నీరు, బడ్జెట్ 1 లక్ష', label: '🌾 తెలంగాణ: 4 ఎకరాలు నల్ల నేల (1 లక్ష)' },
+            { text: 'గుంటూరులో 3 ఎకరాలు నల్ల నేల, ఖరీఫ్, కాలువ నీరు, బడ్జెట్ 80 వేలు', label: '🌾 గుంటూరు: 3 ఎకరాలు కాలువ నీరు (80 వేలు)' },
+            { text: 'వరంగల్‌లో 2 ఎకరాలు ఎర్ర నేల, ఖరీఫ్, వర్షాధారం, బడ్జెట్ 40 వేలు', label: '🌾 వరంగల్: 2 ఎకరాలు ఎర్ర నేల (40 వేలు)' },
+            { text: 'లైవ్ వాతావరణం లేదా మండి ధరలు చూశారా?', label: '📊 లైవ్ వాతావరణం & మండి ధరలు చూశారా?' },
+            { text: 'పత్తి పంట గురించి సమగ్ర వివరాలు చెప్పండి', label: '🔍 పత్తి పంట సమగ్ర వివరాలు' },
+            { text: 'Reply in English', label: '🌐 Reply in English' }
+          ];
+        } else {
+          chips = [
+            { text: '4 acres black soil in Telangana, kharif, borewell, budget 100000', label: '🌾 Telangana: 4 acres black soil (1 Lakh)' },
+            { text: '3 acres alluvial soil in Guntur, kharif, canal water, budget 80000', label: '🌾 Guntur: 3 acres canal water (80K)' },
+            { text: '2 acres red soil, rainfed, kharif, budget 40000', label: '🌾 2 acres red soil, rainfed (40K)' },
+            { text: 'Did you check live weather or mandi prices?', label: '📊 Live Weather & Mandi Prices?' },
+            { text: 'Explain Bt Cotton suitability and risks', label: '🔍 Bt Cotton Details' },
+            { text: 'తెలుగులో సమాధానం చెప్పండి', label: '🌐 తెలుగులో చెప్పండి' }
+          ];
+        }
+      }
+
+      container.innerHTML = chips.map(c => `
+        <button type="button" class="suggestion-chip ${c.problem ? 'chip-problem' : ''}" onclick="fillPrompt('${c.text.replace(/'/g, "\'")}')">
+          ${c.label}
+        </button>
+      `).join('');
     }
 
     function fillPrompt(text) {
-      document.getElementById('user-input').value = text;
+      const input = document.getElementById('user-input');
+      if (input) {
+        input.value = text;
+        baseInputText = text;
+      }
       sendMessage();
     }
 
     function handleKey(e) {
       if (e.key === 'Enter') {
+        e.preventDefault();
         sendMessage();
       }
     }
 
+    // Send chat message with Ollama integration and error fallback
     async function sendMessage() {
       const input = document.getElementById('user-input');
-      const text = input.value.trim();
+      const text = input ? input.value.trim() : '';
       if (!text) return;
 
+      if (isRecording || userRequestedListening) {
+        stopSpeechRecognition();
+      }
+
+      lastSentMessage = text;
       input.value = '';
+      baseInputText = '';
+
+      const micBtn = document.getElementById('mic-btn');
+      const sendBtn = document.getElementById('send-btn');
+      if (micBtn) micBtn.disabled = true;
+      if (sendBtn) sendBtn.disabled = true;
+
       appendUserMessage(text);
 
-      // Check if user explicitly asked for English or Telugu
-      if (text.toLowerCase().includes('english')) {
+      // Auto-switch language based on user query
+      if (text.toLowerCase().includes('english') || text.toLowerCase().includes('reply in english')) {
         setLanguage('en');
       } else if (text.includes('తెలుగు') || text.toLowerCase().includes('telugu')) {
         setLanguage('te');
       }
 
-      // Show typing indicator
       const typingId = appendTypingIndicator();
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 35000);
+
       try {
-        const response = await fetch('/api/chat', {
+        const apiBase = (window.AGRISAARTHI_CONFIG && window.AGRISAARTHI_CONFIG.API_BASE_URL)
+          ? window.AGRISAARTHI_CONFIG.API_BASE_URL.replace(/\/$/, '')
+          : '';
+        const chatHeaders = { 'Content-Type': 'application/json' };
+        const savedToken = localStorage.getItem('agrisaarthi_session_token');
+        if (savedToken) {
+          chatHeaders['Authorization'] = 'Bearer ' + savedToken;
+        }
+        const response = await fetch(apiBase + '/api/chat', {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: chatHeaders,
           body: JSON.stringify({
             text: text,
             sender: 'farmer_voice_web_user'
-          })
+          }),
+          signal: controller.signal
         });
+
+        clearTimeout(timeoutId);
+
+        if (!response.ok) {
+          throw new Error('HTTP ' + response.status);
+        }
 
         const data = await response.json();
         removeTypingIndicator(typingId);
-        appendAgentMessage(data.reply || 'సమాధానం ప్రాసెస్ చేయలేకపోయాము.');
+        appendAgentMessage(data.reply || (currentLang === 'te' ? 'సమాధానం ప్రాసెస్ చేయలేకపోయాము.' : 'Unable to process reply.'));
       } catch (err) {
+        clearTimeout(timeoutId);
         removeTypingIndicator(typingId);
-        appendAgentMessage('🌾 **నెట్‌వర్క్ సమాచారం**: AgriSaarthi స్థానిక ఏజెంట్‌కు కనెక్ట్ కావడం లేదు. దయచేసి వెబ్ సర్వర్ రన్ అవుతుందో లేదో సరిచూసుకోండి.');
+        const isTimeout = err.name === 'AbortError';
+        const errDetail = isTimeout ? (currentLang === 'te' ? 'సమయం ముగిసింది (Timeout)' : 'Request timeout after 35s') : (err.message || 'Network error');
+        appendErrorMessage(errDetail);
+      } finally {
+        if (micBtn) micBtn.disabled = false;
+        if (sendBtn) sendBtn.disabled = false;
+        if (input) input.focus();
+      }
+    }
+
+    function appendErrorMessage(errInfo) {
+      const container = document.getElementById('chat-messages');
+      const row = document.createElement('div');
+      row.className = 'message-row agent';
+      const msg = currentLang === 'te'
+        ? `🌾 **నెట్‌వర్క్ సమాచారం**: AgriSaarthi స్థానిక సర్వర్‌కు కనెక్ట్ కావడం లేదు (${escapeHtml(errInfo)}). సర్వర్ మరియు Ollama రన్ అవుతున్నాయో లేదో సరిచూసుకోండి.`
+        : `🌾 **Network Notice**: Unable to connect to AgriSaarthi local server (${escapeHtml(errInfo)}). Please ensure the UI server and Ollama are running.`;
+
+      row.innerHTML = `
+        <div class="message-bubble" style="background:#fef2f2; border:1.5px solid #fecaca; color:#991b1b;">
+          ${msg}<br><br>
+          <button type="button" class="retry-btn" onclick="retryLastMessage()">
+            🔄 ${currentLang === 'te' ? 'మళ్ళీ ప్రయత్నించండి (Retry)' : 'Retry Request'}
+          </button>
+        </div>
+      `;
+      container.appendChild(row);
+      container.scrollTop = container.scrollHeight;
+    }
+
+    function retryLastMessage() {
+      if (lastSentMessage) {
+        const input = document.getElementById('user-input');
+        if (input) input.value = lastSentMessage;
+        sendMessage();
       }
     }
 
@@ -807,7 +1996,7 @@
       row.className = 'message-row user';
       row.innerHTML = `
         <div class="message-bubble">${escapeHtml(text)}</div>
-        <div class="message-meta"><span>రైతు (Farmer)</span> • <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>
+        <div class="message-meta"><span>👨‍🌾 రైతు (Farmer)</span> • <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>
       `;
       container.appendChild(row);
       container.scrollTop = container.scrollHeight;
@@ -823,11 +2012,11 @@
       row.innerHTML = `
         <div class="message-bubble" id="${bubbleId}">${formattedHtml}</div>
         <div class="message-meta">
-          <span>AgriSaarthi AI</span> • <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+          <span>🌾 AgriSaarthi AI</span> • <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
           <div class="speech-controls">
-            <button class="speech-btn" onclick="speakMessage(this, '${bubbleId}')">🔊 వినండి (Listen)</button>
-            <button class="speech-btn" onclick="speakMessage(this, '${bubbleId}')">🔄 మళ్ళీ (Replay)</button>
-            <button class="speech-btn" onclick="stopSpeech()">⏹️ ఆపు (Stop)</button>
+            <button type="button" class="speech-btn" onclick="speakMessage(this, '${bubbleId}')">🔊 వినండి (Listen)</button>
+            <button type="button" class="speech-btn" onclick="speakMessage(this, '${bubbleId}')">🔄 మళ్ళీ (Replay)</button>
+            <button type="button" class="speech-btn" onclick="stopSpeech()">⏹️ ఆపు (Stop)</button>
           </div>
         </div>
       `;
@@ -842,8 +2031,13 @@
       row.className = 'message-row agent';
       row.id = typingId;
       row.innerHTML = `
-        <div class="message-bubble" style="color: var(--text-muted); font-style: italic;">
-          🌾 విశ్లేషిస్తున్నాను... (Analyzing farm parameters & agronomic suitability)...
+        <div class="message-bubble" style="color: var(--text-muted); font-style: italic; display: flex; align-items: center; gap: 8px;">
+          <span>🌾 ${currentLang === 'te' ? 'విశ్లేషిస్తున్నాను (వ్యవసాయ విజ్ఞాన నిల్వ & Ollama సలహాదారు)...' : 'Analyzing (Grounding in Agricultural Knowledge & Ollama)...'}</span>
+          <span class="typing-dots">
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+            <span class="typing-dot"></span>
+          </span>
         </div>
       `;
       container.appendChild(row);
@@ -882,7 +2076,27 @@
     }
 
     function formatMarkdown(text) {
-      let html = text
+      let html = text;
+
+      // Ollama assistant card
+      html = html.replace(/🤖 \*\*\[Ollama: (.*?)\]\*\*/g, '<div class="card-ollama"><span class="badge-tag">🤖 Local Model: $1</span><br><br>');
+
+      // Diagnostic follow-up questions card
+      html = html.replace(/❓ \*\*\[(?:Diagnostic Follow-Up Questions \(Max 3\)|రోగనిర్ధారణ ప్రశ్నలు \(గరిష్టంగా 3\))\]\*\*/g, '<div class="card-question"><div class="card-header">❓ <strong>రోగనిర్ధారణ ప్రశ్నలు (Diagnostic Questions - Max 3)</strong></div>');
+
+      // Possible causes card
+      html = html.replace(/🔍 \*\*\[(?:Possible Causes Based on Verified Evidence|శాస్త్రీయ ఆధారాల ప్రకారం సాధ్యమైన కారణాలు)\]\*\*/g, '<div class="card-causes"><div class="card-header">🔍 <strong>శాస్త్రీయ ఆధారాల ప్రకారం సాధ్యమైన కారణాలు (Verified Causes & Evidence)</strong></div>');
+
+      // Safe next steps card
+      html = html.replace(/🛡️ \*\*\[(?:Safe Next Steps \(Cultural & Non-Chemical Management\)|సురక్షిత తక్షణ చర్యలు \(సేంద్రీయ & యాజమాన్య పద్ధతులు\))\]\*\*/g, '<div class="card-actions"><div class="card-header">🛡️ <strong>సురక్షిత తక్షణ చర్యలు (Safe Cultural Next Steps)</strong></div>');
+
+      // Uncertainty warning card
+      html = html.replace(/⚠️ \*\*\[(?:Advisory Notice & Uncertainty|Uncertainty Warning & Required Expert Inspection|ముఖ్య గమనిక & అనిశ్చితి|అనిశ్చితి & తప్పనిసరి నిపుణుల తనిఖీ)\]\*\*:/g, '<div class="card-warning"><div class="card-header">⚠️ <strong>అనిశ్చితి & తప్పనిసరి నిపుణుల తనిఖీ (Advisory Notice & Uncertainty)</strong></div>');
+
+      // Verified agricultural reference card
+      html = html.replace(/📚 \*\*\[(?:Verified Agricultural Reference|ధృవీకరించబడిన వ్యవసాయ మూలం)\]\*\*:/g, '<div class="card-reference"><div class="card-header">📚 <strong>ధృవీకరించబడిన వ్యవసాయ మూలం (Verified ICAR Reference)</strong></div>');
+
+      html = html
         .replace(/### (.*)/g, '<h3>$1</h3>')
         .replace(/#### (.*)/g, '<h4>$1</h4>')
         .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
@@ -890,7 +2104,10 @@
         .replace(/`(.*?)`/g, '<code style="background:#f1f5f9;padding:2px 6px;border-radius:4px;">$1</code>')
         .replace(/\n\n/g, '<br><br>')
         .replace(/\n- /g, '<br>• ')
+        .replace(/\n• /g, '<br>• ')
+        .replace(/\n---/g, '<br><hr style="border:0;border-top:1px solid #e2e8f0;margin:12px 0;">')
         .replace(/\n/g, '<br>');
+
       return html;
     }
 
@@ -905,8 +2122,46 @@
       return String(string).replace(/[&<>"']/g, s => entityMap[s]);
     }
 
-    // Initialize speech on load
-    window.addEventListener('DOMContentLoaded', initSpeech);
+    async function checkOllamaStatus() {
+      const badge = document.getElementById('ollama-status-badge');
+      if (!badge) return;
+      try {
+        const res = await fetch('/api/model-status');
+        if (res.ok) {
+          const data = await res.json();
+          if (data.available) {
+            badge.className = 'badge-status badge-ollama online';
+            badge.innerHTML = `<span class="status-dot"></span> 🦙 Ollama: ${data.model} (Ready)`;
+            badge.title = data.message;
+          } else {
+            badge.className = 'badge-status badge-ollama offline';
+            badge.innerHTML = `<span class="status-dot"></span> 🦙 Ollama: ${data.model || 'Model'} (Offline/Missing)`;
+            badge.title = data.message || data.error || 'Ollama unavailable';
+          }
+        }
+      } catch (e) {
+        badge.className = 'badge-status badge-ollama offline';
+        badge.innerHTML = '<span class="status-dot"></span> 🦙 Ollama: Offline';
+        badge.title = 'Cannot connect to UI server model status';
+      }
+    }
+
+    // Keep baseInputText synced with manual edits when not actively recording
+    window.addEventListener('DOMContentLoaded', function() {
+      initSpeech();
+      renderSuggestions();
+      checkOllamaStatus();
+
+      const inputEl = document.getElementById('user-input');
+      if (inputEl) {
+        inputEl.addEventListener('input', function() {
+          if (!isRecording) {
+            baseInputText = this.value;
+          }
+        });
+      }
+    });
   </script>
+  <script src="/js/portal.js"></script>
 </body>
 </html>
