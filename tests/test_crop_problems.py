@@ -248,3 +248,54 @@ def test_unsupported_crop_or_symptom_fallback():
     # Must include uncertainty warning and not invent dosages
     assert "KVK" in response or "Krishi Vigyan Kendra" in response
     assert "chemical" in response.lower() or "laboratory" in response.lower()
+
+
+def test_cross_crop_generic_symptom_does_not_match_paddy():
+    """
+    Regression test:
+    A generic symptom like 'yellow leaves' on another crop (e.g. Groundnut, Maize)
+    must NOT match Paddy / Rice disorders, and must preserve safe fallback triage.
+    """
+    # 1. Direct lookup checks
+    assert find_matching_crop_disorder("My groundnut leaves are turning yellow") is None
+    assert find_matching_crop_disorder("Groundnut yellow leaves") is None
+    assert find_matching_crop_disorder("వేరుశనగ ఆకులు పసుపు రంగులోకి మారుతున్నాయి") is None
+
+    assert find_matching_crop_disorder("My maize has yellow leaves") is None
+    assert find_matching_crop_disorder("Maize leaves turning yellow") is None
+    assert find_matching_crop_disorder("మొక్కజొన్న ఆకులు పసుపు రంగులోకి మారుతున్నాయి") is None
+
+    # Token boundary checks ('price' != 'rice', 'చివరి' != 'వరి')
+    assert find_matching_crop_disorder("Groundnut price is low and yellow leaves") is None
+    assert find_matching_crop_disorder("మొక్కజొన్న చివరి ఆకులు పసుపు రంగులో ఉన్నాయి") is None
+
+    # Paddy + matching symptoms continue working properly
+    paddy_en = find_matching_crop_disorder("My paddy leaves are turning yellow")
+    assert paddy_en is not None and paddy_en.crop_name == "Paddy / Rice"
+    paddy_te = find_matching_crop_disorder("వరి ఆకులు పసుపు రంగులోకి మారుతున్నాయి")
+    assert paddy_te is not None and paddy_te.crop_name == "Paddy / Rice"
+
+    # 2. Conversational workflow checks (Groundnut & Maize use safe fallback, not Paddy)
+    mock_client = MagicMock(spec=OllamaClient)
+    mock_client.model = "qwen2.5:0.5b"
+    mock_client.check_availability.return_value = (True, "Ready")
+    mock_client.chat.return_value = "Let us safely evaluate your crop symptom."
+
+    for crop_query, sender_id in [
+        ("My groundnut leaves are turning yellow", "test_groundnut_yellow"),
+        ("My maize leaves are turning yellow", "test_maize_yellow"),
+    ]:
+        reset_session(sender_id)
+        reply = process_chat_message(
+            text=crop_query,
+            sender=sender_id,
+            ollama_client=mock_client,
+        )
+        session = get_session(sender_id)
+        assert session.active_crop_problem is not None
+        assert session.active_crop_problem.get("disorder_ref") is None
+        assert session.active_crop_problem.get("crop") != "Paddy / Rice"
+        assert "Paddy / Rice" not in reply
+        assert "ICAR-IIRR" not in reply
+        assert "❓ **[Diagnostic Follow-Up Questions (Max 3)]**" in reply
+        assert "KVK" in reply or "Krishi Vigyan Kendra" in reply
