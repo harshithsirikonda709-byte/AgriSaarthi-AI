@@ -6,6 +6,7 @@ diagnostic evidence, safe actions, and official ICAR/SAU publication citations.
 This module provides a clean, extendable knowledge layer with zero fabricated sources.
 """
 
+import re
 from dataclasses import dataclass
 from typing import List, Tuple, Dict, Any, Optional
 
@@ -404,20 +405,42 @@ CROP_DISORDER_DATABASE: List[CropDisorderReference] = [
 ]
 
 
+def _has_crop_term(text: str, term: str) -> bool:
+    """
+    Check whether a crop name or alias appears as a distinct token in text.
+    Uses word boundaries for ASCII terms (preventing 'rice' from matching 'price')
+    and leading token boundaries for Telugu script (allowing suffixes like 'వరిలో'
+    while preventing 'వరి' from matching inside 'చివరి').
+    """
+    clean_term = term.strip().lower()
+    if not clean_term:
+        return False
+    if clean_term.isascii():
+        return bool(re.search(rf"\b{re.escape(clean_term)}\b", text))
+    return bool(re.search(rf"(?:^|[\s,.;:!?()'\"/-]){re.escape(clean_term)}", text))
+
+
+def _matches_crop_reference(text: str, ref: CropDisorderReference) -> bool:
+    """Return True if the query explicitly mentions the disorder reference's target crop."""
+    if _has_crop_term(text, ref.crop_name.lower()):
+        return True
+    return any(_has_crop_term(text, alias) for alias in ref.crop_aliases)
+
+
 def find_matching_crop_disorder(query: str) -> Optional[CropDisorderReference]:
     """
     Search trusted crop disorders database matching the farmer's query text.
     Handles English, Telugu, and transliterated queries.
+    Requires the disorder's target crop to be matched in the query so generic
+    symptoms (such as 'yellow leaves') on other crops never misroute.
     """
     clean_lower = query.lower().strip()
+    if not clean_lower:
+        return None
 
-    # Priority 1: Exact crop + symptom keyword match
+    # Priority 1: Target crop match + trigger symptom keyword match
     for ref in CROP_DISORDER_DATABASE:
-        crop_match = (
-            any(alias in clean_lower for alias in ref.crop_aliases)
-            or ref.crop_name.lower() in clean_lower
-        )
-        if crop_match:
+        if _matches_crop_reference(clean_lower, ref):
             symptom_match = (
                 any(kw in clean_lower for kw in ref.trigger_keywords_en)
                 or any(kw in clean_lower for kw in ref.trigger_keywords_te)
@@ -425,24 +448,10 @@ def find_matching_crop_disorder(query: str) -> Optional[CropDisorderReference]:
             if symptom_match:
                 return ref
 
-    # Priority 2: Symptom match alone if specific crop is mentioned
+    # Priority 2: Target crop match + general symptom keyword match
     for ref in CROP_DISORDER_DATABASE:
-        crop_match = (
-            any(alias in clean_lower for alias in ref.crop_aliases)
-            or ref.crop_name.lower() in clean_lower
-        )
-        if crop_match:
-            # Check for general symptom words like yellow, curl, red, rust
+        if _matches_crop_reference(clean_lower, ref):
             if any(w in clean_lower for w in ["yellow", "పసుపు", "red", "ఎర్ర", "curl", "ముడత", "rust", "కుంకుమ"]):
                 return ref
-
-    # Priority 3: Fallback check if strong symptom keywords match regardless of explicit crop name
-    for ref in CROP_DISORDER_DATABASE:
-        symptom_match = (
-            any(kw in clean_lower for kw in ref.trigger_keywords_en)
-            or any(kw in clean_lower for kw in ref.trigger_keywords_te)
-        )
-        if symptom_match:
-            return ref
 
     return None
