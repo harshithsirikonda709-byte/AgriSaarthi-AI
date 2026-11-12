@@ -876,47 +876,131 @@
   </div>
 
   <!-- =====================================================================
-       PAGE 1: PUBLIC HOME PAGE
+       PAGE 1: PUBLIC HOME / WELCOME SCREEN (Charan - Task 2)
        ===================================================================== -->
   <section id="page-home" class="portal-page active" aria-labelledby="home-hero-heading">
-    <div class="hero-banner">
-      <h2 id="home-hero-heading">🌾 అగ్రిసారథి AI (AgriSaarthi AI) — భారతీయ రైతుల కోసం స్మార్ట్ వ్యవసాయ నిర్ణయ వేదిక</h2>
-      <p>
-        ICAR మరియు CACP (MSP 2024–2025) ప్రామాణిక గణాంకాల ఆధారంగా మీ నేల, నీటి వసతి, సీజన్ మరియు బడ్జెట్‌కు తగిన పంట సిఫార్సులు,
-        పంట తెగుళ్ల రోగనిర్ధారణ, వాస్తవ వాతావరణ సమాచారం మరియు తెలుగు/ఇంగ్లీష్ వాయిస్ అసిస్టెంట్.
-      </p>
-      <div class="hero-actions" id="home-cta-guest">
-        <button type="button" class="btn-hero-light" onclick="navigateTo('register')">📝 కొత్త రైతు నమోదు (Register Free)</button>
-        <button type="button" class="btn-hero-outline" onclick="navigateTo('login')">🔑 రైతు లాగిన్ (Farmer Login)</button>
-        <button type="button" class="btn-hero-outline" onclick="navigateTo('voice')">🎙️ AI వాయిస్ సహాయకుడిని ప్రయత్నించండి (Try Voice AI)</button>
+    <!-- Main Welcome Hero Card with Green-and-White Agricultural Theme -->
+    <div class="welcome-hero">
+      <div class="welcome-hero-top">
+        <div class="welcome-brand-badge">
+          <span class="welcome-brand-icon">🌱</span>
+          <span class="welcome-brand-badge-text">AgriSaarthi AI • భారతీయ రైతుల స్మార్ట్ నేస్తం</span>
+        </div>
+        <!-- Language Selection (Telugu & English) directly in Welcome Screen -->
+        <div class="welcome-lang-selector" role="group" aria-label="Welcome screen language selection">
+          <span class="welcome-lang-label">🌐 భాష / Lang:</span>
+          <button type="button" id="welcome-btn-te" class="welcome-lang-chip active" onclick="setLanguage('te')">తెలుగు</button>
+          <button type="button" id="welcome-btn-en" class="welcome-lang-chip" onclick="setLanguage('en')">English</button>
+        </div>
       </div>
-      <div class="hero-actions" id="home-cta-authenticated" style="display:none;">
-        <button type="button" class="btn-hero-light" onclick="navigateTo('dashboard')">📊 నా రైతు డాష్‌బోర్డ్‌కు వెళ్ళండి (Open My Dashboard)</button>
-        <button type="button" class="btn-hero-outline" onclick="navigateTo('advisory')">🌱 పంట సలహా పొందండి (Crop Advisory)</button>
-        <button type="button" class="btn-hero-outline" onclick="navigateTo('voice')">🎙️ AI వాయిస్ సహాయకుడు (Voice Assistant)</button>
+
+      <div class="welcome-hero-content">
+        <h2 id="home-hero-heading" class="welcome-hero-title">
+          🌾 అగ్రిసారథి AI (AgriSaarthi AI)
+        </h2>
+        <p class="welcome-hero-subtitle">
+          భారతీయ రైతుల నమ్మకమైన డిజిటల్ వ్యవసాయ సలహాదారు • Smart AI Farming Assistant
+        </p>
+
+        <!-- Simple, accessible farming-related introduction -->
+        <div class="welcome-hero-desc">
+          <p id="welcome-intro-p">
+            మీ వ్యవసాయ భూమి విస్తీర్ణం, నేల రకం, నీటి వసతి మరియు బడ్జెట్‌కు తగిన లాభదాయక పంటల ఎంపిక, ICAR ఆధారిత పంట తెగుళ్ల గుర్తింపు, వాస్తవ వాతావరణ సమాచారం మరియు వాయిస్ అసిస్టెంట్‌తో మీ సాగును సులభతరం చేసుకోండి.
+          </p>
+          <p class="welcome-hero-desc-en" id="welcome-intro-sub-p">
+            Empowering Indian farmers with science-backed crop advisory, ICAR-aligned disorder diagnosis, real-time weather alerts, and bilingual voice intelligence.
+          </p>
+        </div>
+
+        <!-- Call to Action Buttons: Get Started & Login -->
+        <div class="welcome-hero-actions" id="home-cta-guest">
+          <button type="button" class="btn-welcome-primary" onclick="navigateTo('register')">
+            🚀 ప్రారంభించండి (Get Started)
+          </button>
+          <button type="button" class="btn-welcome-secondary" onclick="navigateTo('login')">
+            🔑 రైతు లాగిన్ (Login)
+          </button>
+          <button type="button" class="btn-welcome-ghost" onclick="navigateTo('voice')">
+            🎙️ వాయిస్ ద్వారా అడగండి (Try Voice AI)
+          </button>
+        </div>
+
+        <!-- Authenticated State Actions -->
+        <div class="welcome-hero-actions" id="home-cta-authenticated" style="display:none;">
+          <button type="button" class="btn-welcome-primary" onclick="navigateTo('dashboard')">
+            📊 నా రైతు డాష్‌బోర్డ్ (Open My Dashboard)
+          </button>
+          <button type="button" class="btn-welcome-secondary" onclick="navigateTo('advisory')">
+            🌱 పంట సలహా (Crop Advisory)
+          </button>
+          <button type="button" class="btn-welcome-ghost" onclick="navigateTo('voice')">
+            🎙️ AI వాయిస్ సహాయకుడు (Voice Assistant)
+          </button>
+        </div>
+      </div>
+
+      <!-- Trust Badges Strip -->
+      <div class="welcome-trust-bar">
+        <div class="welcome-trust-item">
+          <span class="trust-icon">🏛️</span>
+          <span><strong>ICAR & CACP</strong> ప్రామాణికం</span>
+        </div>
+        <div class="welcome-trust-item">
+          <span class="trust-icon">🛡️</span>
+          <span><strong>100% ఉచితం</strong> & డేటా భద్రత</span>
+        </div>
+        <div class="welcome-trust-item">
+          <span class="trust-icon">🌦️</span>
+          <span><strong>Open-Meteo</strong> లైవ్ వాతావరణం</span>
+        </div>
+        <div class="welcome-trust-item">
+          <span class="trust-icon">🤖</span>
+          <span><strong>Fetch.ai ACP</strong> ఆర్కెస్ట్రేషన్</span>
+        </div>
       </div>
     </div>
 
-    <div class="grid-4" style="margin-bottom:24px;">
-      <div class="portal-card card-green-accent">
-        <h3>🌱 పంట సలహా (Crop Advisory)</h3>
+    <!-- 4 Core Feature Cards in Clean Green-and-White Theme -->
+    <div class="welcome-features-header">
+      <h3 class="welcome-features-title">🌿 అగ్రిసారథి ముఖ్య సేవలు (Key Agricultural Services)</h3>
+      <p class="welcome-features-subtitle">మీ సాగు నిర్ణయాలకు శాస్త్రీయంగా తోడ్పడే సాంకేతిక విభాగాలు</p>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:28px;">
+      <div class="portal-card welcome-feature-card">
+        <div class="feature-card-icon">🌱</div>
+        <h3>శాస్త్రీయ పంట సిఫార్సు (Crop Advisory)</h3>
         <p>మీ రాష్ట్రం, జిల్లా, ఎకరాలు, నేల రకం, నీటి వసతి మరియు బడ్జెట్ ఆధారంగా 4-దశల శాస్త్రీయ విశ్లేషణ మరియు నికర లాభం అంచనా.</p>
-        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('advisory')">పంట సలహా చూడండి →</button>
+        <button type="button" class="btn-secondary-agri" style="margin-top:auto; width:100%;" onclick="navigateTo('advisory')">
+          పంట సలహా చూడండి →
+        </button>
       </div>
-      <div class="portal-card card-green-accent">
-        <h3>🔬 పంట ఆరోగ్యం (Crop Health)</h3>
-        <p>వరి, పత్తి, మిరప, గోధుమ, మొక్కజొన్న పంటల్లో ఆకులు పసుపుబారడం, ముడత మరియు పురుగుల సమస్యలకు ICAR ఆధారిత నిర్ధారణ.</p>
-        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('health')">పంట ఆరోగ్యం తనిఖీ →</button>
+
+      <div class="portal-card welcome-feature-card">
+        <div class="feature-card-icon">🔬</div>
+        <h3>పంట రక్షణ & ఆరోగ్యం (Crop Health)</h3>
+        <p>వరి, పత్తి, మిరప, గోధుమ, మొక్కజొన్న పంటల్లో ఆకులు పసుపుబారడం, ముడత మరియు పురుగుల సమస్యలకు ICAR ఆధారిత రోగనిర్ధారణ.</p>
+        <button type="button" class="btn-secondary-agri" style="margin-top:auto; width:100%;" onclick="navigateTo('health')">
+          పంట ఆరోగ్యం తనిఖీ →
+        </button>
       </div>
-      <div class="portal-card card-green-accent">
-        <h3>🌦️ వాతావరణం & హెచ్చరికలు</h3>
-        <p>Open-Meteo వాస్తవ వాతావరణ డేటాతో మీ జిల్లా ఉష్ణోగ్రత, వర్షపాతం, గాలి వేగం మరియు 3-రోజుల వ్యవసాయ ముందస్తు సూచనలు.</p>
-        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('weather')">వాతావరణం చూడండి →</button>
+
+      <div class="portal-card welcome-feature-card">
+        <div class="feature-card-icon">🌦️</div>
+        <h3>వాతావరణం & ముందస్తు హెచ్చరికలు</h3>
+        <p>Open-Meteo వాస్తవ డేటాతో మీ జిల్లా ఉష్ణోగ్రత, వర్షపాతం, గాలి వేగం మరియు 3-రోజుల వ్యవసాయ ముందస్తు సూచనలు.</p>
+        <button type="button" class="btn-secondary-agri" style="margin-top:auto; width:100%;" onclick="navigateTo('weather')">
+          వాతావరణం చూడండి →
+        </button>
       </div>
-      <div class="portal-card card-green-accent">
-        <h3>🎙️ తెలుగు & ఇంగ్లీష్ వాయిస్ AI</h3>
+
+      <div class="portal-card welcome-feature-card">
+        <div class="feature-card-icon">🎙️</div>
+        <h3>తెలుగు & ఇంగ్లీష్ వాయిస్ AI</h3>
         <p>టైప్ చేయడం ఇబ్బందిగా ఉంటే మైక్రోఫోన్ నొక్కి తెలుగులో లేదా ఇంగ్లీష్‌లో మాట్లాడండి. సమాధానాన్ని బిగ్గరగా వినండి.</p>
-        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('voice')">మైక్రోఫోన్‌తో మాట్లాడండి →</button>
+        <button type="button" class="btn-secondary-agri" style="margin-top:auto; width:100%;" onclick="navigateTo('voice')">
+          వాయిస్‌తో మాట్లాడండి →
+        </button>
       </div>
     </div>
   </section>
@@ -1784,14 +1868,43 @@
         stopSpeechRecognition();
       }
       currentLang = lang;
-      document.getElementById('btn-lang-te').classList.toggle('active', lang === 'te');
-      document.getElementById('btn-lang-en').classList.toggle('active', lang === 'en');
+      const bTe = document.getElementById('btn-lang-te');
+      const bEn = document.getElementById('btn-lang-en');
+      if (bTe) bTe.classList.toggle('active', lang === 'te');
+      if (bEn) bEn.classList.toggle('active', lang === 'en');
+
+      // Keep Welcome Screen language chips in sync
+      const wTe = document.getElementById('welcome-btn-te');
+      const wEn = document.getElementById('welcome-btn-en');
+      if (wTe) wTe.classList.toggle('active', lang === 'te');
+      if (wEn) wEn.classList.toggle('active', lang === 'en');
+
+      // Update welcome banner text emphasis based on selected language
+      const introP = document.getElementById('welcome-intro-p');
+      const introSub = document.getElementById('welcome-intro-sub-p');
+      if (introP && introSub) {
+        if (lang === 'en') {
+          introP.style.fontSize = '14px';
+          introP.style.opacity = '0.9';
+          introSub.style.fontSize = '15.5px';
+          introSub.style.fontStyle = 'normal';
+          introSub.style.color = '#ffffff';
+        } else {
+          introP.style.fontSize = '15px';
+          introP.style.opacity = '1';
+          introSub.style.fontSize = '13.5px';
+          introSub.style.fontStyle = 'italic';
+          introSub.style.color = '#cbd5e1';
+        }
+      }
 
       const input = document.getElementById('user-input');
-      if (lang === 'te') {
-        input.placeholder = "మీ వ్యవసాయ వివరాలు మాట్లాడండి లేదా టైప్ చేయండి...";
-      } else {
-        input.placeholder = "Speak or type your crop symptom or farm details...";
+      if (input) {
+        if (lang === 'te') {
+          input.placeholder = "మీ వ్యవసాయ వివరాలు మాట్లాడండి లేదా టైప్ చేయండి...";
+        } else {
+          input.placeholder = "Speak or type your crop symptom or farm details...";
+        }
       }
 
       const tabAdvisory = document.getElementById('tab-advisory');
