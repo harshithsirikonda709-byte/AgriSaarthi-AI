@@ -2120,6 +2120,7 @@
         }
       };
 
+      recognition = rec;
       return rec;
     }
 
@@ -2153,8 +2154,7 @@
       if (recognition) {
         try { recognition.abort(); } catch (_) { }
       }
-      recognition = null;
-      initSpeech();
+      recognition = initSpeech();
       if (!recognition) return;
 
       recognition.lang = currentLang === 'te' ? 'te-IN' : 'en-IN';
@@ -2166,8 +2166,7 @@
         try {
           recognition.abort();
         } catch (_) { }
-        recognition = null;
-        initSpeech();
+        recognition = initSpeech();
         if (recognition) {
           try {
             recognition.start();
@@ -2988,10 +2987,21 @@ function updateWizardReviewSummary() {
 }
 
 
+    // Export global handlers for HTML onclick attributes
+    window.toggleSpeechRecognition = toggleSpeechRecognition;
+    window.startSpeechRecognition = startSpeechRecognition;
+    window.stopSpeechRecognition = stopSpeechRecognition;
+    window.speakMessage = speakMessage;
+    window.stopSpeech = stopSpeech;
+    window.sendMessage = sendMessage;
+    window.fillPrompt = fillPrompt;
+    window.handleKey = handleKey;
+    window.switchCategory = switchCategory;
+
     // Keep baseInputText synced with manual edits when not actively recording
     window.addEventListener('DOMContentLoaded', function () {
       if (typeof applyLanguage === 'function') { applyLanguage(currentLang || 'te'); }
-      initSpeech();
+      recognition = initSpeech();
       renderSuggestions();
       checkOllamaStatus();
 
