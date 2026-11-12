@@ -10,6 +10,9 @@
   let currentFarmer = null;
   let currentPage = 'home';
   let isFirstTimeOnboarding = false;
+  let lastAdvisoryResult = null;
+  let lastHealthResult = null;
+  let lastWeatherResult = null;
 
   function getApiUrl(path) {
     const cfg = window.AGRISAARTHI_CONFIG || {};
@@ -421,7 +424,7 @@
       const locParts = [currentFarmer.village, currentFarmer.district, currentFarmer.state].filter(Boolean);
       welcomeSub.textContent = locParts.length
         ? `📍 ${locParts.join(', ')}`
-        : t('📍 ప్రాంతం ఇంకా నమోదు చేయలేదు (ప్రొఫైల్‌లో జతచేయండి)', '📍 Location not set yet (Add in Farm Profile)');
+        : t('📍 ప్రాంతం ఇంకా నమోదు చేయలేదు', '📍 Location not set yet');
     }
 
     renderMyFarmSummary(currentFarmer);
@@ -516,7 +519,11 @@
     if (nameEl) nameEl.textContent = farmer.full_name || '—';
     if (phoneEl) phoneEl.textContent = farmer.identifier || '—';
     if (langEl) {
-      langEl.textContent = farmer.preferred_language === 'en' ? 'English (ఇంగ్లీష్)' : 'తెలుగు (Telugu)';
+      if (typeof currentLang !== 'undefined' && currentLang === 'en') {
+        langEl.textContent = farmer.preferred_language === 'en' ? 'English' : 'Telugu';
+      } else {
+        langEl.textContent = farmer.preferred_language === 'en' ? 'ఇంగ్లీష్' : 'తెలుగు';
+      }
     }
   }
 
@@ -579,7 +586,7 @@
           <strong style="font-size:16px; color:var(--forest-900);">📍 ${escapeHtml(weather.district)}, ${escapeHtml(weather.state)}</strong>
           <div style="font-size:12px; color:var(--text-muted);">${escapeHtml(weather.source)}</div>
         </div>
-        <span class="badge-tag" style="background:#dcfce7; color:#166534;">🟢 ${t('వాస్తవ డేటా (Live)', 'Live WMO Feed')}</span>
+        <span class="badge-tag" style="background:#dcfce7; color:#166534;">🟢 ${t('వాస్తవ డేటా', 'Live WMO Feed')}</span>
       </div>
       <div class="metric-strip">
         <div class="metric-box">
@@ -718,6 +725,7 @@
         return;
       }
 
+      lastAdvisoryResult = data.recommendation;
       renderAdvisoryResults(data.recommendation, resultsContainer);
     } catch (err) {
       if (resultsContainer) resultsContainer.innerHTML = '';
@@ -743,7 +751,7 @@
           <div class="rec-crop-header">
             <div>
               <span class="badge-tag" style="background:${isPrimary ? '#dcfce7' : '#fef3c7'}; color:${isPrimary ? '#166534' : '#92400e'}; margin-bottom:4px;">
-                ${isPrimary ? t('🌟 ప్రధాన సిఫార్సు (Primary)', '🌟 Primary Recommendation') : t('🛡️ ప్రత్యామ్నాయ పంట (Alternative/Hedge)', '🛡️ Diversified Alternative')}
+                ${isPrimary ? t('🌟 ప్రధాన సిఫార్సు', '🌟 Primary Recommendation') : t('🛡️ ప్రత్యామ్నాయ పంట', '🛡️ Diversified Alternative')}
               </span>
               <h4 style="font-size:18px; color:var(--forest-900); margin-top:4px;">🌾 ${escapeHtml(titleName)}</h4>
             </div>
@@ -751,7 +759,7 @@
           </div>
           <div class="metric-strip">
             <div class="metric-box">
-              <div class="m-label">${t('ఎకరానికి ఖర్చు (CACP)', 'Est. Cost / Acre')}</div>
+              <div class="m-label">${t('ఎకరానికి అంచనా ఖర్చు', 'Est. Cost / Acre')}</div>
               <div class="m-val">₹${Number(c.estimated_cost_per_acre_inr).toLocaleString('en-IN')}</div>
             </div>
             <div class="metric-box">
@@ -770,13 +778,13 @@
           ${c.sowing_notes_te && currentLang === 'te' ? `<p style="font-size:13.5px; color:var(--forest-800); margin-bottom:8px;"><strong>🌱 సాగు సూచన:</strong> ${escapeHtml(c.sowing_notes_te)}</p>` : ''}
           <div class="grid-2" style="margin-top:8px;">
             <div class="card-reference" style="margin:0;">
-              <div class="card-header">✅ ${t('ప్రధాన ప్రయోజనాలు (Key Strengths)', 'Key Strengths')}</div>
+              <div class="card-header">✅ ${t('ప్రధాన ప్రయోజనాలు', 'Key Strengths')}</div>
               <ul style="padding-left:18px; font-size:13.5px;">
                 ${(c.key_strengths || []).map(s => `<li>${escapeHtml(s)}</li>`).join('')}
               </ul>
             </div>
             <div class="card-warning" style="margin:0;">
-              <div class="card-header">⚠️ ${t('ముఖ్య జాగ్రత్తలు & రిస్కులు (Risk Factors)', 'Risk Factors')}</div>
+              <div class="card-header">⚠️ ${t('ముఖ్య జాగ్రత్తలు & రిస్కులు', 'Risk Factors')}</div>
               <ul style="padding-left:18px; font-size:13.5px;">
                 ${(c.risk_factors || []).map(r => `<li>${escapeHtml(r)}</li>`).join('')}
               </ul>
@@ -794,7 +802,7 @@
     container.innerHTML = `
       ${warningsHtml}
       <div class="portal-card card-green-accent" style="margin-bottom:18px;">
-        <h3>💰 ${t('బడ్జెట్ & పొలం విశ్లేషణ (Budget Summary)', 'Farm Holding & Budget Analysis')}</h3>
+        <h3>💰 ${t('పొలం విస్తీర్ణం & బడ్జెట్ విశ్లేషణ', 'Farm Holding & Budget Analysis')}</h3>
         <p>${t('మొత్తం బడ్జెట్', 'Total Budget')}: <strong>₹${Number(b.total_budget_inr || 0).toLocaleString('en-IN')}</strong> •
            ${t('విస్తీర్ణం', 'Land Size')}: <strong>${b.land_size_acres || 0} ${t('ఎకరాలు', 'acres')}</strong> •
            ${t('ఎకరానికి కేటాయింపు', 'Per Acre Allocation')}: <strong>₹${Number(b.budget_per_acre_inr || 0).toLocaleString('en-IN')}/acre</strong>
@@ -864,6 +872,7 @@
         return;
       }
 
+      lastHealthResult = data;
       renderCropHealthResult(data, outBox);
     } catch (err) {
       if (outBox) outBox.innerHTML = '';
@@ -907,7 +916,7 @@
           </ol>
           <p style="font-size:12.5px; margin-top:6px;"><em>💡 ${t('పై ప్రశ్నలకు మీ పొలం పరిశీలనలను పైన ఉన్న "పొలం పరిశీలన వివరాలు" బాక్స్‌లో రాసి మళ్ళీ నొక్కండి.', 'Enter your answers in the Field Observations box above to record a confirmed field consultation in your history.')}</em></p>
         </div>
-        <h4 style="margin:14px 0 8px 0; color:var(--forest-900);">🔍 ${t('శాస్త్రీయ ఆధారాల ప్రకారం సాధ్యమైన కారణాలు (Possible Causes)', 'Verified Possible Causes & Field Clues')}</h4>
+        <h4 style="margin:14px 0 8px 0; color:var(--forest-900);">🔍 ${t('శాస్త్రీయ ఆధారాల ప్రకారం సాధ్యమైన కారణాలు', 'Verified Possible Causes & Field Clues')}</h4>
         ${causesHtml}
         <div class="card-actions">
           <div class="card-header">🛡️ ${t('సురక్షిత తక్షణ చర్యలు (రసాయనేతర & యాజమాన్య పద్ధతులు)', 'Safe Non-Chemical & Cultural Next Steps')}</div>
@@ -955,6 +964,7 @@
         headers: getAuthHeaders()
       });
       const data = await res.json();
+      lastWeatherResult = data;
       renderWeatherPageData(data, outBox);
     } catch (err) {
       if (outBox) {
@@ -1031,13 +1041,13 @@
         </div>
       </div>
 
-      <h3 style="margin-bottom:12px; color:var(--forest-900);">📆 ${t('3-రోజుల వాతావరణ అంచనా (3-Day Agricultural Forecast)', '3-Day Agricultural Forecast')}</h3>
+      <h3 style="margin-bottom:12px; color:var(--forest-900);">📆 ${t('3-రోజుల వ్యవసాయ వాతావరణ అంచనా', '3-Day Agricultural Forecast')}</h3>
       <div class="grid-3" style="margin-bottom:20px;">
         ${forecastCards}
       </div>
 
       <div class="portal-card">
-        <h3>🚨 ${t('అధికారిక వాతావరణ & తుఫాను హెచ్చరికల స్థితి (Official Alerts Status)', 'Official Weather & Cyclone Alerts Status')}</h3>
+        <h3>🚨 ${t('అధికారిక వాతావరణ & తుఫాను హెచ్చరికల స్థితి', 'Official Weather & Cyclone Alerts Status')}</h3>
         <p style="font-size:13px; color:var(--text-muted); margin-bottom:12px;">
           ${escapeHtml(t(w.official_alerts_status_te || w.official_alerts_status, w.official_alerts_status))}
         </p>
@@ -1045,6 +1055,40 @@
       </div>
     `;
   }
+
+  // Universal portal language refresh handler
+  window.refreshPortalDynamicViews = function () {
+    updateAuthNavbar();
+    if (currentFarmer) {
+      if (currentPage === 'dashboard') {
+        const welcomeTitle = document.getElementById('dash-welcome-name');
+        if (welcomeTitle) {
+          welcomeTitle.textContent = t(
+            `🌾 నమస్కారం, ${currentFarmer.full_name} గారు!`,
+            `🌾 Welcome, ${currentFarmer.full_name}!`
+          );
+        }
+        renderMyFarmSummary(currentFarmer);
+        renderDashboardFarmerDetails(currentFarmer);
+        renderDashboardProfileProgress(currentFarmer);
+      }
+    }
+    const advContainer = document.getElementById('advisory-results-container');
+    if (lastAdvisoryResult && advContainer && advContainer.innerHTML.trim() !== '') {
+      renderAdvisoryResults(lastAdvisoryResult, advContainer);
+    }
+    const healthContainer = document.getElementById('health-results-container');
+    if (lastHealthResult && healthContainer && healthContainer.innerHTML.trim() !== '') {
+      renderCropHealthResult(lastHealthResult, healthContainer);
+    }
+    const weatherContainer = document.getElementById('weather-page-results');
+    if (lastWeatherResult && weatherContainer && weatherContainer.innerHTML.trim() !== '') {
+      renderWeatherPageData(lastWeatherResult, weatherContainer);
+    }
+    if (typeof updateWizardReviewSummary === 'function' && typeof currentWizardStep !== 'undefined' && currentWizardStep === 6) {
+      updateWizardReviewSummary();
+    }
+  };
 
   // Initialize portal on DOM load
   window.addEventListener('DOMContentLoaded', async function () {

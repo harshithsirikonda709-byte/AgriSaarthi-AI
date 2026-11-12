@@ -1381,3 +1381,290 @@ body.portal-body {
     flex: 1;
   }
 }
+
+/* ==========================================================================
+   AGRISAARTHI AI — ADVANCED UI ENHANCEMENTS & TYPOGRAPHY
+   ========================================================================== */
+
+/* 1. Global Typography & Readability (Accessible for all farmers) */
+body {
+  font-size: 15px !important;
+  line-height: 1.6 !important;
+  color: #0f172a !important; /* Deep crisp contrast */
+  font-family: 'Noto Sans Telugu', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif !important;
+}
+
+h1, h2, h3, h4, .brand-text h1, .welcome-hero-title, .step-panel-title {
+  font-weight: 750 !important;
+  letter-spacing: -0.015em;
+  color: #064e3b; /* Deep forest green */
+}
+
+h1 { font-size: 26px !important; }
+h2 { font-size: 22px !important; }
+h3 { font-size: 18px !important; }
+h4 { font-size: 16px !important; }
+
+/* Enhanced Form Labels & Inputs for Farmers */
+.form-group label {
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  color: #1e293b !important;
+  margin-bottom: 7px !important;
+  display: block;
+}
+
+.form-control {
+  font-size: 15px !important;
+  font-weight: 500 !important;
+  color: #0f172a !important;
+  border: 1.8px solid #cbd5e1 !important;
+  border-radius: 12px !important;
+  padding: 12px 14px !important;
+  min-height: 48px !important;
+  background-color: #ffffff !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.form-control:focus {
+  border-color: #15803d !important;
+  box-shadow: 0 0 0 4px rgba(34, 197, 94, 0.18) !important;
+  outline: none !important;
+}
+
+.form-control::placeholder {
+  color: #94a3b8 !important;
+  font-weight: 400 !important;
+}
+
+/* 2. Login & Registration 3D Agriculture Background & Soft Color Overlay */
+.portal-page:not(.active) {
+  display: none !important;
+}
+
+#page-login.active, #page-register.active {
+  position: relative !important;
+  min-height: calc(100vh - 120px) !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 40px 16px !important;
+  background-color: #0f3d23 !important;
+  background-image: 
+    linear-gradient(135deg, rgba(15, 61, 35, 0.72) 0%, rgba(6, 40, 25, 0.82) 100%),
+    url('https://images.unsplash.com/photo-1625246333195-78d9c38ad449?auto=format&fit=crop&w=1920&q=80') !important;
+  background-size: cover !important;
+  background-position: center center !important;
+  background-attachment: fixed !important;
+  background-repeat: no-repeat !important;
+}
+
+/* Modern Elevated Auth Card */
+.auth-card {
+  width: 100% !important;
+  max-width: 500px !important;
+  margin: 0 auto !important;
+  background: rgba(255, 255, 255, 0.98) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.9) !important;
+  border-radius: 24px !important;
+  padding: 38px 32px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.5) !important;
+  position: relative !important;
+  z-index: 2 !important;
+  transition: transform 0.25s ease, box-shadow 0.25s ease !important;
+}
+
+.auth-card:hover {
+  box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.42), 0 0 0 1px rgba(255, 255, 255, 0.7) !important;
+}
+
+.auth-logo-badge {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 58px !important;
+  height: 58px !important;
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%) !important;
+  border: 2px solid #86efac !important;
+  border-radius: 50% !important;
+  font-size: 28px !important;
+  margin-bottom: 12px !important;
+  box-shadow: 0 4px 12px rgba(34, 197, 94, 0.25) !important;
+}
+
+.auth-card h2 {
+  font-size: 23px !important;
+  font-weight: 800 !important;
+  color: #064e3b !important;
+  margin-bottom: 6px !important;
+}
+
+.auth-subtitle {
+  font-size: 14px !important;
+  color: #475569 !important;
+  line-height: 1.5 !important;
+  margin-bottom: 22px !important;
+}
+
+/* 3. Welcome Hero Section Overhaul */
+.welcome-hero {
+  background: 
+    linear-gradient(135deg, rgba(15, 60, 32, 0.90) 0%, rgba(6, 40, 25, 0.94) 100%),
+    url('https://images.unsplash.com/photo-1500937386664-56d1dfef3854?auto=format&fit=crop&w=1600&q=75') !important;
+  background-size: cover !important;
+  background-position: center !important;
+  border-radius: 24px !important;
+  padding: 38px 32px !important;
+  color: #ffffff !important;
+  position: relative !important;
+  overflow: hidden !important;
+  box-shadow: 0 16px 36px rgba(10, 46, 26, 0.18) !important;
+  margin-bottom: 28px !important;
+}
+
+.welcome-hero-title {
+  font-size: 32px !important;
+  font-weight: 850 !important;
+  color: #ffffff !important;
+  letter-spacing: -0.02em !important;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.25) !important;
+}
+
+.welcome-hero-subtitle {
+  font-size: 17px !important;
+  font-weight: 600 !important;
+  color: #bbf7d0 !important;
+  margin-top: 6px !important;
+  margin-bottom: 16px !important;
+}
+
+.welcome-hero-desc p {
+  font-size: 15px !important;
+  line-height: 1.65 !important;
+  color: #f1f5f9 !important;
+  max-width: 820px !important;
+}
+
+/* Buttons with clear hover states & tactile feel */
+.btn-primary-agri, .btn-welcome-primary {
+  min-height: 46px !important;
+  font-weight: 750 !important;
+  font-size: 15px !important;
+  border-radius: 12px !important;
+  letter-spacing: 0.01em !important;
+  cursor: pointer !important;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1) !important;
+}
+
+.btn-welcome-primary {
+  background: #ffffff !important;
+  color: #064e3b !important;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.2) !important;
+}
+
+.btn-welcome-primary:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25) !important;
+  background: #f8fafc !important;
+}
+
+.btn-welcome-secondary {
+  min-height: 46px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  border-radius: 12px !important;
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.6) !important;
+  color: #ffffff !important;
+  backdrop-filter: blur(8px) !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-welcome-secondary:hover {
+  background: rgba(255, 255, 255, 0.28) !important;
+  border-color: #ffffff !important;
+  transform: translateY(-2px) !important;
+}
+
+.btn-welcome-ghost {
+  min-height: 46px !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  border-radius: 12px !important;
+  background: transparent !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.35) !important;
+  color: #e2e8f0 !important;
+  cursor: pointer !important;
+  transition: all 0.2s ease !important;
+}
+
+.btn-welcome-ghost:hover {
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Feature Cards */
+.welcome-feature-card {
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-top: 4px solid #16a34a !important;
+  border-radius: 18px !important;
+  padding: 24px 20px !important;
+  display: flex !important;
+  flex-direction: column !important;
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04) !important;
+}
+
+.welcome-feature-card:hover {
+  transform: translateY(-5px) !important;
+  border-color: #86efac !important;
+  border-top-color: #15803d !important;
+  box-shadow: 0 16px 32px rgba(22, 101, 52, 0.12) !important;
+}
+
+.welcome-feature-card h3 {
+  font-size: 17.5px !important;
+  font-weight: 750 !important;
+  color: #064e3b !important;
+  margin: 12px 0 8px 0 !important;
+}
+
+.welcome-feature-card p {
+  font-size: 14px !important;
+  line-height: 1.55 !important;
+  color: #475569 !important;
+}
+
+/* 4. Wizard & Profile Cards */
+.wizard-card {
+  background: #ffffff !important;
+  border: 1.5px solid #e2e8f0 !important;
+  border-radius: 22px !important;
+  padding: 32px 28px !important;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.05) !important;
+}
+
+.wizard-step-circle {
+  font-weight: 800 !important;
+}
+
+.wizard-step-title {
+  font-size: 12.5px !important;
+  font-weight: 700 !important;
+}
+
+/* Clean Google Sign-in button */
+.btn-google-placeholder {
+  height: 46px !important;
+  border-radius: 12px !important;
+  font-size: 14.5px !important;
+  font-weight: 650 !important;
+  background: #f8fafc !important;
+  border: 1.5px solid #e2e8f0 !important;
+  color: #475569 !important;
+}
