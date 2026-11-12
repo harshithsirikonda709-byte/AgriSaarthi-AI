@@ -308,6 +308,10 @@
       skipBtn.style.display = isFirstTimeOnboarding ? 'inline-flex' : 'none';
     }
 
+    if (typeof setWizardStep === 'function') {
+      setWizardStep(1);
+    }
+
     if (!currentFarmer) return;
     document.getElementById('prof-fullname').value = currentFarmer.full_name || '';
     document.getElementById('prof-state').value = currentFarmer.state || '';
@@ -320,6 +324,10 @@
     document.getElementById('prof-budget').value = currentFarmer.budget_inr != null ? currentFarmer.budget_inr : '';
     document.getElementById('prof-risk').value = currentFarmer.risk_tolerance || 'moderate';
     document.getElementById('prof-crops').value = currentFarmer.primary_crops_grown || '';
+    const langPref = document.getElementById('prof-lang-pref');
+    if (langPref && currentFarmer.preferred_language) {
+      langPref.value = currentFarmer.preferred_language;
+    }
   }
 
   window.handleProfileSubmit = async function (ev) {
@@ -417,6 +425,8 @@
     }
 
     renderMyFarmSummary(currentFarmer);
+    renderDashboardFarmerDetails(currentFarmer);
+    renderDashboardProfileProgress(currentFarmer);
 
     const weatherBox = document.getElementById('dash-weather-content');
     const alertsBox = document.getElementById('dash-alerts-content');
@@ -439,6 +449,8 @@
       if (data.farmer) {
         currentFarmer = data.farmer;
         renderMyFarmSummary(currentFarmer);
+        renderDashboardFarmerDetails(currentFarmer);
+        renderDashboardProfileProgress(currentFarmer);
       }
       renderDashboardWeatherAndAlerts(data.weather, weatherBox, alertsBox);
       renderDashboardHistory(data.history || [], historyBox);
@@ -494,6 +506,51 @@
         </button>
       </div>
     `;
+  }
+
+  function renderDashboardFarmerDetails(farmer) {
+    if (!farmer) return;
+    const nameEl = document.getElementById('dash-det-name');
+    const phoneEl = document.getElementById('dash-det-phone');
+    const langEl = document.getElementById('dash-det-lang');
+    if (nameEl) nameEl.textContent = farmer.full_name || '—';
+    if (phoneEl) phoneEl.textContent = farmer.identifier || '—';
+    if (langEl) {
+      langEl.textContent = farmer.preferred_language === 'en' ? 'English (ఇంగ్లీష్)' : 'తెలుగు (Telugu)';
+    }
+  }
+
+  function renderDashboardProfileProgress(farmer) {
+    if (!farmer) return;
+    const pctEl = document.getElementById('dash-profile-pct');
+    const barEl = document.getElementById('dash-profile-bar-fill');
+    const hintEl = document.getElementById('dash-profile-hint');
+
+    const fields = [
+      farmer.full_name,
+      farmer.state,
+      farmer.district,
+      farmer.village,
+      farmer.land_size_acres,
+      farmer.soil_type,
+      farmer.water_availability,
+      farmer.season
+    ];
+    const filled = fields.filter(f => f !== null && f !== undefined && f !== '').length;
+    const pct = Math.max(20, Math.round((filled / fields.length) * 100));
+
+    if (pctEl) pctEl.textContent = `${pct}%`;
+    if (barEl) barEl.style.width = `${pct}%`;
+    if (hintEl) {
+      if (pct >= 90) {
+        hintEl.textContent = t('✅ అద్భుతం! మీ ప్రొఫైల్ పూర్తయింది. AI ఖచ్చితమైన సలహాలు ఇవ్వగలదు.', '✅ Excellent! Profile complete. AI can provide fully tailored advice.');
+      } else {
+        hintEl.textContent = t(
+          `ప్రొఫైల్ ${pct}% పూర్తయింది. పూర్తి పంట సిఫార్సుల కోసం మిగిలిన వివరాలను జోడించండి.`,
+          `Profile is ${pct}% complete. Fill remaining details for accurate crop recommendations.`
+        );
+      }
+    }
   }
 
   function renderDashboardWeatherAndAlerts(weather, weatherBox, alertsBox) {

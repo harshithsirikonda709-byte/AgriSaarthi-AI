@@ -803,23 +803,581 @@ body.portal-body {
 
 /* Responsive Breakpoints */
 @media (max-width: 920px) {
-  .grid-4 { grid-template-columns: repeat(2, 1fr); }
-  .grid-3 { grid-template-columns: repeat(2, 1fr); }
-  .metric-strip { grid-template-columns: repeat(2, 1fr); }
+  .grid-4 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .grid-3 {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .metric-strip {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 640px) {
-  .grid-4, .grid-3, .grid-2, .form-grid {
+
+  .grid-4,
+  .grid-3,
+  .grid-2,
+  .form-grid {
     grid-template-columns: 1fr;
   }
+
   .hero-banner {
     padding: 22px 18px;
   }
+
   .hero-banner h2 {
     font-size: 21px;
   }
+
   .portal-page {
     padding: 14px 12px 36px 12px;
   }
 }
 
+
+
+/* =========================================================================
+   AUTH ENHANCEMENTS (Day 1 Task 3)
+   ========================================================================= */
+.auth-card-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.auth-logo-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 52px;
+  height: 52px;
+  background: rgba(46, 125, 50, 0.12);
+  border: 1.5px solid rgba(46, 125, 50, 0.25);
+  border-radius: 50%;
+  font-size: 26px;
+  margin-bottom: 10px;
+}
+
+.auth-subtitle {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin-top: 4px;
+  line-height: 1.45;
+}
+
+.password-toggle-btn {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 18px;
+  padding: 4px;
+  opacity: 0.65;
+  transition: opacity 0.2s ease;
+}
+
+.password-toggle-btn:hover {
+  opacity: 1;
+}
+
+.password-strength-bar {
+  height: 4px;
+  background: #e2e8f0;
+  border-radius: 2px;
+  margin-top: 6px;
+  overflow: hidden;
+}
+
+.pwd-strength-fill {
+  height: 100%;
+  width: 0%;
+  transition: width 0.3s ease, background-color 0.3s ease;
+}
+
+.pwd-strength-label,
+.pwd-match-label {
+  font-size: 11.5px;
+  margin-top: 3px;
+  font-weight: 600;
+}
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  margin: 18px 0;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.auth-divider span {
+  padding: 0 10px;
+  font-size: 12px;
+  color: var(--text-muted);
+  text-transform: uppercase;
+}
+
+.btn-google-placeholder {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 16px;
+  background: #ffffff;
+  border: 1.5px solid #cbd5e1;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: #64748b;
+  cursor: not-allowed;
+  opacity: 0.75;
+  position: relative;
+}
+
+.coming-soon-badge {
+  margin-left: 8px;
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  color: #475569;
+  font-size: 10.5px;
+  padding: 2px 7px;
+  border-radius: 12px;
+  font-weight: 700;
+}
+
+.optional-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: normal;
+}
+
+/* =========================================================================
+   6-SECTION PROFILE SETUP UI (Day 1 Task 4)
+   ========================================================================= */
+.profile-section-card {
+  background: #ffffff;
+  border: 1.5px solid var(--card-border);
+  border-radius: 14px;
+  padding: 20px;
+  margin-bottom: 18px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.03);
+}
+
+.profile-section-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1.5px solid #f1f5f9;
+}
+
+.profile-section-num {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--forest-800);
+  color: #ffffff;
+  font-size: 13px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.profile-section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--forest-900);
+  margin: 0;
+}
+
+.profile-section-desc {
+  font-size: 12.5px;
+  color: var(--text-muted);
+  margin: 2px 0 0 0;
+}
+
+.pref-checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 8px;
+}
+
+.pref-checkbox-label {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13.5px;
+  color: var(--text-main);
+  cursor: pointer;
+  line-height: 1.4;
+}
+
+.pref-checkbox-label input[type="checkbox"] {
+  margin-top: 3px;
+  width: 17px;
+  height: 17px;
+  accent-color: var(--forest-800);
+  cursor: pointer;
+}
+
+/* =========================================================================
+   FARMER DASHBOARD 5 ELEMENTS (Day 1 Task 5)
+   ========================================================================= */
+.dash-profile-progress-box {
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border: 1.5px solid #86efac;
+  border-radius: 14px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.progress-left {
+  flex: 1;
+  min-width: 240px;
+}
+
+.progress-bar-container {
+  width: 100%;
+  height: 10px;
+  background: #dcfce7;
+  border-radius: 5px;
+  overflow: hidden;
+  margin-top: 8px;
+}
+
+.progress-bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #16a34a, #15803d);
+  border-radius: 5px;
+  transition: width 0.6s ease;
+}
+
+.dash-my-details-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 12px;
+  margin-top: 10px;
+}
+
+.detail-item {
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 10px 12px;
+}
+
+.detail-label {
+  font-size: 11.5px;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.detail-value {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--forest-900);
+  margin-top: 3px;
+}
+
+.privacy-badge-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+/* =========================================================================
+   6-STEP FARMER ONBOARDING WIZARD (Day 1 Task 4 & 5)
+   ========================================================================= */
+.wizard-card {
+  max-width: 860px;
+  margin: 0 auto;
+  background: #ffffff;
+  border: 1.5px solid var(--card-border);
+  border-radius: 18px;
+  padding: 28px 24px;
+  box-shadow: var(--shadow-md);
+}
+
+/* Stepper Bar Desktop */
+.wizard-stepper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  padding-bottom: 20px;
+  border-bottom: 1.5px solid #f1f5f9;
+  position: relative;
+}
+
+.wizard-step-node {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  flex: 1;
+}
+
+.wizard-step-circle {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: #f1f5f9;
+  border: 2px solid #cbd5e1;
+  color: #64748b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 14px;
+  transition: all 0.3s ease;
+  margin-bottom: 6px;
+}
+
+.wizard-step-node.active .wizard-step-circle {
+  background: var(--forest-800);
+  border-color: var(--forest-800);
+  color: #ffffff;
+  box-shadow: 0 0 0 4px rgba(22, 101, 52, 0.2);
+  transform: scale(1.08);
+}
+
+.wizard-step-node.completed .wizard-step-circle {
+  background: #16a34a;
+  border-color: #16a34a;
+  color: #ffffff;
+}
+
+.wizard-step-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #64748b;
+  text-align: center;
+  transition: color 0.3s ease;
+  white-space: nowrap;
+}
+
+.wizard-step-node.active .wizard-step-title {
+  color: var(--forest-900);
+  font-weight: 700;
+}
+
+.wizard-step-node.completed .wizard-step-title {
+  color: #16a34a;
+}
+
+.wizard-step-connector {
+  position: absolute;
+  top: 19px;
+  left: 5%;
+  right: 5%;
+  height: 2px;
+  background: #e2e8f0;
+  z-index: 1;
+}
+
+.wizard-step-connector-fill {
+  height: 100%;
+  background: #16a34a;
+  width: 0%;
+  transition: width 0.4s ease;
+}
+
+/* Mobile Stepper Banner */
+.wizard-mobile-header {
+  display: none;
+  background: linear-gradient(135deg, #f0fdf4 0%, #ecfdf5 100%);
+  border: 1.5px solid #86efac;
+  border-radius: 12px;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+}
+
+.wizard-mobile-progress-bar {
+  height: 6px;
+  background: #dcfce7;
+  border-radius: 3px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.wizard-mobile-progress-fill {
+  height: 100%;
+  background: #16a34a;
+  width: 16.66%;
+  transition: width 0.3s ease;
+}
+
+/* Step Content Panels */
+.wizard-step-panel {
+  display: none;
+  animation: fadeInStep 0.3s ease forwards;
+}
+
+.wizard-step-panel.active {
+  display: block;
+}
+
+@keyframes fadeInStep {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.step-panel-header {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1.5px solid #f1f5f9;
+}
+
+.step-badge {
+  display: inline-block;
+  padding: 3px 10px;
+  background: rgba(22, 101, 52, 0.1);
+  color: var(--forest-800);
+  border-radius: 12px;
+  font-size: 11.5px;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.step-panel-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--forest-900);
+  margin: 0 0 4px 0;
+}
+
+.step-panel-desc {
+  font-size: 13.5px;
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* Navigation Footer */
+.wizard-nav-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 28px;
+  padding-top: 18px;
+  border-top: 1.5px solid #f1f5f9;
+  flex-wrap: wrap;
+}
+
+.wizard-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Step 6 Review Summary */
+.wizard-review-box {
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 16px;
+  margin-top: 18px;
+}
+
+.wizard-review-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.wizard-review-item {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.wizard-review-label {
+  font-size: 11px;
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.wizard-review-val {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--forest-900);
+  margin-top: 2px;
+}
+
+/* Field Validation Error State */
+.input-field-error {
+  border-color: #ef4444 !important;
+  background-color: #fef2f2 !important;
+}
+
+.inline-field-error {
+  color: #dc2626;
+  font-size: 12px;
+  margin-top: 4px;
+  display: none;
+  font-weight: 600;
+}
+
+.inline-field-error.show {
+  display: block;
+}
+
+/* Responsive Overrides */
+@media (max-width: 768px) {
+  .wizard-stepper {
+    display: none;
+  }
+  .wizard-mobile-header {
+    display: block;
+  }
+  .wizard-card {
+    padding: 20px 16px;
+  }
+  .wizard-nav-footer {
+    flex-direction: column-reverse;
+  }
+  .wizard-nav-footer > button,
+  .wizard-nav-actions {
+    width: 100%;
+  }
+  .wizard-nav-actions > button {
+    flex: 1;
+  }
+}
