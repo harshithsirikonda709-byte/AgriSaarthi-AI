@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html lang="te">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AgriSaarthi AI — రైతు నేస్తం (Farmer Decision Assistant)</title>
+  <title>AgriSaarthi AI — Digital Farmer Assistant</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Noto+Sans+Telugu:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap"
+    rel="stylesheet">
   <style>
     :root {
       /* Agricultural Forest & Leaf Palette */
@@ -66,7 +69,7 @@
       font-family: 'Noto Sans Telugu', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       background-color: var(--cream-bg);
       background-image: radial-gradient(circle at 10% 10%, rgba(34, 197, 94, 0.05) 0%, transparent 40%),
-                        radial-gradient(circle at 90% 90%, rgba(217, 119, 6, 0.04) 0%, transparent 40%);
+        radial-gradient(circle at 90% 90%, rgba(217, 119, 6, 0.04) 0%, transparent 40%);
       color: var(--text-main);
       display: flex;
       flex-direction: column;
@@ -210,7 +213,7 @@
     .lang-btn.active {
       background: #ffffff;
       color: var(--forest-900);
-      box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     }
 
     /* Dashboard Hub Bar */
@@ -319,8 +322,15 @@
     }
 
     @keyframes fadeIn {
-      from { opacity: 0; transform: translateY(6px); }
-      to { opacity: 1; transform: translateY(0); }
+      from {
+        opacity: 0;
+        transform: translateY(6px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     .message-row.user {
@@ -660,10 +670,13 @@
     }
 
     @keyframes pulse-ring-mic {
-      0%, 100% {
+
+      0%,
+      100% {
         transform: scale(1);
         box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5);
       }
+
       50% {
         transform: scale(1.08);
         box-shadow: 0 0 0 10px rgba(239, 68, 68, 0);
@@ -680,8 +693,17 @@
     }
 
     @keyframes pulse-amber-mic {
-      0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4); }
-      50% { transform: scale(1.05); box-shadow: 0 0 0 8px rgba(245, 158, 11, 0); }
+
+      0%,
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.4);
+      }
+
+      50% {
+        transform: scale(1.05);
+        box-shadow: 0 0 0 8px rgba(245, 158, 11, 0);
+      }
     }
 
     /* State: Microphone Unavailable / Permission Denied */
@@ -767,12 +789,25 @@
       animation: typing-bounce 1.2s infinite ease-in-out;
     }
 
-    .typing-dot:nth-child(2) { animation-delay: 0.2s; }
-    .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+    .typing-dot:nth-child(2) {
+      animation-delay: 0.2s;
+    }
+
+    .typing-dot:nth-child(3) {
+      animation-delay: 0.4s;
+    }
 
     @keyframes typing-bounce {
-      0%, 80%, 100% { transform: translateY(0); }
-      40% { transform: translateY(-5px); }
+
+      0%,
+      80%,
+      100% {
+        transform: translateY(0);
+      }
+
+      40% {
+        transform: translateY(-5px);
+      }
     }
 
     .notice-bar {
@@ -785,44 +820,89 @@
       flex-shrink: 0;
     }
 
-    button:focus-visible, input:focus-visible {
+    button:focus-visible,
+    input:focus-visible {
       outline: 2px solid var(--accent-gold);
       outline-offset: 2px;
     }
 
     /* Mobile Responsiveness */
     @media (max-width: 768px) {
-      header { padding: 10px 14px; }
-      .brand-icon-box { width: 40px; height: 40px; font-size: 22px; }
-      .brand-text h1 { font-size: 16px; }
-      .brand-text p { font-size: 11px; }
-      .system-badges { display: none; }
-      .dashboard-hub { padding: 6px 14px; }
-      main { padding: 8px 10px 12px 10px; }
-      .message-row { max-width: 92%; }
-      .message-bubble { padding: 12px 14px; font-size: 14px; }
-      .input-panel { padding: 4px 6px 4px 10px; }
-      .mic-button { width: 42px; height: 42px; font-size: 18px; }
-      .send-btn { width: 40px; height: 40px; }
+      header {
+        padding: 10px 14px;
+      }
+
+      .brand-icon-box {
+        width: 40px;
+        height: 40px;
+        font-size: 22px;
+      }
+
+      .brand-text h1 {
+        font-size: 16px;
+      }
+
+      .brand-text p {
+        font-size: 11px;
+      }
+
+      .system-badges {
+        display: none;
+      }
+
+      .dashboard-hub {
+        padding: 6px 14px;
+      }
+
+      main {
+        padding: 8px 10px 12px 10px;
+      }
+
+      .message-row {
+        max-width: 92%;
+      }
+
+      .message-bubble {
+        padding: 12px 14px;
+        font-size: 14px;
+      }
+
+      .input-panel {
+        padding: 4px 6px 4px 10px;
+      }
+
+      .mic-button {
+        width: 42px;
+        height: 42px;
+        font-size: 18px;
+      }
+
+      .send-btn {
+        width: 40px;
+        height: 40px;
+      }
     }
   </style>
-  <link rel="stylesheet" href="/css/portal.css">
-  <script src="/config.js"></script>
+  <link rel="stylesheet" href="css/portal.css">
+  <script src="config.js"></script>
+  <script src="js/i18n.js"></script>
 </head>
+
 <body class="portal-body">
 
-  <!-- Top Agricultural Brand Header -->
+    <!-- Top Agricultural Brand Header -->
   <header>
     <div class="brand" style="cursor:pointer;" onclick="navigateTo('home')">
       <div class="brand-icon-box" title="AgriSaarthi AI Crop Sprout">🌾</div>
       <div class="brand-text">
-        <h1 id="app-title">AgriSaarthi AI <span class="telugu-name">(అగ్రిసారథి)</span></h1>
-        <p id="app-subtitle">రైతు నిర్ణయ సహాయకుడు • Fetch.ai ACP Decision Agent & Crop Health AI</p>
+        <h1 id="app-title"><span data-i18n="brand_title">అగ్రిసారథి AI</span></h1>
+        <p id="app-subtitle" data-i18n="brand_sub">రైతు నిర్ణయ సహాయకుడు • Fetch.ai ACP నిర్ణయ ఏజెంట్ & పంట రక్షణ AI</p>
       </div>
     </div>
     <div class="header-controls">
       <div class="system-badges">
-        <div class="badge-status badge-ollama" id="ollama-status-badge" onclick="checkOllamaStatus()" title="Local Open-Weight Model via Ollama (Click to refresh)">
+        <div class="badge-status badge-ollama" id="ollama-status-badge" onclick="checkOllamaStatus()"
+          title="Local Open-Weight Model via Ollama (Click to refresh)">
           <span class="status-dot"></span> 🦙 Ollama: Checking...
         </div>
         <div class="badge-status" title="ACP v0.3.0 Agentverse Mailbox Active">
@@ -839,207 +919,432 @@
   <!-- Primary Farmer Portal Navigation Bar -->
   <nav class="portal-nav" aria-label="Primary Navigation">
     <div class="portal-nav-links">
-      <button type="button" class="nav-item-btn active" data-page="home" onclick="navigateTo('home')">🏠 హోమ్ (Home)</button>
-      <button type="button" class="nav-item-btn" id="nav-btn-dashboard" data-page="dashboard" style="display:none;" onclick="navigateTo('dashboard')">📊 డాష్‌బోర్డ్ (Dashboard)</button>
-      <button type="button" class="nav-item-btn" data-page="advisory" onclick="navigateTo('advisory')">🌱 పంట సలహా (Crop Advisory)</button>
-      <button type="button" class="nav-item-btn" data-page="health" onclick="navigateTo('health')">🔬 పంట ఆరోగ్యం (Crop Health)</button>
-      <button type="button" class="nav-item-btn" data-page="weather" onclick="navigateTo('weather')">🌦️ వాతావరణం (Weather & Alerts)</button>
-      <button type="button" class="nav-item-btn" data-page="voice" onclick="navigateTo('voice')">🎙️ AI వాయిస్ సహాయకుడు (Voice AI)</button>
-      <button type="button" class="nav-item-btn" id="nav-btn-profile" data-page="profile" style="display:none;" onclick="navigateTo('profile')">👤 నా ప్రొఫైల్ (Profile)</button>
+      <button type="button" class="nav-item-btn active" data-page="home" data-i18n="nav_home" onclick="navigateTo('home')">🏠 హోమ్</button>
+      <button type="button" class="nav-item-btn" id="nav-btn-dashboard" data-page="dashboard" data-i18n="nav_dashboard" style="display:none;" onclick="navigateTo('dashboard')">📊 డాష్‌బోర్డ్</button>
+      <button type="button" class="nav-item-btn" data-page="advisory" data-i18n="nav_advisory" onclick="navigateTo('advisory')">🌱 పంట సలహా</button>
+      <button type="button" class="nav-item-btn" data-page="health" data-i18n="nav_health" onclick="navigateTo('health')">🔬 పంట ఆరోగ్యం</button>
+      <button type="button" class="nav-item-btn" data-page="weather" data-i18n="nav_weather" onclick="navigateTo('weather')">🌦️ వాతావరణం</button>
+      <button type="button" class="nav-item-btn" data-page="voice" data-i18n="nav_voice" onclick="navigateTo('voice')">🎙️ వాయిస్ AI</button>
+      <button type="button" class="nav-item-btn" id="nav-btn-profile" data-page="profile" data-i18n="nav_profile" style="display:none;" onclick="navigateTo('profile')">👤 నా ప్రొఫైల్</button>
     </div>
     <div class="portal-nav-auth">
       <div id="nav-auth-guest" style="display:flex; gap:8px;">
-        <button type="button" class="btn-nav-action btn-outline" onclick="navigateTo('login')">🔑 లాగిన్ (Login)</button>
-        <button type="button" class="btn-nav-action" onclick="navigateTo('register')">📝 రైతు నమోదు (Register)</button>
+        <button type="button" class="btn-nav-action btn-outline" data-i18n="nav_login" onclick="navigateTo('login')">🔑 లాగిన్</button>
+        <button type="button" class="btn-nav-action" data-i18n="nav_register" onclick="navigateTo('register')">📝 రైతు నమోదు</button>
       </div>
       <div id="nav-auth-user" style="display:none; align-items:center; gap:8px;">
         <span class="nav-user-pill">👨‍🌾 <span id="nav-farmer-name">Farmer</span></span>
-        <button type="button" class="btn-nav-action btn-danger-outline" onclick="handleLogout()">🚪 లాగ్ అవుట్ (Logout)</button>
+        <button type="button" class="btn-nav-action btn-danger-outline" data-i18n="nav_logout" onclick="handleLogout()">🚪 లాగ్ అవుట్</button>
       </div>
     </div>
   </nav>
 
   <!-- Agricultural AI Dashboard Hub Bar -->
   <div class="dashboard-hub">
-    <div class="hub-pill">
-      <span>🌾</span> <strong>పంట సలహాదారు (Crop Advisory):</strong> 11 ICAR/CACP పంటలు
+    <div class="hub-pill" data-i18n-html="hub_crop_advisory">
+      <span>🌾</span> <strong>పంట సలహాదారు:</strong> 11 ICAR/CACP పంటలు
     </div>
-    <div class="hub-pill pill-amber">
-      <span>🛡️</span> <strong>పంట రక్షణ & తెగుళ్లు (Crop Health):</strong> లక్షణాలు & నివారణ
+    <div class="hub-pill pill-amber" data-i18n-html="hub_crop_health">
+      <span>🛡️</span> <strong>పంట రక్షణ:</strong> లక్షణాలు & నివారణ
     </div>
-    <div class="hub-pill pill-blue">
-      <span>🤖</span> <strong>ఏజెంట్ ఆర్కెస్ట్రేషన్:</strong> Fetch.ai ACP + Local AI
+    <div class="hub-pill pill-blue" data-i18n-html="hub_agent_orch">
+      <span>🤖</span> <strong>ఆర్కెస్ట్రేషన్:</strong> Fetch.ai ACP + స్థానిక AI
     </div>
-    <div id="voice-status-pill" class="voice-status-pill status-idle">
-      🎙️ వాయిస్ సిద్ధంగా ఉంది (Voice Ready)
+    <div id="voice-status-pill" class="voice-status-pill status-idle" data-i18n="hub_voice_ready">
+      🎙️ వాయిస్ సిద్ధంగా ఉంది
     </div>
   </div>
 
   <!-- =====================================================================
-       PAGE 1: PUBLIC HOME PAGE
+       PAGE 1: PUBLIC HOME / WELCOME SCREEN (Modern Agriculture Theme)
        ===================================================================== -->
   <section id="page-home" class="portal-page active" aria-labelledby="home-hero-heading">
-    <div class="hero-banner">
-      <h2 id="home-hero-heading">🌾 అగ్రిసారథి AI (AgriSaarthi AI) — భారతీయ రైతుల కోసం స్మార్ట్ వ్యవసాయ నిర్ణయ వేదిక</h2>
-      <p>
-        ICAR మరియు CACP (MSP 2024–2025) ప్రామాణిక గణాంకాల ఆధారంగా మీ నేల, నీటి వసతి, సీజన్ మరియు బడ్జెట్‌కు తగిన పంట సిఫార్సులు,
-        పంట తెగుళ్ల రోగనిర్ధారణ, వాస్తవ వాతావరణ సమాచారం మరియు తెలుగు/ఇంగ్లీష్ వాయిస్ అసిస్టెంట్.
-      </p>
-      <div class="hero-actions" id="home-cta-guest">
-        <button type="button" class="btn-hero-light" onclick="navigateTo('register')">📝 కొత్త రైతు నమోదు (Register Free)</button>
-        <button type="button" class="btn-hero-outline" onclick="navigateTo('login')">🔑 రైతు లాగిన్ (Farmer Login)</button>
-        <button type="button" class="btn-hero-outline" onclick="navigateTo('voice')">🎙️ AI వాయిస్ సహాయకుడిని ప్రయత్నించండి (Try Voice AI)</button>
+    <!-- Main Welcome Hero Card with High-Res Farm Visuals -->
+    <div class="welcome-hero">
+      <div class="welcome-hero-top">
+        <div class="welcome-brand-badge">
+          <span class="welcome-brand-icon">🌱</span>
+          <span class="welcome-brand-badge-text" data-i18n="welcome_badge">🌱 అగ్రిసారథి AI • భారతీయ రైతుల స్మార్ట్ నేస్తం</span>
+        </div>
+        <div class="welcome-lang-selector" role="group" aria-label="Language selection">
+          <span class="welcome-lang-label">🌐 భాష:</span>
+          <button type="button" id="welcome-btn-te" class="welcome-lang-chip active" onclick="setLanguage('te')">తెలుగు</button>
+          <button type="button" id="welcome-btn-en" class="welcome-lang-chip" onclick="setLanguage('en')">English</button>
+        </div>
       </div>
-      <div class="hero-actions" id="home-cta-authenticated" style="display:none;">
-        <button type="button" class="btn-hero-light" onclick="navigateTo('dashboard')">📊 నా రైతు డాష్‌బోర్డ్‌కు వెళ్ళండి (Open My Dashboard)</button>
-        <button type="button" class="btn-hero-outline" onclick="navigateTo('advisory')">🌱 పంట సలహా పొందండి (Crop Advisory)</button>
-        <button type="button" class="btn-hero-outline" onclick="navigateTo('voice')">🎙️ AI వాయిస్ సహాయకుడు (Voice Assistant)</button>
+
+      <div class="welcome-hero-content">
+        <h2 id="home-hero-heading" class="welcome-hero-title" data-i18n="welcome_title">
+          🌾 అగ్రిసారథి AI
+        </h2>
+        <p class="welcome-hero-subtitle" data-i18n="welcome_sub">
+          భారతీయ రైతుల నమ్మకమైన డిజిటల్ వ్యవసాయ సలహాదారు
+        </p>
+
+        <div class="welcome-hero-desc">
+          <p id="welcome-intro-p" data-i18n="welcome_desc">
+            మీ వ్యవసాయ భూమి విస్తీర్ణం, నేల రకం, నీటి వసతి మరియు బడ్జెట్‌కు తగిన లాభదాయక పంటల ఎంపిక, ICAR ఆధారిత పంట తెగుళ్ల గుర్తింపు, వాస్తవ వాతావరణ సమాచారం మరియు వాయిస్ అసిస్టెంట్‌తో మీ సాగును సులభతరం చేసుకోండి.
+          </p>
+        </div>
+
+        <!-- Call to Action Buttons -->
+        <div class="welcome-hero-actions" id="home-cta-guest">
+          <button type="button" class="btn-welcome-primary" data-i18n="btn_get_started" onclick="navigateTo('register')">
+            🚀 ప్రారంభించండి
+          </button>
+          <button type="button" class="btn-welcome-secondary" data-i18n="btn_farmer_login" onclick="navigateTo('login')">
+            🔑 రైతు లాగిన్
+          </button>
+          <button type="button" class="btn-welcome-ghost" data-i18n="btn_try_voice" onclick="navigateTo('voice')">
+            🎙️ వాయిస్ ద్వారా అడగండి
+          </button>
+        </div>
+
+        <div class="welcome-hero-actions" id="home-cta-authenticated" style="display:none;">
+          <button type="button" class="btn-welcome-primary" data-i18n="btn_open_dashboard" onclick="navigateTo('dashboard')">
+            📊 నా రైతు డాష్‌బోర్డ్
+          </button>
+          <button type="button" class="btn-welcome-secondary" data-i18n="nav_advisory" onclick="navigateTo('advisory')">
+            🌱 పంట సలహా
+          </button>
+          <button type="button" class="btn-welcome-ghost" data-i18n="nav_voice" onclick="navigateTo('voice')">
+            🎙️ వాయిస్ సహాయకుడు
+          </button>
+        </div>
+      </div>
+
+      <!-- Trust Badges Strip -->
+      <div class="welcome-trust-bar">
+        <div class="welcome-trust-item" data-i18n-html="trust_icar">
+          <span class="trust-icon">🏛️</span>
+          <span><strong>ICAR & CACP</strong> ప్రామాణికం</span>
+        </div>
+        <div class="welcome-trust-item" data-i18n-html="trust_free">
+          <span class="trust-icon">🛡️</span>
+          <span><strong>100% ఉచితం</strong> & డేటా భద్రత</span>
+        </div>
+        <div class="welcome-trust-item" data-i18n-html="trust_weather">
+          <span class="trust-icon">🌦️</span>
+          <span><strong>Open-Meteo</strong> లైవ్ వాతావరణం</span>
+        </div>
+        <div class="welcome-trust-item" data-i18n-html="trust_acp">
+          <span class="trust-icon">🤖</span>
+          <span><strong>Fetch.ai ACP</strong> ఆర్కెస్ట్రేషన్</span>
+        </div>
       </div>
     </div>
 
-    <div class="grid-4" style="margin-bottom:24px;">
-      <div class="portal-card card-green-accent">
-        <h3>🌱 పంట సలహా (Crop Advisory)</h3>
-        <p>మీ రాష్ట్రం, జిల్లా, ఎకరాలు, నేల రకం, నీటి వసతి మరియు బడ్జెట్ ఆధారంగా 4-దశల శాస్త్రీయ విశ్లేషణ మరియు నికర లాభం అంచనా.</p>
-        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('advisory')">పంట సలహా చూడండి →</button>
+    <!-- 4 Core Feature Cards with Icons & Smooth Transitions -->
+    <div class="welcome-features-header">
+      <h3 class="welcome-features-title" data-i18n="features_heading">🌿 అగ్రిసారథి ముఖ్య సేవలు</h3>
+      <p class="welcome-features-subtitle" data-i18n="features_subheading">మీ సాగు నిర్ణయాలకు శాస్త్రీయంగా తోడ్పడే సాంకేతిక విభాగాలు</p>
+    </div>
+
+    <div class="grid-4" style="margin-bottom:28px;">
+      <div class="portal-card welcome-feature-card">
+        <div class="feature-card-icon">🌱</div>
+        <h3 data-i18n="feat1_title">శాస్త్రీయ పంట సిఫార్సు</h3>
+        <p data-i18n="feat1_desc">మీ ప్రాంతం, విస్తీర్ణం, నేల రకం, నీటి వసతి మరియు బడ్జెట్ ఆధారంగా 4-దశల శాస్త్రీయ విశ్లేషణ మరియు నికర లాభం అంచనా.</p>
+        <button type="button" class="btn-secondary-agri" style="margin-top:auto; width:100%;" data-i18n="feat1_btn" onclick="navigateTo('advisory')">
+          పంట సలహా చూడండి →
+        </button>
       </div>
-      <div class="portal-card card-green-accent">
-        <h3>🔬 పంట ఆరోగ్యం (Crop Health)</h3>
-        <p>వరి, పత్తి, మిరప, గోధుమ, మొక్కజొన్న పంటల్లో ఆకులు పసుపుబారడం, ముడత మరియు పురుగుల సమస్యలకు ICAR ఆధారిత నిర్ధారణ.</p>
-        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('health')">పంట ఆరోగ్యం తనిఖీ →</button>
+
+      <div class="portal-card welcome-feature-card">
+        <div class="feature-card-icon">🔬</div>
+        <h3 data-i18n="feat2_title">పంట రక్షణ & ఆరోగ్యం</h3>
+        <p data-i18n="feat2_desc">వరి, పత్తి, మిరప, గోధుమ, మొక్కజొన్న పంటల్లో ఆకులు పసుపుబారడం, ముడత మరియు పురుగుల సమస్యలకు ICAR ఆధారిత రోగనిర్ధారణ.</p>
+        <button type="button" class="btn-secondary-agri" style="margin-top:auto; width:100%;" data-i18n="feat2_btn" onclick="navigateTo('health')">
+          పంట ఆరోగ్యం తనిఖీ →
+        </button>
       </div>
-      <div class="portal-card card-green-accent">
-        <h3>🌦️ వాతావరణం & హెచ్చరికలు</h3>
-        <p>Open-Meteo వాస్తవ వాతావరణ డేటాతో మీ జిల్లా ఉష్ణోగ్రత, వర్షపాతం, గాలి వేగం మరియు 3-రోజుల వ్యవసాయ ముందస్తు సూచనలు.</p>
-        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('weather')">వాతావరణం చూడండి →</button>
+
+      <div class="portal-card welcome-feature-card">
+        <div class="feature-card-icon">🌦️</div>
+        <h3 data-i18n="feat3_title">వాతావరణం & ముందస్తు హెచ్చరికలు</h3>
+        <p data-i18n="feat3_desc">Open-Meteo వాస్తవ డేటాతో మీ జిల్లా ఉష్ణోగ్రత, వర్షపాతం, గాలి వేగం మరియు 3-రోజుల వ్యవసాయ ముందస్తు సూచనలు.</p>
+        <button type="button" class="btn-secondary-agri" style="margin-top:auto; width:100%;" data-i18n="feat3_btn" onclick="navigateTo('weather')">
+          వాతావరణం చూడండి →
+        </button>
       </div>
-      <div class="portal-card card-green-accent">
-        <h3>🎙️ తెలుగు & ఇంగ్లీష్ వాయిస్ AI</h3>
-        <p>టైప్ చేయడం ఇబ్బందిగా ఉంటే మైక్రోఫోన్ నొక్కి తెలుగులో లేదా ఇంగ్లీష్‌లో మాట్లాడండి. సమాధానాన్ని బిగ్గరగా వినండి.</p>
-        <button type="button" class="btn-secondary-agri" style="margin-top:12px; width:100%;" onclick="navigateTo('voice')">మైక్రోఫోన్‌తో మాట్లాడండి →</button>
+
+      <div class="portal-card welcome-feature-card">
+        <div class="feature-card-icon">🎙️</div>
+        <h3 data-i18n="feat4_title">వాయిస్ AI సహాయకుడు</h3>
+        <p data-i18n="feat4_desc">టైప్ చేయడం ఇబ్బందిగా ఉంటే మైక్రోఫోన్ నొక్కి మాట్లాడండి. వ్యవసాయ సమాధానాన్ని బిగ్గరగా వినండి.</p>
+        <button type="button" class="btn-secondary-agri" style="margin-top:auto; width:100%;" data-i18n="feat4_btn" onclick="navigateTo('voice')">
+          వాయిస్ ద్వారా మాట్లాడండి →
+        </button>
       </div>
     </div>
   </section>
 
   <!-- =====================================================================
-       PAGE 2: FARMER LOGIN PAGE
+       PAGE 2: FARMER LOGIN PAGE (With 3D Agriculture Background & Soft Overlay)
        ===================================================================== -->
   <section id="page-login" class="portal-page" aria-labelledby="login-heading">
     <div class="auth-card">
-      <h2 id="login-heading" style="color:var(--forest-900); margin-bottom:6px;">🔑 రైతు లాగిన్ (Farmer Login)</h2>
-      <p style="font-size:14px; color:var(--text-muted); margin-bottom:18px;">
-        మీ వ్యక్తిగత డాష్‌బోర్డ్, పొలం వివరాలు మరియు గత సలహాలను చూడటానికి లాగిన్ అవ్వండి.
-      </p>
+      <div class="auth-card-header">
+        <div class="auth-logo-badge">🌾</div>
+        <h2 id="login-heading" data-i18n="login_heading">🔑 రైతు లాగిన్</h2>
+        <p class="auth-subtitle" data-i18n="login_desc">
+          మీ వ్యక్తిగత డాష్‌బోర్డ్, పొలం వివరాలు మరియు గత సలహాలను చూడటానికి లాగిన్ అవ్వండి.
+        </p>
+      </div>
       <div id="login-alert" class="status-alert" role="alert"></div>
       <form onsubmit="handleLoginSubmit(event)">
         <div class="form-group">
-          <label for="login-identifier">📱 మొబైల్ నంబర్ (10 అంకెలు) లేదా యూజర్‌నేమ్ (Mobile Number or Username)</label>
-          <input type="text" id="login-identifier" class="form-control" placeholder="ఉదా: 9876543210 లేదా raju_farmer" required autocomplete="username">
+          <label for="login-identifier" data-i18n="login_id_label">📱 మొబైల్ నంబర్ / ఇమెయిల్ / యూజర్‌నేమ్ *</label>
+          <input type="text" id="login-identifier" class="form-control" data-i18n-ph="login_id_ph" placeholder="ఉదా: 9876543210 లేదా raju_farmer" required autocomplete="username">
         </div>
-        <div class="form-group">
-          <label for="login-password">🔒 పాస్‌వర్డ్ (Password)</label>
-          <input type="password" id="login-password" class="form-control" placeholder="మీ పాస్‌వర్డ్ నమోదు చేయండి" required autocomplete="current-password">
+        <div class="form-group" style="position:relative;">
+          <label for="login-password" data-i18n="login_pw_label">🔒 పాస్‌వర్డ్ *</label>
+          <input type="password" id="login-password" class="form-control" data-i18n-ph="login_pw_ph" placeholder="మీ పాస్‌వర్డ్ నమోదు చేయండి" required autocomplete="current-password" style="padding-right:48px;">
+          <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('login-password', this)" title="Show/Hide">👁️</button>
         </div>
-        <button type="submit" id="login-submit-btn" class="btn-primary-agri" style="width:100%; margin-top:6px;">
-          🔑 లాగిన్ అవ్వండి (Sign In)
+        <button type="submit" id="login-submit-btn" class="btn-primary-agri" style="width:100%; margin-top:6px;" data-i18n="login_submit">
+          🔑 లాగిన్ అవ్వండి
         </button>
       </form>
+
+      <!-- Google Sign-in Placeholder -->
+      <div class="auth-divider"><span data-i18n="login_or">లేదా</span></div>
+      <button type="button" class="btn-google-placeholder" disabled title="Google login coming soon">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:20px; height:20px; margin-right:10px;">
+        <span data-i18n="login_google">Google తో లాగిన్ అవ్వండి</span>
+        <span class="coming-soon-badge" data-i18n="login_coming_soon">త్వరలో అందుబాటులోకి</span>
+      </button>
+
       <div style="text-align:center; margin-top:18px; font-size:14px; color:var(--text-muted);">
-        ఇంకా ఖాతా లేదా? (New to AgriSaarthi?)
-        <button type="button" style="background:none; border:none; color:var(--forest-800); font-weight:700; cursor:pointer; text-decoration:underline;" onclick="navigateTo('register')">
-          కొత్త రైతు నమోదు (Create Farmer Account)
+        <span data-i18n="login_new_user">ఇంకా ఖాతా లేదా?</span>
+        <button type="button" style="background:none; border:none; color:var(--forest-800); font-weight:700; cursor:pointer; text-decoration:underline; margin-left:4px;" data-i18n="login_create_acc" onclick="navigateTo('register')">
+          కొత్త రైతు నమోదు
         </button>
       </div>
     </div>
   </section>
 
   <!-- =====================================================================
-       PAGE 3: FARMER REGISTRATION PAGE
+       PAGE 3: FARMER REGISTRATION PAGE (With 3D Agriculture Background & Soft Overlay)
        ===================================================================== -->
   <section id="page-register" class="portal-page" aria-labelledby="register-heading">
-    <div class="auth-card" style="max-width:560px;">
-      <h2 id="register-heading" style="color:var(--forest-900); margin-bottom:6px;">📝 కొత్త రైతు నమోదు (Farmer Registration)</h2>
-      <p style="font-size:14px; color:var(--text-muted); margin-bottom:18px;">
-        ఉచిత రైతు ఖాతాను సృష్టించండి. తదుపరి దశలో మీ పొలం వివరాలను జతచేయవచ్చు (లేదా ఇప్పుడే దాటవేయవచ్చు).
-      </p>
+    <div class="auth-card" style="max-width:580px;">
+      <div class="auth-card-header">
+        <div class="auth-logo-badge">📝</div>
+        <h2 id="register-heading" data-i18n="reg_heading">📝 కొత్త రైతు నమోదు</h2>
+        <p class="auth-subtitle" data-i18n="reg_desc">
+          ఉచిత రైతు ఖాతాను సృష్టించండి. తదుపరి దశలో పొలం వివరాలు జతచేయవచ్చు.
+        </p>
+      </div>
       <div id="register-alert" class="status-alert" role="alert"></div>
       <form onsubmit="handleRegisterSubmit(event)">
         <div class="form-group">
-          <label for="reg-fullname">👨‍🌾 పూర్తి పేరు (Full Name) *</label>
-          <input type="text" id="reg-fullname" class="form-control" placeholder="ఉదా: రామారావు (Rama Rao)" required>
+          <label for="reg-fullname" data-i18n="reg_name_label">👨‍🌾 పూర్తి పేరు *</label>
+          <input type="text" id="reg-fullname" class="form-control" data-i18n-ph="reg_name_ph" placeholder="ఉదా: రామారావు" required>
         </div>
         <div class="form-group">
-          <label for="reg-identifier">📱 10-అంకెల మొబైల్ నంబర్ లేదా యూజర్‌నేమ్ (10-Digit Mobile or Username) *</label>
-          <input type="text" id="reg-identifier" class="form-control" placeholder="ఉదా: 9876543210" required autocomplete="username">
+          <label for="reg-identifier" data-i18n="reg_id_label">📱 మొబైల్ నంబర్ లేదా యూజర్‌నేమ్ *</label>
+          <input type="text" id="reg-identifier" class="form-control" data-i18n-ph="reg_id_ph" placeholder="ఉదా: 9876543210" required autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="reg-email" data-i18n="reg_email_label">📧 ఇమెయిల్ చిరునామా (ఐచ్ఛికం)</label>
+          <input type="email" id="reg-email" class="form-control" data-i18n-ph="reg_email_ph" placeholder="ఉదా: ramu@gmail.com" autocomplete="email">
         </div>
         <div class="form-grid">
           <div class="form-group">
-            <label for="reg-password">🔒 పాస్‌వర్డ్ (కనీసం 6 అక్షరాలు / Min 6 chars) *</label>
-            <input type="password" id="reg-password" class="form-control" placeholder="******" minlength="6" required autocomplete="new-password">
+            <label for="reg-password" data-i18n="reg_pw_label">🔒 పాస్‌వర్డ్ (కనీసం 6 అక్షరాలు) *</label>
+            <div style="position:relative;">
+              <input type="password" id="reg-password" class="form-control" data-i18n-ph="reg_pw_ph" placeholder="కనీసం 6 అక్షరాలు" minlength="6" required autocomplete="new-password" style="padding-right:48px;" oninput="checkPasswordStrength(this.value)">
+              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('reg-password', this)" title="Show/Hide">👁️</button>
+            </div>
+            <div class="password-strength-bar" id="pwd-strength-bar">
+              <div class="pwd-strength-fill" id="pwd-strength-fill"></div>
+            </div>
+            <div class="pwd-strength-label" id="pwd-strength-label"></div>
           </div>
           <div class="form-group">
-            <label for="reg-confirm-password">🔒 పాస్‌వర్డ్ నిర్ధారణ (Confirm Password) *</label>
-            <input type="password" id="reg-confirm-password" class="form-control" placeholder="******" minlength="6" required autocomplete="new-password">
+            <label for="reg-confirm-password" data-i18n="reg_cpw_label">🔒 పాస్‌వర్డ్ నిర్ధారణ *</label>
+            <div style="position:relative;">
+              <input type="password" id="reg-confirm-password" class="form-control" data-i18n-ph="reg_cpw_ph" placeholder="పాస్‌వర్డ్‌ను మళ్ళీ నమోదు చేయండి" minlength="6" required autocomplete="new-password" style="padding-right:48px;" oninput="checkPasswordMatch()">
+              <button type="button" class="password-toggle-btn" onclick="togglePasswordVisibility('reg-confirm-password', this)" title="Show/Hide">👁️</button>
+            </div>
+            <div class="pwd-match-label" id="pwd-match-label"></div>
           </div>
         </div>
         <div class="form-group">
-          <label for="reg-lang">🌐 ప్రాధాన్య భాష (Preferred Language)</label>
+          <label for="reg-lang" data-i18n="reg_lang_label">🌐 ప్రాధాన్య సమాచార భాష</label>
           <select id="reg-lang" class="form-control">
-            <option value="te">తెలుగు (Telugu)</option>
-            <option value="en">English (ఇంగ్లీష్)</option>
+            <option value="te">తెలుగు</option>
+            <option value="en">English</option>
           </select>
         </div>
-        <button type="submit" id="reg-submit-btn" class="btn-primary-agri" style="width:100%; margin-top:6px;">
-          📝 ఖాతా సృష్టించి కొనసాగండి (Register & Continue)
+        <button type="submit" id="reg-submit-btn" class="btn-primary-agri" style="width:100%; margin-top:6px;" data-i18n="reg_submit">
+          📝 ఖాతా సృష్టించి కొనసాగండి
         </button>
       </form>
+
+      <!-- Google Sign-in Placeholder -->
+      <div class="auth-divider"><span data-i18n="login_or">లేదా</span></div>
+      <button type="button" class="btn-google-placeholder" disabled title="Google Sign-up coming soon">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" style="width:20px; height:20px; margin-right:10px;">
+        <span data-i18n="reg_google">Google తో నమోదు అవ్వండి</span>
+        <span class="coming-soon-badge" data-i18n="login_coming_soon">త్వరలో అందుబాటులోకి</span>
+      </button>
+
       <div style="text-align:center; margin-top:18px; font-size:14px; color:var(--text-muted);">
-        ఇప్పటికే ఖాతా ఉందా? (Already registered?)
-        <button type="button" style="background:none; border:none; color:var(--forest-800); font-weight:700; cursor:pointer; text-decoration:underline;" onclick="navigateTo('login')">
-          ఇక్కడ లాగిన్ అవ్వండి (Login Here)
+        <span data-i18n="reg_already">ఇప్పటికే ఖాతా ఉందా?</span>
+        <button type="button" style="background:none; border:none; color:var(--forest-800); font-weight:700; cursor:pointer; text-decoration:underline; margin-left:4px;" data-i18n="reg_login_link" onclick="navigateTo('login')">
+          ఇక్కడ లాగిన్ అవ్వండి
         </button>
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       PAGE 4: FARMER DASHBOARD (Protected Route)
-       ===================================================================== -->
   <section id="page-dashboard" class="portal-page" aria-labelledby="dash-welcome-name">
     <div class="hero-banner" style="padding:24px;">
       <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:12px;">
         <div>
-          <h2 id="dash-welcome-name">🌾 నమస్కారం రైతు సోదరులారా!</h2>
-          <p id="dash-welcome-location" style="margin-top:4px;">📍 ప్రాంతం</p>
+          <h2 id="dash-welcome-name" data-i18n="dash_welcome_title">🌾 నమస్కారం, రైతు సోదరులారా!</h2>
+          <p id="dash-welcome-location" style="margin-top:4px;" data-i18n="dash_welcome_loc">📍 ప్రాంతం ఇంకా నమోదు చేయలేదు</p>
         </div>
-        <button type="button" class="btn-hero-light" onclick="navigateTo('profile')">
-          👤 నా పొలం ప్రొఫైల్ (My Farm Profile)
+        <button type="button" class="btn-hero-light" data-i18n="dash_btn_farm_profile" onclick="navigateTo('profile')">
+          👤 నా పొలం ప్రొఫైల్
+        </button>
+      </div>
+    </div>
+
+    <!-- 1. Profile Completion Indicator -->
+    <div class="dash-profile-progress-box" id="dash-profile-progress-box">
+      <div class="progress-left">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-weight:700; color:var(--forest-900); font-size:14.5px;" data-i18n="dash_prog_title">
+            📊 ప్రొఫైల్ పూర్తి స్థాయి
+          </span>
+          <span id="dash-profile-pct" style="font-weight:800; color:var(--forest-800); font-size:15px;">80%</span>
+        </div>
+        <div class="progress-bar-container">
+          <div class="progress-bar-fill" id="dash-profile-bar-fill" style="width:80%;"></div>
+        </div>
+        <div style="font-size:12.5px; color:var(--text-muted); margin-top:5px;" id="dash-profile-hint" data-i18n="dash_prog_hint">
+          ఖచ్చితమైన ICAR AI పంట సలహా కోసం ప్రొఫైల్ పూర్తి చేయండి.
+        </div>
+      </div>
+      <div>
+        <button type="button" class="btn-primary-agri" style="padding:8px 16px; font-size:13.5px;" data-i18n="dash_btn_update" onclick="navigateTo('profile')">
+          ✍️ ప్రొఫైల్ అప్‌డేట్ చేయండి
+        </button>
+      </div>
+    </div>
+
+    <!-- 2. Core Dashboard Cards: My Details & My Farm -->
+    <div class="grid-2" style="margin-bottom:22px;">
+      <!-- My Details Card -->
+      <div class="portal-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 data-i18n="dash_details_title">👤 నా వ్యక్తిగత వివరాలు</h3>
+          <span class="privacy-badge-pill" data-i18n="dash_verified_badge">🌱 ధృవీకరించబడిన రైతు</span>
+        </div>
+        <div class="dash-my-details-grid" id="dash-my-details">
+          <div class="detail-item">
+            <div class="detail-label" data-i18n="dash_lbl_name">రైతు పేరు</div>
+            <div class="detail-value" id="dash-det-name">—</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label" data-i18n="dash_lbl_id">మొబైల్ / ఐడి</div>
+            <div class="detail-value" id="dash-det-phone">—</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label" data-i18n="dash_lbl_lang">ప్రాధాన్య భాష</div>
+            <div class="detail-value" id="dash-det-lang">తెలుగు</div>
+          </div>
+          <div class="detail-item">
+            <div class="detail-label" data-i18n="dash_lbl_status">ఖాతా స్థితి</div>
+            <div class="detail-value" style="color:var(--leaf-600);" data-i18n="dash_status_active">✅ సక్రియం</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- My Farm Summary Card -->
+      <div class="portal-card card-green-accent">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 data-i18n="dash_farm_title">🚜 నా పొలం వివరాలు</h3>
+          <button type="button" class="speech-btn" data-i18n="dash_btn_edit_farm" onclick="navigateTo('profile')">సవరించండి →</button>
+        </div>
+        <div id="dash-farm-summary"></div>
+      </div>
+    </div>
+
+    <!-- 3. AI Suggestions & Privacy Settings -->
+    <div class="grid-2" style="margin-bottom:22px;">
+      <!-- AI Suggestions Card -->
+      <div class="portal-card" style="border-left:4px solid var(--leaf-500);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 data-i18n="dash_ai_title">💡 AI పంట సలహాలు</h3>
+          <span class="badge-status online" style="font-size:11px;" data-i18n="dash_ai_season_badge">ICAR / CACP మోడల్</span>
+        </div>
+        <div id="dash-ai-suggestions">
+          <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:10px; padding:12px; margin-bottom:10px;">
+            <div style="font-weight:700; color:var(--forest-900); font-size:14px; margin-bottom:4px;" data-i18n="dash_ai_curr_season">
+              🌾 ప్రస్తుత సీజన్ సిఫార్సు
+            </div>
+            <p style="font-size:13px; color:var(--text-muted); line-height:1.45; margin:0;" data-i18n="dash_ai_tip">
+              మీ ప్రాంత నేల రకం మరియు ప్రస్తుత వర్షపాత సూచన ప్రకారం, తక్కువ పెట్టుబడితో కూడిన అపరాలు లేదా నూనెగింజల సాగు అనుకూలం.
+            </p>
+          </div>
+          <button type="button" class="btn-primary-agri" style="width:100%; padding:9px 14px; font-size:13.5px;" data-i18n="dash_btn_new_advice" onclick="navigateTo('advisory')">
+            🌱 కొత్త పంట సలహా తీసుకోండి
+          </button>
+        </div>
+      </div>
+
+      <!-- Privacy & AI Settings Card -->
+      <div class="portal-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:10px;">
+          <h3 data-i18n="dash_priv_title">🔒 గోప్యత &amp; సెట్టింగ్‌లు</h3>
+          <span class="privacy-badge-pill" data-i18n="dash_priv_badge">🛡️ 100% సురక్షితం</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:10px; font-size:13px; color:var(--text-main);">
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f1f5f9;">
+            <span data-i18n="dash_priv_personalized">🤖 వ్యక్తిగతీకరించిన AI సలహా</span>
+            <span style="font-weight:700; color:#16a34a;" data-i18n="dash_priv_enabled">ఆన్‌లో ఉంది</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0; border-bottom:1px solid #f1f5f9;">
+            <span data-i18n="dash_priv_dataprivacy">🛡️ రైతు డేటా రక్షణ</span>
+            <span style="font-weight:700; color:#16a34a;" data-i18n="dash_priv_protected">రక్షించబడింది</span>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center; padding:8px 0;">
+            <span data-i18n="dash_priv_weatheralerts">📡 వాతావరణ SMS హెచ్చరికలు</span>
+            <span style="font-weight:700; color:#16a34a;" data-i18n="dash_priv_active">యాక్టివ్</span>
+          </div>
+        </div>
+        <button type="button" class="btn-secondary-agri" style="width:100%; margin-top:8px; font-size:13px; padding:7px 12px;" data-i18n="dash_btn_change_pref" onclick="navigateTo('profile')">
+          ⚙️ ప్రాధాన్యతలను మార్చండి
         </button>
       </div>
     </div>
 
     <!-- Quick Action Cards -->
-    <h3 style="margin-bottom:12px; color:var(--forest-900);">⚡ తక్షణ సేవలు (Quick Actions)</h3>
+    <h3 style="margin-bottom:12px; color:var(--forest-900);" data-i18n="dash_qa_heading">⚡ తక్షణ సేవలు</h3>
     <div class="grid-4" style="margin-bottom:22px;">
       <button type="button" class="quick-action-card" onclick="navigateTo('advisory')">
         <div class="quick-action-icon">🌱</div>
-        <div class="quick-action-title">పంట సలహా (Crop Advisory)</div>
-        <div class="quick-action-desc">మీ నేల, నీరు & బడ్జెట్‌కు తగిన లాభదాయక పంటలు</div>
+        <div class="quick-action-title" data-i18n="dash_qa_adv_title">పంట సలహా</div>
+        <div class="quick-action-desc" data-i18n="dash_qa_adv_desc">మీ నేల, నీరు & బడ్జెట్‌కు తగిన లాభదాయక పంటలు</div>
       </button>
       <button type="button" class="quick-action-card" onclick="navigateTo('health')">
         <div class="quick-action-icon">🔬</div>
-        <div class="quick-action-title">పంట ఆరోగ్యం (Crop Health)</div>
-        <div class="quick-action-desc">ఆకు మచ్చలు, పసుపుబారడం & పురుగుల నిర్ధారణ</div>
+        <div class="quick-action-title" data-i18n="dash_qa_health_title">పంట ఆరోగ్యం</div>
+        <div class="quick-action-desc" data-i18n="dash_qa_health_desc">ఆకు మచ్చలు, పసుపుబారడం & పురుగుల నిర్ధారణ</div>
       </button>
       <button type="button" class="quick-action-card" onclick="navigateTo('weather')">
         <div class="quick-action-icon">🌦️</div>
-        <div class="quick-action-title">వాతావరణం & హెచ్చరికలు</div>
-        <div class="quick-action-desc">వాస్తవ వర్షపాతం, గాలి వేగం & 3-రోజుల సూచన</div>
+        <div class="quick-action-title" data-i18n="dash_qa_weather_title">వాతావరణం & హెచ్చరికలు</div>
+        <div class="quick-action-desc" data-i18n="dash_qa_weather_desc">వాస్తవ వర్షపాతం, గాలి వేగం & 3-రోజుల సూచన</div>
       </button>
       <button type="button" class="quick-action-card" onclick="navigateTo('voice')">
         <div class="quick-action-icon">🎙️</div>
-        <div class="quick-action-title">AI వాయిస్ సహాయకుడు</div>
-        <div class="quick-action-desc">తెలుగు / ఇంగ్లీష్‌లో మాట్లాడి సమాధానం వినండి</div>
+        <div class="quick-action-title" data-i18n="dash_qa_voice_title">AI వాయిస్ సహాయకుడు</div>
+        <div class="quick-action-desc" data-i18n="dash_qa_voice_desc">మాట్లాడి సమాధానం వినండి</div>
       </button>
     </div>
 
@@ -1047,46 +1352,43 @@
     <div class="grid-2" style="margin-bottom:22px;">
       <div class="portal-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-          <h3>🌦️ ప్రాంతీయ వాతావరణం (Real-Time Weather)</h3>
-          <button type="button" class="speech-btn" onclick="navigateTo('weather')">పూర్తి వివరాలు →</button>
+          <h3 data-i18n="dash_weather_title">🌦️ ప్రాంతీయ వాతావరణం</h3>
+          <button type="button" class="speech-btn" data-i18n="dash_btn_full_weather" onclick="navigateTo('weather')">పూర్తి వివరాలు →</button>
         </div>
         <div id="dash-weather-content">
           <p>⏳ వాతావరణ సమాచారం లోడ్ అవుతోంది...</p>
         </div>
       </div>
       <div class="portal-card">
-        <h3>🚨 అధికారిక వాతావరణ హెచ్చరికలు (Weather Alerts)</h3>
+        <h3 data-i18n="dash_alerts_title">🚨 అధికారిక వాతావరణ హెచ్చరికలు</h3>
         <div id="dash-alerts-content">
           <p>⏳ హెచ్చరికల స్థితి లోడ్ అవుతోంది...</p>
         </div>
       </div>
     </div>
 
-    <!-- My Farm Summary & Recent Advisory History -->
-    <div class="grid-2">
-      <div class="portal-card card-green-accent">
-        <h3>🚜 నా పొలం వివరాలు (My Farm Summary)</h3>
-        <div id="dash-farm-summary"></div>
-      </div>
-      <div class="portal-card">
-        <h3>📜 ఇటీవలి సలహా చరిత్ర (Recent Advisory History)</h3>
-        <div id="dash-history-content">
-          <p>ఇంకా ఎటువంటి సలహా చరిత్ర లేదు.</p>
-        </div>
+    <!-- Recent Advisory History -->
+    <div class="portal-card">
+      <h3 data-i18n="dash_history_title">📜 ఇటీవలి సలహా చరిత్ర</h3>
+      <div id="dash-history-content">
+        <p>ఇంకా ఎటువంటి సలహా చరిత్ర లేదు.</p>
       </div>
     </div>
   </section>
 
-  <!-- =====================================================================
-       PAGE 5: CROP ADVISORY PAGE
-       ===================================================================== -->
-  <section id="page-advisory" class="portal-page" aria-labelledby="advisory-heading">
+
+
+    <section id="page-advisory" class="portal-page" aria-labelledby="advisory-heading">
     <div class="section-header-bar">
       <div>
-        <h2 id="advisory-heading">🌱 శాస్త్రీయ పంట సిఫార్సు (ICAR/CACP Crop Advisory)</h2>
-        <p style="font-size:14px; color:var(--text-muted);">మీ పొలం వివరాలను నమోదు చేసి అనుకూలత స్కోరు, పెట్టుబడి మరియు నికర లాభం అంచనాలను పొందండి.</p>
+        <h2 id="advisory-heading" data-i18n="adv_heading">🌱 శాస్త్రీయ పంట సిఫార్సు</h2>
+        <p style="font-size:14px; color:var(--text-muted);" data-i18n="adv_sub">
+          మీ పొలం వివరాలను నమోదు చేసి అనుకూలత స్కోరు, పెట్టుబడి మరియు నికర లాభం అంచనాలను పొందండి.
+        </p>
       </div>
-      <button type="button" class="btn-secondary-agri" onclick="navigateTo('voice')">🎙️ వాయిస్ ద్వారా అడగండి (Ask via Voice)</button>
+      <button type="button" class="btn-secondary-agri" data-i18n="adv_voice_btn" onclick="navigateTo('voice')">
+        🎙️ వాయిస్ ద్వారా అడగండి
+      </button>
     </div>
 
     <div id="advisory-alert" class="status-alert" role="alert"></div>
@@ -1095,73 +1397,73 @@
       <form onsubmit="handleAdvisorySubmit(event)">
         <div class="form-grid">
           <div class="form-group">
-            <label for="adv-state">🗺️ రాష్ట్రం (State) *</label>
+            <label for="adv-state" data-i18n="adv_state_lbl">🗺️ రాష్ట్రం *</label>
             <select id="adv-state" class="form-control" required>
-              <option value="Telangana">తెలంగాణ (Telangana)</option>
-              <option value="Andhra Pradesh">ఆంధ్రప్రదేశ్ (Andhra Pradesh)</option>
-              <option value="Punjab">పంజాబ్ (Punjab)</option>
-              <option value="Maharashtra">మహారాష్ట్ర (Maharashtra)</option>
-              <option value="Karnataka">కర్ణాటక (Karnataka)</option>
-              <option value="Rajasthan">రాజస్థాన్ (Rajasthan)</option>
-              <option value="Madhya Pradesh">మధ్యప్రదేశ్ (Madhya Pradesh)</option>
-              <option value="Uttar Pradesh">ఉత్తర ప్రదేశ్ (Uttar Pradesh)</option>
-              <option value="Gujarat">గుజరాత్ (Gujarat)</option>
-              <option value="Haryana">హర్యానా (Haryana)</option>
-              <option value="Tamil Nadu">తమిళనాడు (Tamil Nadu)</option>
-              <option value="Odisha">ఒడిశా (Odisha)</option>
+              <option value="Telangana" data-i18n="opt_state_telangana">తెలంగాణ</option>
+              <option value="Andhra Pradesh" data-i18n="opt_state_andhra">ఆంధ్రప్రదేశ్</option>
+              <option value="Punjab" data-i18n="opt_state_punjab">పంజాబ్</option>
+              <option value="Maharashtra" data-i18n="opt_state_maharashtra">మహారాష్ట్ర</option>
+              <option value="Karnataka" data-i18n="opt_state_karnataka">కర్ణాటక</option>
+              <option value="Rajasthan" data-i18n="opt_state_rajasthan">రాజస్థాన్</option>
+              <option value="Madhya Pradesh" data-i18n="opt_state_mp">మధ్యప్రదేశ్</option>
+              <option value="Uttar Pradesh" data-i18n="opt_state_up">ఉత్తర ప్రదేశ్</option>
+              <option value="Gujarat" data-i18n="opt_state_gujarat">గుజరాత్</option>
+              <option value="Haryana" data-i18n="opt_state_haryana">హర్యానా</option>
+              <option value="Tamil Nadu" data-i18n="opt_state_tamilnadu">తమిళనాడు</option>
+              <option value="Odisha" data-i18n="opt_state_odisha">ఒడిశా</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="adv-district">📍 జిల్లా (District)</label>
+            <label for="adv-district" data-i18n="adv_dist_lbl">📍 జిల్లా</label>
             <input type="text" id="adv-district" class="form-control" placeholder="ఉదా: Warangal, Guntur, Karimnagar">
           </div>
           <div class="form-group">
-            <label for="adv-acres">📐 భూమి విస్తీర్ణం - ఎకరాల్లో (Land Size in Acres) *</label>
+            <label for="adv-acres" data-i18n="adv_acres_lbl">📐 భూమి విస్తీర్ణం (ఎకరాల్లో) *</label>
             <input type="number" id="adv-acres" class="form-control" step="0.1" min="0.1" max="5000" value="4" required>
           </div>
           <div class="form-group">
-            <label for="adv-soil">🪨 నేల రకం (Soil Type) *</label>
+            <label for="adv-soil" data-i18n="adv_soil_lbl">🪨 నేల రకం *</label>
             <select id="adv-soil" class="form-control" required>
-              <option value="black">నల్ల రేగడి నేల (Black Soil)</option>
-              <option value="red">ఎర్ర నేల (Red Soil)</option>
-              <option value="alluvial">ఒండ్రు నేల (Alluvial Soil)</option>
-              <option value="sandy_loam">ఇసుక రేగడి నేల (Sandy Loam)</option>
-              <option value="clayey">బంకమట్టి నేల (Clayey Soil)</option>
-              <option value="laterite">లేటరైట్ నేల (Laterite Soil)</option>
+              <option value="black" data-i18n="opt_soil_black">నల్ల రేగడి నేల</option>
+              <option value="red" data-i18n="opt_soil_red">ఎర్ర నేల</option>
+              <option value="alluvial" data-i18n="opt_soil_alluvial">ఒండ్రు నేల</option>
+              <option value="sandy_loam" data-i18n="opt_soil_sandy_loam">ఇసుక రేగడి నేల</option>
+              <option value="clayey" data-i18n="opt_soil_clayey">బంకమట్టి నేల</option>
+              <option value="laterite" data-i18n="opt_soil_laterite">లేటరైట్ నేల</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="adv-water">💧 నీటి వసతి (Water Availability) *</label>
+            <label for="adv-water" data-i18n="adv_water_lbl">💧 నీటి వసతి *</label>
             <select id="adv-water" class="form-control" required>
-              <option value="moderate">మధ్యస్థ నీరు - బోరు/బావి (Moderate / Borewell)</option>
-              <option value="high">సమృద్ధిగా నీరు - కాలువ (High / Canal)</option>
-              <option value="low">తక్కువ నీరు - వర్షాధారం (Low / Rainfed)</option>
+              <option value="moderate" data-i18n="opt_water_moderate">మధ్యస్థ నీరు (బోరు బావి)</option>
+              <option value="high" data-i18n="opt_water_high">సమృద్ధిగా నీరు (కాలువ)</option>
+              <option value="low" data-i18n="opt_water_low">తక్కువ నీరు (వర్షాధారం)</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="adv-season">☀️ సాగు సీజన్ (Season) *</label>
+            <label for="adv-season" data-i18n="adv_season_lbl">☀️ సాగు సీజన్ *</label>
             <select id="adv-season" class="form-control" required>
-              <option value="kharif">ఖరీఫ్ / వానాకాలం (Kharif)</option>
-              <option value="rabi">రబీ / యాసంగి (Rabi)</option>
-              <option value="zaid">జైద్ / వేసవి (Zaid)</option>
-              <option value="year_round">వార్షిక పంట (Year Round)</option>
+              <option value="kharif" data-i18n="opt_season_kharif">ఖరీఫ్ (వానాకాలం)</option>
+              <option value="rabi" data-i18n="opt_season_rabi">రబీ (యాసంగి)</option>
+              <option value="zaid" data-i18n="opt_season_zaid">జైద్ (వేసవి)</option>
+              <option value="year_round" data-i18n="opt_season_year">వార్షిక పంట</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="adv-budget">💰 మొత్తం పెట్టుబడి బడ్జెట్ ₹ (Total Budget in INR) *</label>
+            <label for="adv-budget" data-i18n="adv_budget_lbl">💰 బడ్జెట్ (రూపాయల్లో) *</label>
             <input type="number" id="adv-budget" class="form-control" step="500" min="1000" value="90000" required>
           </div>
           <div class="form-group">
-            <label for="adv-risk">⚖️ రిస్క్ స్థాయి (Risk Tolerance)</label>
+            <label for="adv-risk" data-i18n="adv_risk_lbl">⚖️ రిస్క్ ప్రాధాన్యత</label>
             <select id="adv-risk" class="form-control">
-              <option value="moderate">మధ్యస్థం - సమతుల్య రాబడి (Moderate)</option>
-              <option value="low">తక్కువ రిస్క్ - MSP భద్రత (Low Risk)</option>
-              <option value="high">అధిక రాబడి వాణిజ్య పంటలు (High Return)</option>
+              <option value="moderate" data-i18n="opt_risk_moderate">మధ్యస్థం</option>
+              <option value="low" data-i18n="opt_risk_low">తక్కువ రిస్క్</option>
+              <option value="high" data-i18n="opt_risk_high">అధిక రాబడి</option>
             </select>
           </div>
         </div>
-        <button type="submit" id="adv-submit-btn" class="btn-primary-agri">
-          🌾 అనుకూల పంటలను విశ్లేషించండి (Calculate Crop Recommendations)
+        <button type="submit" id="adv-submit-btn" class="btn-primary-agri" data-i18n="adv_submit">
+          🌱 శాస్త్రీయ పంట సలహా పొందండి
         </button>
       </form>
     </div>
@@ -1175,50 +1477,61 @@
   <section id="page-health" class="portal-page" aria-labelledby="health-heading">
     <div class="section-header-bar">
       <div>
-        <h2 id="health-heading">🔬 పంట ఆరోగ్యం & రోగనిర్ధారణ (Crop Health & Diagnostics)</h2>
-        <p style="font-size:14px; color:var(--text-muted);">ICAR & వ్యవసాయ విశ్వవిద్యాలయాల ధృవీకరించిన లక్షణాల ఆధారంగా పంట సమస్యలను గుర్తించండి.</p>
+        <h2 id="health-heading" data-i18n="health_heading">🔬 పంట ఆరోగ్యం &amp; వ్యాధి నిర్ధారణ</h2>
+        <p style="font-size:14px; color:var(--text-muted);" data-i18n="health_sub">
+          ICAR &amp; వ్యవసాయ విశ్వవిద్యాలయాల ధృవీకరించిన లక్షణాల ఆధారంగా పంట సమస్యలను గుర్తించండి.
+        </p>
       </div>
-      <button type="button" class="btn-secondary-agri" onclick="navigateTo('voice')">🎙️ వాయిస్ ద్వారా లక్షణాలు చెప్పండి</button>
+      <button type="button" class="btn-secondary-agri" data-i18n="health_voice_btn" onclick="navigateTo('voice')">
+        🎙️ వాయిస్ ద్వారా లక్షణాలు చెప్పండి
+      </button>
     </div>
 
     <div id="health-alert" class="status-alert" role="alert"></div>
 
     <!-- Quick Disorder Presets -->
     <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
-      <button type="button" class="suggestion-chip chip-problem" onclick="fillCropHealthPreset('Paddy / Rice', 'yellow leaves')">🌾 వరి ఆకులు పసుపుబారడం (Paddy Yellowing)</button>
-      <button type="button" class="suggestion-chip chip-problem" onclick="fillCropHealthPreset('Cotton', 'red leaves and curling')">🌾 పత్తి ఆకు ఎర్రబడటం & ముడత (Cotton Reddening)</button>
-      <button type="button" class="suggestion-chip chip-problem" onclick="fillCropHealthPreset('Chilli', 'leaf curl upward')">🌶️ మిరప ఆకు ముడత (Chilli Leaf Curl)</button>
-      <button type="button" class="suggestion-chip chip-problem" onclick="fillCropHealthPreset('Wheat', 'yellow stripes rust')">🌾 గోధుమ పసుపు చారలు (Wheat Rust/Yellowing)</button>
-      <button type="button" class="suggestion-chip chip-problem" onclick="fillCropHealthPreset('Maize', 'holes in whorl fall armyworm')">🌽 మొక్కజొన్న కత్తెర పురుగు (Fall Armyworm)</button>
+      <button type="button" class="suggestion-chip chip-problem"
+        onclick="fillCropHealthPreset('Paddy / Rice', 'yellow leaves')">🌾 వరి ఆకులు పసుపుబారడం</button>
+      <button type="button" class="suggestion-chip chip-problem"
+        onclick="fillCropHealthPreset('Cotton', 'red leaves and curling')">🌾 పత్తి ఆకు ఎర్రబడటం &amp; ముడత</button>
+      <button type="button" class="suggestion-chip chip-problem"
+        onclick="fillCropHealthPreset('Chilli', 'leaf curl upward')">🌶️ మిరప ఆకు ముడత</button>
+      <button type="button" class="suggestion-chip chip-problem"
+        onclick="fillCropHealthPreset('Wheat', 'yellow stripes rust')">🌾 గోధుమ పసుపు చారలు</button>
+      <button type="button" class="suggestion-chip chip-problem"
+        onclick="fillCropHealthPreset('Maize', 'holes in whorl fall armyworm')">🌽 మొక్కజొన్న కత్తెర పురుగు</button>
     </div>
 
     <div class="portal-card" style="margin-bottom:22px;">
       <form onsubmit="handleCropHealthSubmit(event)">
         <div class="form-grid">
           <div class="form-group">
-            <label for="health-crop">🌿 పంట పేరు (Crop Name) *</label>
+            <label for="health-crop" data-i18n="health_crop_lbl">🌿 పంట పేరు *</label>
             <select id="health-crop" class="form-control">
-              <option value="Paddy / Rice">వరి (Paddy / Rice)</option>
-              <option value="Cotton">పత్తి (Cotton)</option>
-              <option value="Chilli">మిరప (Chilli / Mirchi)</option>
-              <option value="Wheat">గోధుమ (Wheat)</option>
-              <option value="Maize">మొక్కజొన్న (Maize / Corn)</option>
-              <option value="Groundnut">వేరుశనగ (Groundnut)</option>
-              <option value="Soybean">సోయాబీన్ (Soybean)</option>
-              <option value="Chickpea">శనగలు (Chickpea / Chana)</option>
+              <option value="Paddy / Rice" data-i18n="opt_crop_paddy">వరి</option>
+              <option value="Cotton" data-i18n="opt_crop_cotton">పత్తి</option>
+              <option value="Chilli" data-i18n="opt_crop_chilli">మిరప</option>
+              <option value="Wheat" data-i18n="opt_crop_wheat">గోధుమ</option>
+              <option value="Maize" data-i18n="opt_crop_maize">మొక్కజొన్న</option>
+              <option value="Groundnut" data-i18n="opt_crop_groundnut">వేరుశనగ</option>
+              <option value="Soybean" data-i18n="opt_crop_soybean">సోయాబీన్</option>
+              <option value="Chickpea" data-i18n="opt_crop_bengal_gram">శనగలు</option>
             </select>
           </div>
           <div class="form-group">
-            <label for="health-symptom">🔍 కనిపిస్తున్న లక్షణం (Observed Symptom) *</label>
-            <input type="text" id="health-symptom" class="form-control" placeholder="ఉదా: ఆకులు పసుపు రంగులోకి మారుతున్నాయి / yellow leaves" required>
+            <label for="health-symptom" data-i18n="health_symp_lbl">🔍 కనిపిస్తున్న లక్షణం *</label>
+            <input type="text" id="health-symptom" class="form-control"
+              placeholder="ఉదా: ఆకులు పసుపు రంగులోకి మారుతున్నాయి" required>
           </div>
         </div>
         <div class="form-group">
-          <label for="health-notes">📝 పొలం పరిశీలన వివరాలు - ఐచ్ఛికం (Field Observations: Crop age, top vs bottom leaves, water condition)</label>
-          <input type="text" id="health-notes" class="form-control" placeholder="ఉదా: పంట వయస్సు 25 రోజులు, కింది పాత ఆకులపై ముందుగా కనిపించింది, నీరు నిలిచి ఉంది">
+          <label for="health-notes">📝 పొలం పరిశీలన వివరాలు (ఐచ్ఛికం)</label>
+          <input type="text" id="health-notes" class="form-control"
+            placeholder="ఉదా: పై ఆకులు ముడుచుకుపోతున్నాయి, వర్షం తర్వాత వచ్చింది">
         </div>
-        <button type="submit" id="health-submit-btn" class="btn-primary-agri">
-          🔬 లక్షణాలను విశ్లేషించండి (Analyze Crop Symptom)
+        <button type="submit" id="health-submit-btn" class="btn-primary-agri" data-i18n="health_submit">
+          🔬 సమస్యను విశ్లేషించండి
         </button>
       </form>
     </div>
@@ -1227,65 +1540,71 @@
   </section>
 
   <!-- =====================================================================
-       PAGE 7: WEATHER AND ALERTS PAGE
+       PAGE 7: WEATHER & AGRICULTURAL ALERTS PAGE
        ===================================================================== -->
   <section id="page-weather" class="portal-page" aria-labelledby="weather-heading">
     <div class="section-header-bar">
       <div>
-        <h2 id="weather-heading">🌦️ వాతావరణం & వ్యవసాయ హెచ్చరికలు (Weather & Alerts)</h2>
-        <p style="font-size:14px; color:var(--text-muted);">వాస్తవ వాతావరణ డేటా (Open-Meteo WMO) మరియు పంట రక్షణ జాగ్రత్తలు. నకిలీ హెచ్చరికలు చూపబడవు.</p>
+        <h2 id="weather-heading" data-i18n="weather_heading">🌦️ వాతావరణం &amp; వ్యవసాయ హెచ్చరికలు</h2>
+        <p style="font-size:14px; color:var(--text-muted);" data-i18n="weather_sub">
+          వాస్తవ వాతావరణ డేటా (Open-Meteo WMO) మరియు పంట రక్షణ జాగ్రత్తలు.
+        </p>
       </div>
     </div>
 
     <div class="portal-card" style="margin-bottom:20px;">
       <form onsubmit="loadWeatherPage(event)" style="display:flex; gap:14px; flex-wrap:wrap; align-items:flex-end;">
         <div class="form-group" style="flex:1; min-width:200px; margin-bottom:0;">
-          <label for="weather-state">🗺️ రాష్ట్రం (State)</label>
+          <label for="weather-state" data-i18n="weather_state_lbl">🗺️ రాష్ట్రం</label>
           <select id="weather-state" class="form-control">
-            <option value="Telangana">తెలంగాణ (Telangana)</option>
-            <option value="Andhra Pradesh">ఆంధ్రప్రదేశ్ (Andhra Pradesh)</option>
-            <option value="Punjab">పంజాబ్ (Punjab)</option>
-            <option value="Maharashtra">మహారాష్ట్ర (Maharashtra)</option>
-            <option value="Karnataka">కర్ణాటక (Karnataka)</option>
-            <option value="Rajasthan">రాజస్థాన్ (Rajasthan)</option>
-            <option value="Madhya Pradesh">మధ్యప్రదేశ్ (Madhya Pradesh)</option>
-            <option value="Uttar Pradesh">ఉత్తర ప్రదేశ్ (Uttar Pradesh)</option>
-            <option value="Gujarat">గుజరాత్ (Gujarat)</option>
-            <option value="Tamil Nadu">తమిళనాడు (Tamil Nadu)</option>
-            <option value="Odisha">ఒడిశా (Odisha)</option>
+            <option value="Telangana" data-i18n="opt_state_telangana">తెలంగాణ</option>
+            <option value="Andhra Pradesh" data-i18n="opt_state_andhra">ఆంధ్రప్రదేశ్</option>
+            <option value="Punjab" data-i18n="opt_state_punjab">పంజాబ్</option>
+            <option value="Maharashtra" data-i18n="opt_state_maharashtra">మహారాష్ట్ర</option>
+            <option value="Karnataka" data-i18n="opt_state_karnataka">కర్ణాటక</option>
+            <option value="Rajasthan" data-i18n="opt_state_rajasthan">రాజస్థాన్</option>
+            <option value="Madhya Pradesh" data-i18n="opt_state_mp">మధ్యప్రదేశ్</option>
+            <option value="Uttar Pradesh" data-i18n="opt_state_up">ఉత్తర ప్రదేశ్</option>
+            <option value="Gujarat" data-i18n="opt_state_gujarat">గుజరాత్</option>
+            <option value="Tamil Nadu" data-i18n="opt_state_tamilnadu">తమిళనాడు</option>
+            <option value="Odisha" data-i18n="opt_state_odisha">ఒడిశా</option>
           </select>
         </div>
         <div class="form-group" style="flex:1; min-width:200px; margin-bottom:0;">
-          <label for="weather-district">📍 జిల్లా (District)</label>
-          <input type="text" id="weather-district" class="form-control" placeholder="ఉదా: Warangal, Guntur, Visakhapatnam, Karimnagar">
+          <label for="weather-district" data-i18n="weather_dist_lbl">📍 జిల్లా</label>
+          <input type="text" id="weather-district" class="form-control"
+            placeholder="ఉదా: Warangal, Guntur, Karimnagar">
         </div>
-        <button type="submit" class="btn-primary-agri">🔄 వాతావరణం చూడండి (Check Live Weather)</button>
+        <button type="submit" class="btn-primary-agri" data-i18n="weather_submit">🔄 వాతావరణం చూడండి</button>
       </form>
     </div>
 
     <div id="weather-page-results"></div>
   </section>
 
-  <!-- =====================================================================
-       PAGE 8: AI VOICE ASSISTANT PAGE (Preserves Existing Chat & Speech DOM)
-       ===================================================================== -->
+
+
   <main id="page-voice" class="portal-page">
     <!-- Chat Conversation Area -->
     <div class="chat-container" id="chat-messages" role="log" aria-live="polite">
-      
+
       <!-- Welcome Hero Message -->
       <div class="message-row agent">
         <div class="message-bubble" id="welcome-bubble">
-          🌾 <strong>నమస్కారం రైతు సోదరులారా! నేను అగ్రిసారథి AI (AgriSaarthi AI)</strong> — మీ వ్యక్తిగత డిజిటల్ వ్యవసాయ సలహాదారుని.<br><br>
-          మీ ప్రాంతం, భూమి విస్తీర్ణం (ఎకరాలు), నేల రకం (నల్ల రేగడి/ఎర్ర నేల), నీటి వసతి (బోరు/కాలువ/వర్షాధారం) మరియు పెట్టుబడి బడ్జెట్‌ను బట్టి అధిక లాభదాయకమైన అనుకూల పంటలను సిఫార్సు చేస్తాను. అలాగే మీ పంట సమస్యలు & తెగుళ్లను గుర్తించడంలో సహాయపడతాను.<br><br>
-          <em>🎙️ కింది మైక్రోఫోన్ బటన్ నొక్కి మాట్లాడండి లేదా నేరుగా టైప్ చేసి పంపండి (మాట్లాడిన తర్వాత అక్షరాలను సరిచూసి పంపవచ్చు):</em>
+          🌾 <strong>నమస్కారం రైతు సోదరులారా! నేను అగ్రిసారథి AI (AgriSaarthi AI)</strong> — మీ వ్యక్తిగత డిజిటల్
+          వ్యవసాయ సలహాదారుని.<br><br>
+          మీ ప్రాంతం, భూమి విస్తీర్ణం (ఎకరాలు), నేల రకం (నల్ల రేగడి/ఎర్ర నేల), నీటి వసతి (బోరు/కాలువ/వర్షాధారం) మరియు
+          పెట్టుబడి బడ్జెట్‌ను బట్టి అధిక లాభదాయకమైన అనుకూల పంటలను సిఫార్సు చేస్తాను. అలాగే మీ పంట సమస్యలు & తెగుళ్లను
+          గుర్తించడంలో సహాయపడతాను.<br><br>
+          <em>🎙️ కింది మైక్రోఫోన్ బటన్ నొక్కి మాట్లాడండి లేదా నేరుగా టైప్ చేసి పంపండి (మాట్లాడిన తర్వాత అక్షరాలను
+            సరిచూసి పంపవచ్చు):</em>
         </div>
         <div class="message-meta">
-          <span>🌾 AgriSaarthi AI</span> • <span>ఇప్పుడే (Now)</span>
+          <span>🌾 AgriSaarthi AI</span> • <span data-i18n="time_now">ఇప్పుడే</span>
           <div class="speech-controls">
-            <button type="button" class="speech-btn" onclick="speakMessage(this, 'welcome-bubble')">🔊 వినండి (Listen)</button>
-            <button type="button" class="speech-btn" onclick="speakMessage(this, 'welcome-bubble')">🔄 మళ్ళీ (Replay)</button>
-            <button type="button" class="speech-btn" onclick="stopSpeech()">⏹️ ఆపు (Stop)</button>
+            <button type="button" class="speech-btn" onclick="speakMessage(this, 'welcome-bubble')">🔊 వినండి</button>
+            <button type="button" class="speech-btn" onclick="speakMessage(this, 'welcome-bubble')">🔄 మళ్ళీ</button>
+            <button type="button" class="speech-btn" data-i18n="btn_stop_audio" onclick="stopSpeech()">⏹️ ఆపు</button>
           </div>
         </div>
       </div>
@@ -1294,11 +1613,13 @@
 
     <!-- Category Tabs: Crop Advisory vs Crop Health -->
     <div class="category-tabs" role="tablist">
-      <button type="button" class="category-tab active" id="tab-advisory" onclick="switchCategory('advisory')" role="tab" aria-selected="true">
-        🌱 పంట సిఫార్సు (Crop Advisory)
+      <button type="button" class="category-tab active" id="tab-advisory" onclick="switchCategory('advisory')"
+        role="tab" aria-selected="true">
+        🌱 పంట సలహా
       </button>
-      <button type="button" class="category-tab" id="tab-problems" onclick="switchCategory('problems')" role="tab" aria-selected="false">
-        🔬 పంట సమస్య & రోగనిర్ధారణ (Crop Health & Disease)
+      <button type="button" class="category-tab" id="tab-problems" onclick="switchCategory('problems')" role="tab"
+        aria-selected="false">
+        🔬 పంట ఆరోగ్యం
       </button>
     </div>
 
@@ -1309,145 +1630,377 @@
 
     <!-- Recording Status Banner (Listening, Processing, Unavailable) -->
     <div class="recording-banner" id="recording-banner" role="status" aria-live="assertive">
-      <span id="recording-banner-text">🎙️ రైతు గళం వింటున్నాను... మాట్లాడండి (Listening to your voice...)</span>
-      <button type="button" class="banner-stop-btn" onclick="stopSpeechRecognition()">⏹️ ఆపు (Stop)</button>
+      <span id="recording-banner-text">🎙️ రైతు గళం వింటున్నాను... మాట్లాడండి</span>
+      <button type="button" class="banner-stop-btn" data-i18n="btn_stop" onclick="stopSpeechRecognition()">⏹️ ఆపు</button>
     </div>
 
     <!-- Farmer Voice & Text Input Dock -->
     <div class="input-panel">
-      <button type="button" id="mic-btn" class="mic-button" title="మైక్రోఫోన్ ద్వారా మాట్లాడండి (Speak via Microphone)" onclick="toggleSpeechRecognition()" aria-label="Voice input">
+      <button type="button" id="mic-btn" class="mic-button" data-i18n-title="mic_title" title="మైక్రోఫోన్ ద్వారా మాట్లాడండి"
+        onclick="toggleSpeechRecognition()" aria-label="Voice input">
         🎙️
       </button>
-      <input type="text" id="user-input" class="input-box" placeholder="మీ వ్యవసాయ వివరాలు మాట్లాడండి లేదా టైప్ చేయండి..." onkeydown="handleKey(event)" autocomplete="off">
-      <button type="button" id="send-btn" class="send-btn" title="పంపండి (Send)" onclick="sendMessage()" aria-label="Send message">
+      <input type="text" id="user-input" class="input-box"
+        placeholder="మీ వ్యవసాయ వివరాలు మాట్లాడండి లేదా టైప్ చేయండి..." onkeydown="handleKey(event)" autocomplete="off">
+      <button type="button" id="send-btn" class="send-btn" data-i18n-title="send_title" title="పంపండి" onclick="sendMessage()"
+        aria-label="Send message">
         ➤
       </button>
     </div>
 
     <div class="notice-bar">
-      💡 <strong>CACP & ICAR ప్రామాణిక నివేదికలు మరియు MSP 2024–2025 ఆధారితం.</strong> లైవ్ వాతావరణం/మండి స్క్రాపింగ్ లేదు (శాస్త్రీయ అంచనాలు మాత్రమే).
+      💡 <strong>CACP & ICAR ప్రామాణిక నివేదికలు మరియు MSP 2024–2025 ఆధారితం.</strong> లైవ్ వాతావరణం/మండి స్క్రాపింగ్
+      లేదు (శాస్త్రీయ అంచనాలు మాత్రమే).
       <br>
-      ℹ️ గమనిక: బ్రౌజర్ Web Speech API ఆధారంగా తెలుగు (te-IN) & English (en-IN) వాయిస్ రికగ్నిషన్ సపోర్ట్ ఉంది (Chrome/Edge సిఫార్సు). మాట్లాడిన తర్వాత టెక్స్ట్ ఎడిట్ చేసి పంపవచ్చు.
+      ℹ️ గమనిక: బ్రౌజర్ Web Speech API ఆధారంగా తెలుగు (te-IN) & English (en-IN) వాయిస్ రికగ్నిషన్ సపోర్ట్ ఉంది
+      (Chrome/Edge సిఫార్సు). మాట్లాడిన తర్వాత టెక్స్ట్ ఎడిట్ చేసి పంపవచ్చు.
     </div>
   </main>
 
   <!-- =====================================================================
        PAGE 9: FARMER PROFILE & FIRST-TIME FARM SETUP PAGE (Protected Route)
        ===================================================================== -->
-  <section id="page-profile" class="portal-page" aria-labelledby="profile-heading">
-    <div id="onboarding-welcome-banner" class="status-alert alert-success" style="display:none;">
+      <section id="page-profile" class="portal-page" aria-labelledby="profile-heading">
+    <!-- Welcome Banner for First-Time Registered Farmer -->
+    <div id="onboarding-welcome-banner" class="status-alert alert-success" style="display:none; max-width:860px; margin:0 auto 18px auto;">
       🎉 <strong>స్వాగతం! మీ రైతు ఖాతా సిద్ధంగా ఉంది.</strong><br>
-      వ్యక్తిగతీకరించిన పంట సిఫార్సులు మరియు మీ జిల్లా వాతావరణం కోసం కింది వ్యవసాయ వివరాలను పూర్తి చేయండి. (ఐచ్ఛిక ఫీల్డ్‌లను ఇప్పుడే దాటవేసి నేరుగా డాష్‌బోర్డ్‌కు వెళ్ళవచ్చు).
+      వ్యక్తిగతీకరించిన శాస్త్రీయ పంట సిఫార్సులు మరియు వాతావరణ హెచ్చరికల కోసం కింది 6 సాధారణ దశలలో మీ వ్యవసాయ ప్రొఫైల్‌ను పూర్తి చేయండి.
     </div>
 
-    <div class="portal-card" style="max-width:820px; margin:0 auto;">
-      <div class="section-header-bar">
+    <div class="wizard-card">
+      <!-- Wizard Header Bar -->
+      <div class="section-header-bar" style="margin-bottom:20px;">
         <div>
-          <h2 id="profile-heading">👤 రైతు & వ్యవసాయ భూమి ప్రొఫైల్ (Farmer & Farm Profile)</h2>
-          <p style="font-size:14px; color:var(--text-muted);">మీ ప్రాంతం, నేల రకం, నీటి వసతి మరియు బడ్జెట్ వివరాలను ఎప్పుడైనా మార్చుకోవచ్చు.</p>
+          <h2 id="profile-heading" style="color:var(--forest-900); font-size:22px;" data-i18n="wiz_main_title">
+            🌾 రైతు &amp; వ్యవసాయ ప్రొఫైల్ సెటప్
+          </h2>
+          <p style="font-size:14px; color:var(--text-muted); margin-top:3px;" data-i18n="wiz_main_desc">
+            మీ పొలం వివరాలను నమోదు చేయండి. సరైన ICAR పంట సిఫార్సుల కొరకు 6 దశల ప్రక్రియ.
+          </p>
         </div>
-        <button type="button" id="profile-skip-btn" class="btn-secondary-agri" style="display:none;" onclick="skipOnboardingToDashboard()">
-          ⏭️ ఇప్పుడే దాటవేయండి → డాష్‌బోర్డ్ (Skip for Now)
+        <button type="button" id="profile-skip-btn" class="btn-secondary-agri" style="display:none;" data-i18n="wiz_btn_skip" onclick="skipOnboardingToDashboard()">
+          ⏭️ దాటవేయండి
         </button>
+      </div>
+
+      <!-- Desktop Stepper Bar (6 Steps) -->
+      <div class="wizard-stepper" id="wizard-stepper">
+        <div class="wizard-step-connector">
+          <div class="wizard-step-connector-fill" id="wizard-connector-fill"></div>
+        </div>
+
+        <div class="wizard-step-node active" id="step-node-1" onclick="jumpToWizardStep(1)">
+          <div class="wizard-step-circle">1</div>
+          <div class="wizard-step-title" data-i18n="wiz_step1_name">వ్యక్తిగతం</div>
+        </div>
+
+        <div class="wizard-step-node" id="step-node-2" onclick="jumpToWizardStep(2)">
+          <div class="wizard-step-circle">2</div>
+          <div class="wizard-step-title" data-i18n="wiz_step2_name">ప్రాంతం</div>
+        </div>
+
+        <div class="wizard-step-node" id="step-node-3" onclick="jumpToWizardStep(3)">
+          <div class="wizard-step-circle">3</div>
+          <div class="wizard-step-title" data-i18n="wiz_step3_name">భూమి</div>
+        </div>
+
+        <div class="wizard-step-node" id="step-node-4" onclick="jumpToWizardStep(4)">
+          <div class="wizard-step-circle">4</div>
+          <div class="wizard-step-title" data-i18n="wiz_step4_name">నేల</div>
+        </div>
+
+        <div class="wizard-step-node" id="step-node-5" onclick="jumpToWizardStep(5)">
+          <div class="wizard-step-circle">5</div>
+          <div class="wizard-step-title" data-i18n="wiz_step5_name">సాగు &amp; నీరు</div>
+        </div>
+
+        <div class="wizard-step-node" id="step-node-6" onclick="jumpToWizardStep(6)">
+          <div class="wizard-step-circle">6</div>
+          <div class="wizard-step-title" data-i18n="wiz_step6_name">గోప్యత</div>
+        </div>
+      </div>
+
+      <!-- Mobile Stepper Banner -->
+      <div class="wizard-mobile-header">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+          <span style="font-weight:700; color:var(--forest-900); font-size:13.5px;" id="wizard-mobile-step-text">
+            దశ 1 / 6: వ్యక్తిగత వివరాలు
+          </span>
+          <span style="font-weight:800; color:var(--forest-800); font-size:13px;" id="wizard-mobile-pct-text">16%</span>
+        </div>
+        <div class="wizard-mobile-progress-bar">
+          <div class="wizard-mobile-progress-fill" id="wizard-mobile-bar-fill"></div>
+        </div>
       </div>
 
       <div id="profile-alert" class="status-alert" role="alert"></div>
 
-      <form onsubmit="handleProfileSubmit(event)">
-        <div class="form-grid">
-          <div class="form-group">
-            <label for="prof-fullname">👨‍🌾 పూర్తి పేరు (Full Name) *</label>
-            <input type="text" id="prof-fullname" class="form-control" required>
+      <!-- FORM CONTAINING ALL 6 STEPS -->
+      <form id="wizard-profile-form" onsubmit="handleProfileSubmit(event)">
+        <!-- ==========================================
+             STEP 1: PERSONAL DETAILS
+             ========================================== -->
+        <div class="wizard-step-panel active" id="wizard-panel-1">
+          <div class="step-panel-header">
+            <span class="step-badge" data-i18n="wiz_step1_badge">దశ 1 / 6</span>
+            <h3 class="step-panel-title" data-i18n="wiz_step1_title">👤 వ్యక్తిగత వివరాలు</h3>
+            <p class="step-panel-desc" data-i18n="wiz_step1_desc">రైతు పూర్తి పేరు మరియు ప్రాధాన్య సమాచార భాషను నమోదు చేయండి.</p>
           </div>
-          <div class="form-group">
-            <label for="prof-state">🗺️ రాష్ట్రం (State)</label>
-            <select id="prof-state" class="form-control">
-              <option value="">-- రాష్ట్రం ఎంచుకోండి (Optional) --</option>
-              <option value="Telangana">తెలంగాణ (Telangana)</option>
-              <option value="Andhra Pradesh">ఆంధ్రప్రదేశ్ (Andhra Pradesh)</option>
-              <option value="Punjab">పంజాబ్ (Punjab)</option>
-              <option value="Maharashtra">మహారాష్ట్ర (Maharashtra)</option>
-              <option value="Karnataka">కర్ణాటక (Karnataka)</option>
-              <option value="Rajasthan">రాజస్థాన్ (Rajasthan)</option>
-              <option value="Madhya Pradesh">మధ్యప్రదేశ్ (Madhya Pradesh)</option>
-              <option value="Uttar Pradesh">ఉత్తర ప్రదేశ్ (Uttar Pradesh)</option>
-              <option value="Gujarat">గుజరాత్ (Gujarat)</option>
-              <option value="Haryana">హర్యానా (Haryana)</option>
-              <option value="Tamil Nadu">తమిళనాడు (Tamil Nadu)</option>
-              <option value="Odisha">ఒడిశా (Odisha)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="prof-district">📍 జిల్లా (District)</label>
-            <input type="text" id="prof-district" class="form-control" placeholder="ఉదా: Warangal, Guntur, Karimnagar">
-          </div>
-          <div class="form-group">
-            <label for="prof-village">🏡 గ్రామం / మండలం (Village / Mandal)</label>
-            <input type="text" id="prof-village" class="form-control" placeholder="ఉదా: పరకాల (Parkal)">
-          </div>
-          <div class="form-group">
-            <label for="prof-acres">📐 భూమి విస్తీర్ణం - ఎకరాలు (Land Size in Acres)</label>
-            <input type="number" id="prof-acres" class="form-control" step="0.1" min="0.1" max="5000" placeholder="ఉదా: 4.0">
-          </div>
-          <div class="form-group">
-            <label for="prof-soil">🪨 ప్రధాన నేల రకం (Dominant Soil Type)</label>
-            <select id="prof-soil" class="form-control">
-              <option value="">-- నేల రకం ఎంచుకోండి (Optional) --</option>
-              <option value="black">నల్ల రేగడి నేల (Black Soil)</option>
-              <option value="red">ఎర్ర నేల (Red Soil)</option>
-              <option value="alluvial">ఒండ్రు నేల (Alluvial Soil)</option>
-              <option value="sandy_loam">ఇసుక రేగడి నేల (Sandy Loam)</option>
-              <option value="clayey">బంకమట్టి నేల (Clayey Soil)</option>
-              <option value="laterite">లేటరైట్ నేల (Laterite Soil)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="prof-water">💧 నీటి వసతి (Water Availability)</label>
-            <select id="prof-water" class="form-control">
-              <option value="">-- నీటి వసతి ఎంచుకోండి (Optional) --</option>
-              <option value="moderate">మధ్యస్థ నీరు - బోరు/బావి (Moderate / Borewell)</option>
-              <option value="high">సమృద్ధిగా నీరు - కాలువ (High / Canal)</option>
-              <option value="low">తక్కువ నీరు - వర్షాధారం (Low / Rainfed)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="prof-season">☀️ ప్రస్తుత సాగు సీజన్ (Target Season)</label>
-            <select id="prof-season" class="form-control">
-              <option value="">-- సీజన్ ఎంచుకోండి (Optional) --</option>
-              <option value="kharif">ఖరీఫ్ / వానాకాలం (Kharif)</option>
-              <option value="rabi">రబీ / యాసంగి (Rabi)</option>
-              <option value="zaid">జైద్ / వేసవి (Zaid)</option>
-              <option value="year_round">వార్షిక పంట (Year Round)</option>
-            </select>
-          </div>
-          <div class="form-group">
-            <label for="prof-budget">💰 సీజన్ పెట్టుబడి బడ్జెట్ ₹ (Planned Budget in INR)</label>
-            <input type="number" id="prof-budget" class="form-control" step="500" min="0" placeholder="ఉదా: 100000">
-          </div>
-          <div class="form-group">
-            <label for="prof-risk">⚖️ రిస్క్ ప్రాధాన్యత (Risk Preference)</label>
-            <select id="prof-risk" class="form-control">
-              <option value="moderate">మధ్యస్థం (Moderate)</option>
-              <option value="low">తక్కువ రిస్క్ (Low - MSP Focus)</option>
-              <option value="high">అధిక రాబడి (High Commercial)</option>
-            </select>
+          <div class="form-grid">
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="prof-fullname" data-i18n="wiz_step1_name_lbl">👨‍🌾 పూర్తి పేరు *</label>
+              <input type="text" id="prof-fullname" class="form-control" data-i18n-ph="wiz_step1_name_ph" placeholder="ఉదా: రామారావు" required oninput="clearInlineError('prof-fullname')">
+              <div class="inline-field-error" id="prof-fullname-error">దయచేసి మీ పూర్తి పేరు నమోదు చేయండి.</div>
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="prof-lang-pref" data-i18n="wiz_step1_lang_lbl">🌐 ప్రాధాన్య సమాచార భాష</label>
+              <select id="prof-lang-pref" class="form-control">
+                <option value="te">తెలుగు</option>
+                <option value="en">English</option>
+              </select>
+            </div>
           </div>
         </div>
-        <div class="form-group">
-          <label for="prof-crops">🌾 సాధారణంగా పండించే పంటలు (Primary Crops Grown - Optional)</label>
-          <input type="text" id="prof-crops" class="form-control" placeholder="ఉదా: వరి, పత్తి, మిరప (Paddy, Cotton, Chilli)">
+
+        <!-- ==========================================
+             STEP 2: LOCATION DETAILS
+             ========================================== -->
+        <div class="wizard-step-panel" id="wizard-panel-2">
+          <div class="step-panel-header">
+            <span class="step-badge" data-i18n="wiz_step2_badge">దశ 2 / 6</span>
+            <h3 class="step-panel-title" data-i18n="wiz_step2_title">📍 ప్రాంతం వివరాలు</h3>
+            <p class="step-panel-desc" data-i18n="wiz_step2_desc">స్థానిక వాతావరణం, వర్షపాతం మరియు ప్రాంతీయ పంటల కోసం మీ జిల్లాను ఎంచుకోండి.</p>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="prof-state" data-i18n="wiz_step2_state_lbl">🗺️ రాష్ట్రం</label>
+              <select id="prof-state" class="form-control">
+                <option value="" data-i18n="opt_state_select">-- రాష్ట్రం ఎంచుకోండి --</option>
+                <option value="Telangana" data-i18n="opt_state_telangana">తెలంగాణ</option>
+                <option value="Andhra Pradesh" data-i18n="opt_state_andhra">ఆంధ్రప్రదేశ్</option>
+                <option value="Karnataka" data-i18n="opt_state_karnataka">కర్ణాటక</option>
+                <option value="Maharashtra" data-i18n="opt_state_maharashtra">మహారాష్ట్ర</option>
+                <option value="Tamil Nadu" data-i18n="opt_state_tamilnadu">తమిళనాడు</option>
+                <option value="Punjab" data-i18n="opt_state_punjab">పంజాబ్</option>
+                <option value="Haryana" data-i18n="opt_state_haryana">హర్యానా</option>
+                <option value="Madhya Pradesh" data-i18n="opt_state_mp">మధ్యప్రదేశ్</option>
+                <option value="Uttar Pradesh" data-i18n="opt_state_up">ఉత్తర ప్రదేశ్</option>
+                <option value="Gujarat" data-i18n="opt_state_gujarat">గుజరాత్</option>
+                <option value="Rajasthan" data-i18n="opt_state_rajasthan">రాజస్థాన్</option>
+                <option value="Odisha" data-i18n="opt_state_odisha">ఒడిశా</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="prof-district" data-i18n="wiz_step2_dist_lbl">📍 జిల్లా</label>
+              <input type="text" id="prof-district" class="form-control" data-i18n-ph="wiz_step2_dist_ph" placeholder="ఉదా: వరంగల్, గుంటూరు, కరీంనగర్">
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="prof-village" data-i18n="wiz_step2_vill_lbl">🏡 గ్రామం / మండలం</label>
+              <input type="text" id="prof-village" class="form-control" data-i18n-ph="wiz_step2_vill_ph" placeholder="ఉదా: పరకాల">
+            </div>
+          </div>
         </div>
-        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:10px;">
-          <button type="submit" id="profile-save-btn" class="btn-primary-agri">
-            💾 ప్రొఫైల్ సేవ్ చేయండి (Save Farm Profile)
+
+        <!-- ==========================================
+             STEP 3: LAND DETAILS
+             ========================================== -->
+        <div class="wizard-step-panel" id="wizard-panel-3">
+          <div class="step-panel-header">
+            <span class="step-badge" data-i18n="wiz_step3_badge">దశ 3 / 6</span>
+            <h3 class="step-panel-title" data-i18n="wiz_step3_title">📐 భూమి వివరాలు</h3>
+            <p class="step-panel-desc" data-i18n="wiz_step3_desc">మీ సాగు భూమి విస్తీర్ణం మరియు భూమి యాజమాన్య రకం నమోదు చేయండి.</p>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="prof-acres" data-i18n="wiz_step3_acres_lbl">📐 సాగు భూమి విస్తీర్ణం (ఎకరాల్లో)</label>
+              <input type="number" id="prof-acres" class="form-control" step="0.1" min="0.1" max="5000" data-i18n-ph="wiz_step3_acres_ph" placeholder="ఉదా: 4.5" oninput="clearInlineError('prof-acres')">
+              <div class="inline-field-error" id="prof-acres-error">దయచేసి సరైన భూమి విస్తీర్ణం నమోదు చేయండి.</div>
+            </div>
+            <div class="form-group">
+              <label for="prof-land-type" data-i18n="wiz_step3_type_lbl">📜 భూమి హక్కు / యాజమాన్యం</label>
+              <select id="prof-land-type" class="form-control">
+                <option value="owned" data-i18n="opt_land_owned">సొంత భూమి</option>
+                <option value="leased" data-i18n="opt_land_leased">కౌలు భూమి</option>
+                <option value="shared" data-i18n="opt_land_shared">భాగస్వామ్య భూమి</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 4: SOIL DETAILS
+             ========================================== -->
+        <div class="wizard-step-panel" id="wizard-panel-4">
+          <div class="step-panel-header">
+            <span class="step-badge" data-i18n="wiz_step4_badge">దశ 4 / 6</span>
+            <h3 class="step-panel-title" data-i18n="wiz_step4_title">🪨 నేల వివరాలు</h3>
+            <p class="step-panel-desc" data-i18n="wiz_step4_desc">సరైన పోషకాలు మరియు పంట అనుకూలత స్కోరింగ్ కోసం మట్టి రకం ఎంచుకోండి.</p>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="prof-soil" data-i18n="wiz_step4_soil_lbl">🪨 ప్రధాన నేల రకం</label>
+              <select id="prof-soil" class="form-control">
+                <option value="" data-i18n="opt_soil_select">-- నేల రకం ఎంచుకోండి --</option>
+                <option value="black" data-i18n="opt_soil_black">నల్ల రేగడి నేల</option>
+                <option value="red" data-i18n="opt_soil_red">ఎర్ర నేల</option>
+                <option value="alluvial" data-i18n="opt_soil_alluvial">ఒండ్రు నేల</option>
+                <option value="sandy_loam" data-i18n="opt_soil_sandy_loam">ఇసుక రేగడి నేల</option>
+                <option value="clayey" data-i18n="opt_soil_clayey">బంకమట్టి నేల</option>
+                <option value="laterite" data-i18n="opt_soil_laterite">లేటరైట్ నేల</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="prof-soil-tested" data-i18n="wiz_step4_test_lbl">🧪 సాయిల్ టెస్ట్ చేశారా?</label>
+              <select id="prof-soil-tested" class="form-control">
+                <option value="no" data-i18n="opt_tested_no">ఇంకా చేయలేదు</option>
+                <option value="yes" data-i18n="opt_tested_yes">అవును (సాయిల్ హెల్త్ కార్డు ఉంది)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 5: WATER & FARMING DETAILS
+             ========================================== -->
+        <div class="wizard-step-panel" id="wizard-panel-5">
+          <div class="step-panel-header">
+            <span class="step-badge" data-i18n="wiz_step5_badge">దశ 5 / 6</span>
+            <h3 class="step-panel-title" data-i18n="wiz_step5_title">💧 సాగు &amp; నీటి వసతి</h3>
+            <p class="step-panel-desc" data-i18n="wiz_step5_desc">నీటి సదుపాయం, పెట్టుబడి బడ్జెట్ మరియు సాగు సీజన్ వివరాలు.</p>
+          </div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label for="prof-water" data-i18n="wiz_step5_water_lbl">💧 నీటి వసతి</label>
+              <select id="prof-water" class="form-control">
+                <option value="" data-i18n="opt_water_select">-- నీటి వసతి ఎంచుకోండి --</option>
+                <option value="moderate" data-i18n="opt_water_moderate">మధ్యస్థ నీరు (బోరు బావి)</option>
+                <option value="high" data-i18n="opt_water_high">సమృద్ధిగా నీరు (కాలువ)</option>
+                <option value="low" data-i18n="opt_water_low">తక్కువ నీరు (వర్షాధారం)</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="prof-season" data-i18n="wiz_step5_season_lbl">☀️ సాగు సీజన్</label>
+              <select id="prof-season" class="form-control">
+                <option value="" data-i18n="opt_season_select">-- సీజన్ ఎంచుకోండి --</option>
+                <option value="kharif" data-i18n="opt_season_kharif">ఖరీఫ్ (వానాకాలం)</option>
+                <option value="rabi" data-i18n="opt_season_rabi">రబీ (యాసంగి)</option>
+                <option value="zaid" data-i18n="opt_season_zaid">జైద్ (వేసవి)</option>
+                <option value="year_round" data-i18n="opt_season_year">వార్షిక పంట</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="prof-budget" data-i18n="wiz_step5_budget_lbl">💰 సీజన్ పెట్టుబడి బడ్జెట్ (రూపాయల్లో)</label>
+              <input type="number" id="prof-budget" class="form-control" step="500" min="0" data-i18n-ph="wiz_step5_budget_ph" placeholder="ఉదా: 100000">
+            </div>
+            <div class="form-group">
+              <label for="prof-risk" data-i18n="wiz_step5_risk_lbl">⚖️ రిస్క్ ప్రాధాన్యత</label>
+              <select id="prof-risk" class="form-control">
+                <option value="moderate" data-i18n="opt_risk_moderate">మధ్యస్థం</option>
+                <option value="low" data-i18n="opt_risk_low">తక్కువ రిస్క్</option>
+                <option value="high" data-i18n="opt_risk_high">అధిక రాబడి</option>
+              </select>
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1;">
+              <label for="prof-crops" data-i18n="wiz_step5_crops_lbl">🌾 సాధారణంగా పండించే పంటలు (ఐచ్ఛికం)</label>
+              <input type="text" id="prof-crops" class="form-control" data-i18n-ph="wiz_step5_crops_ph" placeholder="ఉదా: వరి, పత్తి, మిరప">
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             STEP 6: PRIVACY & AI USAGE PREFERENCES + REVIEW
+             ========================================== -->
+        <div class="wizard-step-panel" id="wizard-panel-6">
+          <div class="step-panel-header">
+            <span class="step-badge" data-i18n="wiz_step6_badge">దశ 6 / 6</span>
+            <h3 class="step-panel-title" data-i18n="wiz_step6_title">🔒 గోప్యత, AI ప్రాధాన్యతలు &amp; సమీక్ష</h3>
+            <p class="step-panel-desc" data-i18n="wiz_step6_desc">డేటా భద్రత అనుమతులను ధృవీకరించి, మీ వివరాలను సమీక్షించండి.</p>
+          </div>
+
+          <div class="pref-checkbox-group" style="margin-bottom:18px;">
+            <label class="pref-checkbox-label">
+              <input type="checkbox" id="prof-ai-consent" checked>
+              <span data-i18n-html="wiz_consent_ai">
+                <strong>వ్యక్తిగతీకరించిన AI సలహా:</strong><br>
+                శాస్త్రీయ పంట మరియు తెగుళ్ల సలహాల కొరకు AI నా నేల, నీటి వివరాలను ఉపయోగించడానికి అంగీకరిస్తున్నాను.
+              </span>
+            </label>
+            <label class="pref-checkbox-label">
+              <input type="checkbox" id="prof-anonymous-data" checked>
+              <span data-i18n-html="wiz_consent_anon">
+                <strong>రైతు పరిశోధన మెరుగుదల:</strong><br>
+                వ్యవసాయ మోడళ్లను మెరుగుపరచడానికి నా వ్యక్తిగత గుర్తింపు లేని పంట సమాచారాన్ని ఉపయోగించవచ్చు.
+              </span>
+            </label>
+            <label class="pref-checkbox-label">
+              <input type="checkbox" id="prof-alert-pref" checked>
+              <span data-i18n-html="wiz_consent_alert">
+                <strong>అత్యవసర వాతావరణ హెచ్చరికలు:</strong><br>
+                నా జిల్లాకు సంబంధించిన వర్షపాతం మరియు తెగుళ్ల హెచ్చరికలను డాష్‌బోర్డ్‌లో తక్షణమే చూపించు.
+              </span>
+            </label>
+          </div>
+
+          <!-- Dynamic Profile Review Card -->
+          <div class="wizard-review-box">
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+              <strong style="font-size:14px; color:var(--forest-900);" data-i18n="wiz_rev_title">📋 మీ ప్రొఫైల్ వివరాల సమీక్ష</strong>
+              <span class="privacy-badge-pill" data-i18n="wiz_rev_badge">🛡️ ICAR ధృవీకరణ</span>
+            </div>
+            <div class="wizard-review-grid" id="wizard-review-grid">
+              <div class="wizard-review-item">
+                <div class="wizard-review-label" data-i18n="wiz_rev_name">రైతు పేరు</div>
+                <div class="wizard-review-val" id="rev-fullname">—</div>
+              </div>
+              <div class="wizard-review-item">
+                <div class="wizard-review-label" data-i18n="wiz_rev_loc">ప్రాంతం</div>
+                <div class="wizard-review-val" id="rev-location">—</div>
+              </div>
+              <div class="wizard-review-item">
+                <div class="wizard-review-label" data-i18n="wiz_rev_land">భూమి విస్తీర్ణం</div>
+                <div class="wizard-review-val" id="rev-land">—</div>
+              </div>
+              <div class="wizard-review-item">
+                <div class="wizard-review-label" data-i18n="wiz_rev_soil">నేల రకం</div>
+                <div class="wizard-review-val" id="rev-soil">—</div>
+              </div>
+              <div class="wizard-review-item">
+                <div class="wizard-review-label" data-i18n="wiz_rev_water">నీరు &amp; సీజన్</div>
+                <div class="wizard-review-val" id="rev-water">—</div>
+              </div>
+              <div class="wizard-review-item">
+                <div class="wizard-review-label" data-i18n="wiz_rev_budget">బడ్జెట్</div>
+                <div class="wizard-review-val" id="rev-budget">—</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ==========================================
+             WIZARD NAVIGATION FOOTER
+             ========================================== -->
+        <div class="wizard-nav-footer">
+          <button type="button" class="btn-secondary-agri" data-i18n="wiz_btn_skip" onclick="navigateTo('dashboard')">
+            ⏭️ దాటవేయండి
           </button>
-          <button type="button" class="btn-secondary-agri" onclick="navigateTo('dashboard')">
-            📊 డాష్‌బోర్డ్‌కు వెళ్ళండి (Back to Dashboard)
-          </button>
+
+          <div class="wizard-nav-actions">
+            <button type="button" id="wizard-prev-btn" class="btn-secondary-agri" style="display:none;" data-i18n="wiz_btn_back" onclick="navigateWizardStep(-1)">
+              ⬅️ వెనుకకు
+            </button>
+            <button type="button" id="wizard-next-btn" class="btn-primary-agri" data-i18n="wiz_btn_next" onclick="navigateWizardStep(1)">
+              తదుపరి దశ ➡️
+            </button>
+            <button type="submit" id="profile-save-btn" class="btn-primary-agri" style="display:none;" data-i18n="wiz_btn_save">
+              💾 ప్రొఫైల్ పూర్తి చేయండి
+            </button>
+          </div>
         </div>
       </form>
     </div>
   </section>
+
+
 
   <script>
     // =========================================================================
@@ -1472,7 +2025,7 @@
       const SpeechRecognition = getSpeechRecognition();
       if (!SpeechRecognition) {
         setVoiceState('unavailable', currentLang === 'te'
-          ? 'ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సదుపాయం లేదు (Microphone unavailable). దయచేసి టైప్ చేయండి.'
+          ? 'ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సదుపాయం లేదు. దయచేసి టైప్ చేయండి.'
           : 'Microphone unavailable: Speech recognition is not supported in this browser. Please use typed input.');
         return null;
       }
@@ -1483,30 +2036,30 @@
       rec.maxAlternatives = 1;
       rec.lang = currentLang === 'te' ? 'te-IN' : 'en-IN';
 
-      rec.onstart = function() {
+      rec.onstart = function () {
         isRecording = true;
         setVoiceState('listening');
       };
 
-      rec.onspeechstart = function() {
+      rec.onspeechstart = function () {
         if (isRecording) {
           setVoiceState('listening');
         }
       };
 
-      rec.onspeechend = function() {
+      rec.onspeechend = function () {
         if (isRecording) {
           setVoiceState('processing');
         }
       };
 
-      rec.onaudioend = function() {
+      rec.onaudioend = function () {
         if (isRecording && voiceState === 'listening') {
           setVoiceState('processing');
         }
       };
 
-      rec.onresult = function(event) {
+      rec.onresult = function (event) {
         let finalChunk = '';
         let interimChunk = '';
 
@@ -1532,12 +2085,12 @@
         }
       };
 
-      rec.onerror = function(event) {
+      rec.onerror = function (event) {
         console.warn('Speech recognition error event:', event.error);
         handleSpeechError(event.error);
       };
 
-      rec.onend = function() {
+      rec.onend = function () {
         isRecording = false;
 
         // If continuous listening is desired through natural pauses
@@ -1567,6 +2120,7 @@
         }
       };
 
+      recognition = rec;
       return rec;
     }
 
@@ -1598,7 +2152,7 @@
       baseInputText = inputEl ? inputEl.value.trim() : '';
 
       if (recognition) {
-        try { recognition.abort(); } catch (_) {}
+        try { recognition.abort(); } catch (_) { }
       }
       recognition = initSpeech();
       if (!recognition) return;
@@ -1611,7 +2165,7 @@
         console.warn('Recognition start error, refreshing instance:', err);
         try {
           recognition.abort();
-        } catch (_) {}
+        } catch (_) { }
         recognition = initSpeech();
         if (recognition) {
           try {
@@ -1632,7 +2186,7 @@
         try {
           recognition.stop();
         } catch (e) {
-          try { recognition.abort(); } catch (_) {}
+          try { recognition.abort(); } catch (_) { }
         }
       }
       setTimeout(() => {
@@ -1666,7 +2220,7 @@
           micBtn.title = currentLang === 'te' ? 'వింటున్నాను... పూర్తి చేయడానికి ఇక్కడ లేదా "ఆపు" నొక్కండి' : 'Listening... Click here or Stop when finished';
         }
         if (statusPill) {
-          statusPill.innerHTML = `🎙️ ${currentLang === 'te' ? 'వింటున్నాను (Listening)' : 'Listening...'}`;
+          statusPill.innerHTML = `🎙️ ${currentLang === 'te' ? 'వింటున్నాను...' : 'Listening...'}`;
           statusPill.className = 'voice-status-pill status-listening';
         }
         if (banner) {
@@ -1674,7 +2228,7 @@
           banner.className = 'recording-banner banner-listening';
           banner.innerHTML = `
             <span style="flex:1;">🎙️ ${currentLang === 'te' ? '<strong>రైతు గళం వింటున్నాను...</strong> మాట్లాడండి (మీ మాటలు కింద బాక్స్‌లో కనిపిస్తాయి)' : '<strong>Listening to your voice...</strong> Speak naturally (words will appear below)'}</span>
-            <button type="button" class="banner-stop-btn" onclick="stopSpeechRecognition()">${currentLang === 'te' ? '⏹️ ఆపు (Stop)' : '⏹️ Stop'}</button>
+            <button type="button" class="banner-stop-btn" onclick="stopSpeechRecognition()">${currentLang === 'te' ? '⏹️ ఆపు' : '⏹️ Stop'}</button>
           `;
         }
       } else if (state === 'processing') {
@@ -1685,7 +2239,7 @@
           micBtn.title = currentLang === 'te' ? 'ప్రాసెస్ చేస్తోంది...' : 'Processing speech...';
         }
         if (statusPill) {
-          statusPill.innerHTML = `⏳ ${currentLang === 'te' ? 'ప్రాసెసింగ్ (Processing)' : 'Processing...'}`;
+          statusPill.innerHTML = `⏳ ${currentLang === 'te' ? 'విశ్లేషిస్తున్నాము...' : 'Processing...'}`;
           statusPill.className = 'voice-status-pill status-processing';
         }
         if (banner) {
@@ -1693,7 +2247,7 @@
           banner.className = 'recording-banner banner-processing';
           banner.innerHTML = `
             <span style="flex:1;">⏳ ${currentLang === 'te' ? 'మాటలను అక్షరాలుగా మారుస్తున్నాము... (సరిచూసి పంపండి)' : 'Processing speech... Words are ready to review and send'}</span>
-            <button type="button" class="banner-stop-btn" onclick="stopSpeechRecognition()">${currentLang === 'te' ? '⏹️ ఆపు (Stop)' : '⏹️ Stop'}</button>
+            <button type="button" class="banner-stop-btn" onclick="stopSpeechRecognition()">${currentLang === 'te' ? '⏹️ ఆపు' : '⏹️ Stop'}</button>
           `;
         }
       } else if (state === 'unavailable') {
@@ -1701,7 +2255,7 @@
           micBtn.classList.add('mic-unavailable', 'state-unavailable');
           micBtn.innerHTML = '🎙️';
           micBtn.setAttribute('aria-label', currentLang === 'te' ? 'మైక్రోఫోన్ అందుబాటులో లేదు' : 'Microphone unavailable');
-          micBtn.title = currentLang === 'te' ? 'మైక్రోఫోన్ అందుబాటులో లేదు (టైప్ చేయండి)' : 'Microphone unavailable (Please type)';
+          micBtn.title = currentLang === 'te' ? 'మైక్రోఫోన్ అందుబాటులో లేదు' : 'Microphone unavailable';
         }
         if (statusPill) {
           statusPill.innerHTML = `⚠️ ${currentLang === 'te' ? 'మైక్ అందుబాటులో లేదు' : 'Mic Unavailable'}`;
@@ -1719,8 +2273,8 @@
       } else { // 'idle'
         if (micBtn) {
           micBtn.innerHTML = '🎙️';
-          micBtn.setAttribute('aria-label', currentLang === 'te' ? 'మైక్రోఫోన్ ద్వారా మాట్లాడండి (Speak via Microphone)' : 'Speak via Microphone');
-          micBtn.title = currentLang === 'te' ? 'మైక్రోఫోన్ ద్వారా మాట్లాడండి (Speak via Microphone)' : 'Speak via Microphone';
+          micBtn.setAttribute('aria-label', currentLang === 'te' ? 'మైక్రోఫోన్ ద్వారా మాట్లాడండి' : 'Speak via Microphone');
+          micBtn.title = currentLang === 'te' ? 'మైక్రోఫోన్ ద్వారా మాట్లాడండి' : 'Speak via Microphone';
         }
         if (statusPill) {
           statusPill.innerHTML = `🎙️ ${currentLang === 'te' ? 'వాయిస్ సిద్ధంగా ఉంది' : 'Voice Ready'}`;
@@ -1743,22 +2297,22 @@
       if (errorCode === 'not-allowed' || errorCode === 'permission-denied') {
         isUnavailable = true;
         msg = currentLang === 'te'
-          ? '⚠️ మైక్రోఫోన్ అనుమతి నిరాకరించబడింది (Microphone unavailable). దయచేసి బ్రౌజర్ అడ్రస్ బార్‌లో మైక్రోఫోన్ అనుమతించండి.'
+          ? '⚠️ మైక్రోఫోన్ అనుమతి నిరాకరించబడింది. దయచేసి బ్రౌజర్ అడ్రస్ బార్‌లో మైక్రోఫోన్ అనుమతించండి.'
           : '⚠️ Microphone unavailable: Permission denied. Please allow microphone access in your browser settings.';
       } else if (errorCode === 'no-speech') {
         msg = currentLang === 'te'
-          ? 'ℹ️ ఎటువంటి మాటలు వినబడలేదు. దయచేసి మైక్రోఫోన్‌కు దగ్గరగా మాట్లాడండి (లేదా టైప్ చేయండి).'
+          ? 'ℹ️ ఎటువంటి మాటలు వినబడలేదు. దయచేసి మైక్రోఫోన్‌కు దగ్గరగా మాట్లాడండి.'
           : 'ℹ️ No speech detected. Please speak closer to your microphone or use typed input.';
         setVoiceState('idle');
         return;
       } else if (errorCode === 'network') {
         msg = currentLang === 'te'
-          ? '⚠️ బ్రౌజర్ స్పీచ్ నెట్‌వర్క్ సమస్య (Speech service network error). దయచేసి టైప్ చేసి పంపండి.'
+          ? '⚠️ బ్రౌజర్ స్పీచ్ నెట్‌వర్క్ సమస్య ఏర్పడింది. దయచేసి టైప్ చేసి పంపండి.'
           : '⚠️ Speech recognition network service issue. Please use typed input.';
       } else if (errorCode === 'audio-capture') {
         isUnavailable = true;
         msg = currentLang === 'te'
-          ? '⚠️ మైక్రోఫోన్ కనెక్ట్ కాలేదు లేదా ఆడియో క్యాప్చర్ విఫలమైంది (Microphone unavailable).'
+          ? '⚠️ మైక్రోఫోన్ కనెక్ట్ కాలేదు లేదా ఆడియో క్యాప్చర్ విఫలమైంది.'
           : '⚠️ Microphone unavailable: Audio capture failed. No audio input device detected.';
       } else if (errorCode === 'language-not-supported') {
         msg = currentLang === 'te'
@@ -1767,7 +2321,7 @@
       } else if (errorCode === 'unsupported') {
         isUnavailable = true;
         msg = currentLang === 'te'
-          ? '⚠️ ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సదుపాయం లేదు (Microphone unavailable). దయచేసి Chrome లేదా Edge వాడండి.'
+          ? '⚠️ ఈ బ్రౌజర్‌లో వాయిస్ రికగ్నిషన్ సదుపాయం లేదు. దయచేసి Chrome లేదా Edge వాడండి.'
           : '⚠️ Microphone unavailable: Speech recognition is not supported in this browser. Please use Chrome or Edge.';
       } else {
         msg = currentLang === 'te'
@@ -1780,33 +2334,68 @@
 
     // Toggle language between Telugu and English
     function setLanguage(lang) {
-      if (isRecording || userRequestedListening) {
-        stopSpeechRecognition();
-      }
-      currentLang = lang;
-      document.getElementById('btn-lang-te').classList.toggle('active', lang === 'te');
-      document.getElementById('btn-lang-en').classList.toggle('active', lang === 'en');
+      try {
+        const targetLang = (lang === 'en') ? 'en' : 'te';
+        window.currentLang = targetLang;
+        currentLang = targetLang;
 
-      const input = document.getElementById('user-input');
-      if (lang === 'te') {
-        input.placeholder = "మీ వ్యవసాయ వివరాలు మాట్లాడండి లేదా టైప్ చేయండి...";
-      } else {
-        input.placeholder = "Speak or type your crop symptom or farm details...";
-      }
+        if (isRecording || userRequestedListening) {
+          stopSpeechRecognition();
+        }
 
-      const tabAdvisory = document.getElementById('tab-advisory');
-      const tabProblems = document.getElementById('tab-problems');
-      if (tabAdvisory && tabProblems) {
-        tabAdvisory.textContent = lang === 'te' ? '🌱 పంట సిఫార్సు (Crop Advisory)' : '🌱 Crop Recommendations';
-        tabProblems.textContent = lang === 'te' ? '🔬 పంట సమస్య & రోగనిర్ధారణ (Crop Health)' : '🔬 Crop Problem & Diagnostics';
-      }
+        // Keep all language switcher buttons in sync
+        const bTe = document.getElementById('btn-lang-te');
+        const bEn = document.getElementById('btn-lang-en');
+        if (bTe) bTe.classList.toggle('active', targetLang === 'te');
+        if (bEn) bEn.classList.toggle('active', targetLang === 'en');
 
-      if (recognition) {
-        recognition.lang = lang === 'te' ? 'te-IN' : 'en-IN';
+        // Keep Welcome Screen language chips in sync
+        const wTe = document.getElementById('welcome-btn-te');
+        const wEn = document.getElementById('welcome-btn-en');
+        if (wTe) wTe.classList.toggle('active', targetLang === 'te');
+        if (wEn) wEn.classList.toggle('active', targetLang === 'en');
+
+        // Trigger full DOM internationalization across entire application
+        if (typeof window.applyLanguage === 'function') {
+          window.applyLanguage(targetLang);
+        } else if (typeof applyLanguage === 'function') {
+          applyLanguage(targetLang);
+        }
+
+        const input = document.getElementById('user-input');
+        if (input) {
+          input.placeholder = targetLang === 'te' 
+            ? "మీ వ్యవసాయ వివరాలు మాట్లాడండి లేదా టైప్ చేయండి..."
+            : "Speak or type your crop symptom or farm details...";
+        }
+
+        const tabAdvisory = document.getElementById('tab-advisory');
+        const tabProblems = document.getElementById('tab-problems');
+        if (tabAdvisory && tabProblems) {
+          tabAdvisory.textContent = targetLang === 'te' ? '🌱 పంట సిఫార్సు' : '🌱 Crop Recommendations';
+          tabProblems.textContent = targetLang === 'te' ? '🔬 పంట సమస్య & రోగనిర్ధారణ' : '🔬 Crop Problem & Diagnostics';
+        }
+
+        if (recognition) {
+          recognition.lang = targetLang === 'te' ? 'te-IN' : 'en-IN';
+        }
+        setVoiceState('idle');
+        renderSuggestions();
+
+        // Refresh onboarding wizard step titles if visible
+        if (typeof setWizardStep === 'function' && typeof currentWizardStep !== 'undefined') {
+          setWizardStep(currentWizardStep);
+        }
+
+        // Trigger dynamic view re-rendering across portal if portal controller is active
+        if (typeof window.refreshPortalDynamicViews === 'function') {
+          window.refreshPortalDynamicViews();
+        }
+      } catch (err) {
+        console.error('Error in setLanguage:', err);
       }
-      setVoiceState('idle');
-      renderSuggestions();
     }
+    window.setLanguage = setLanguage;
 
     // Switch between Crop Advisory and Crop Health tabs
     function switchCategory(cat) {
@@ -1827,11 +2416,11 @@
       if (currentCategory === 'problems') {
         if (currentLang === 'te') {
           chips = [
-            { text: 'నా వరి ఆకులు పసుపు రంగులోకి మారుతున్నాయి', label: '🌾 వరి ఆకులు పసుపుబారడం (Paddy Yellowing)', problem: true },
-            { text: 'పత్తిలో ఆకులు ఎర్రబడటం మరియు ముడత వస్తోంది', label: '🌾 పత్తి ఆకు ముడత / ఎర్రబడటం (Cotton Reddening)', problem: true },
-            { text: 'మిరపలో ఆకు ముడత తెగులు కనిపిస్తోంది', label: '🌾 మిరప ఆకు ముడత (Chilli Leaf Curl)', problem: true },
-            { text: 'గోధుమ ఆకులు పసుపు రంగు & చారలు వస్తున్నాయి', label: '🌾 గోధుమ ఆకులు పసుపు రంగు (Wheat Yellowing)', problem: true },
-            { text: 'మొక్కజొన్న ఆకుల్లో రంధ్రాలు & కత్తెర పురుగు', label: '🌾 మొక్కజొన్న కత్తెర పురుగు (Fall Armyworm)', problem: true },
+            { text: 'నా వరి ఆకులు పసుపు రంగులోకి మారుతున్నాయి', label: '🌾 వరి ఆకులు పసుపుబారడం', problem: true },
+            { text: 'పత్తిలో ఆకులు ఎర్రబడటం మరియు ముడత వస్తోంది', label: '🌾 పత్తి ఆకు ముడత & ఎర్రబడటం', problem: true },
+            { text: 'మిరపలో ఆకు ముడత తెగులు కనిపిస్తోంది', label: '🌾 మిరప ఆకు ముడత', problem: true },
+            { text: 'గోధుమ ఆకులు పసుపు రంగు & చారలు వస్తున్నాయి', label: '🌾 గోధుమ ఆకులు పసుపు రంగు', problem: true },
+            { text: 'మొక్కజొన్న ఆకుల్లో రంధ్రాలు & కత్తెర పురుగు', label: '🌾 మొక్కజొన్న కత్తెర పురుగు', problem: true },
             { text: 'పంట వయస్సు 25 రోజులు, కింది ఆకులపై పసుపు రంగు, నీరు నిలిచింది', label: '✍️ సమాధానం: 25 రోజులు, కింది ఆకులు, నీరు నిలిచింది' }
           ];
         } else {
@@ -1953,7 +2542,7 @@
         clearTimeout(timeoutId);
         removeTypingIndicator(typingId);
         const isTimeout = err.name === 'AbortError';
-        const errDetail = isTimeout ? (currentLang === 'te' ? 'సమయం ముగిసింది (Timeout)' : 'Request timeout after 35s') : (err.message || 'Network error');
+        const errDetail = isTimeout ? (currentLang === 'te' ? 'సమయం ముగిసింది' : 'Request timeout after 35s') : (err.message || 'Network error');
         appendErrorMessage(errDetail);
       } finally {
         if (micBtn) micBtn.disabled = false;
@@ -1974,7 +2563,7 @@
         <div class="message-bubble" style="background:#fef2f2; border:1.5px solid #fecaca; color:#991b1b;">
           ${msg}<br><br>
           <button type="button" class="retry-btn" onclick="retryLastMessage()">
-            🔄 ${currentLang === 'te' ? 'మళ్ళీ ప్రయత్నించండి (Retry)' : 'Retry Request'}
+            🔄 ${currentLang === 'te' ? 'మళ్ళీ ప్రయత్నించండి' : 'Retry Request'}
           </button>
         </div>
       `;
@@ -1996,7 +2585,7 @@
       row.className = 'message-row user';
       row.innerHTML = `
         <div class="message-bubble">${escapeHtml(text)}</div>
-        <div class="message-meta"><span>👨‍🌾 రైతు (Farmer)</span> • <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span></div>
+        <div class="message-meta"><span>${currentLang === 'te' ? '👨‍🌾 రైతు' : '👨‍🌾 Farmer'}</span> • <span>${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span></div>
       `;
       container.appendChild(row);
       container.scrollTop = container.scrollHeight;
@@ -2012,11 +2601,11 @@
       row.innerHTML = `
         <div class="message-bubble" id="${bubbleId}">${formattedHtml}</div>
         <div class="message-meta">
-          <span>🌾 AgriSaarthi AI</span> • <span>${new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'})}</span>
+          <span>🌾 AgriSaarthi AI</span> • <span>${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
           <div class="speech-controls">
-            <button type="button" class="speech-btn" onclick="speakMessage(this, '${bubbleId}')">🔊 వినండి (Listen)</button>
-            <button type="button" class="speech-btn" onclick="speakMessage(this, '${bubbleId}')">🔄 మళ్ళీ (Replay)</button>
-            <button type="button" class="speech-btn" onclick="stopSpeech()">⏹️ ఆపు (Stop)</button>
+            <button type="button" class="speech-btn" onclick="speakMessage(this, '${bubbleId}')">🔊 ${currentLang === 'te' ? 'వినండి' : 'Listen'}</button>
+            <button type="button" class="speech-btn" onclick="speakMessage(this, '${bubbleId}')">🔄 ${currentLang === 'te' ? 'మళ్ళీ' : 'Replay'}</button>
+            <button type="button" class="speech-btn" onclick="stopSpeech()">⏹️ ${currentLang === 'te' ? 'ఆపు' : 'Stop'}</button>
           </div>
         </div>
       `;
@@ -2146,15 +2735,279 @@
       }
     }
 
+    // =========================================================================
+    // Auth UI Helpers: Password Visibility, Strength & Match
+    // =========================================================================
+    function togglePasswordVisibility(fieldId, btn) {
+      const field = document.getElementById(fieldId);
+      if (!field) return;
+      if (field.type === 'password') {
+        field.type = 'text';
+        btn.textContent = '🔒';
+      } else {
+        field.type = 'password';
+        btn.textContent = '👁️';
+      }
+    }
+
+    function checkPasswordStrength(val) {
+      const fill = document.getElementById('pwd-strength-fill');
+      const label = document.getElementById('pwd-strength-label');
+      if (!fill || !label) return;
+      let score = 0;
+      if (val.length >= 6) score += 1;
+      if (val.length >= 8) score += 1;
+      if (/[A-Z]/.test(val) || /[0-9]/.test(val)) score += 1;
+      if (/[^A-Za-z0-9]/.test(val)) score += 1;
+
+      if (val.length === 0) {
+        fill.style.width = '0%';
+        label.textContent = '';
+      } else if (score <= 1) {
+        fill.style.width = '25%';
+        fill.style.backgroundColor = '#ef4444';
+        label.textContent = currentLang === 'te' ? '⚠️ బలహీనమైన పాస్‌వర్డ్' : '⚠️ Weak password';
+        label.style.color = '#dc2626';
+      } else if (score === 2) {
+        fill.style.width = '60%';
+        fill.style.backgroundColor = '#f59e0b';
+        label.textContent = currentLang === 'te' ? '🟡 మధ్యస్థ పాస్‌వర్డ్' : '🟡 Medium strength';
+        label.style.color = '#d97706';
+      } else {
+        fill.style.width = '100%';
+        fill.style.backgroundColor = '#16a34a';
+        label.textContent = currentLang === 'te' ? '✅ బలమైన పాస్‌వర్డ్' : '✅ Strong password';
+        label.style.color = '#16a34a';
+      }
+    }
+
+    function checkPasswordMatch() {
+      const p1 = document.getElementById('reg-password')?.value || '';
+      const p2 = document.getElementById('reg-confirm-password')?.value || '';
+      const label = document.getElementById('pwd-match-label');
+      if (!label) return;
+      if (!p2) {
+        label.textContent = '';
+      } else if (p1 === p2) {
+        label.textContent = currentLang === 'te' ? '✅ పాస్‌వర్డ్‌లు సరిపోయాయి' : '✅ Passwords match';
+        label.style.color = '#16a34a';
+      } else {
+        label.textContent = currentLang === 'te' ? '❌ పాస్‌వర్డ్ సరిపోలలేదు' : '❌ Passwords do not match';
+        label.style.color = '#dc2626';
+      }
+    }
+
+
+// =========================================================================
+// 6-STEP FARMER ONBOARDING WIZARD LOGIC (Bilingual Clean)
+// =========================================================================
+let currentWizardStep = 1;
+const TOTAL_WIZARD_STEPS = 6;
+
+const STEP_TITLES_TE = [
+  'వ్యక్తిగత వివరాలు',
+  'ప్రాంతం వివరాలు',
+  'భూమి వివరాలు',
+  'నేల వివరాలు',
+  'సాగు & నీటి వివరాలు',
+  'గోప్యత & సమీక్ష'
+];
+
+const STEP_TITLES_EN = [
+  'Personal Details',
+  'Location Details',
+  'Land Details',
+  'Soil Details',
+  'Water & Farming Details',
+  'Privacy & Review'
+];
+
+function setWizardStep(step) {
+  if (step < 1 || step > TOTAL_WIZARD_STEPS) return;
+  currentWizardStep = step;
+
+  // Toggle step panels
+  for (let i = 1; i <= TOTAL_WIZARD_STEPS; i++) {
+    const panel = document.getElementById(`wizard-panel-${i}`);
+    const node = document.getElementById(`step-node-${i}`);
+    if (panel) {
+      panel.classList.toggle('active', i === currentWizardStep);
+    }
+    if (node) {
+      node.classList.remove('active', 'completed');
+      const circle = node.querySelector('.wizard-step-circle');
+      if (i === currentWizardStep) {
+        node.classList.add('active');
+        if (circle) circle.textContent = i;
+      } else if (i < currentWizardStep) {
+        node.classList.add('completed');
+        if (circle) circle.textContent = '✓';
+      } else {
+        if (circle) circle.textContent = i;
+      }
+    }
+  }
+
+  // Update desktop connector line fill
+  const connectorFill = document.getElementById('wizard-connector-fill');
+  if (connectorFill) {
+    const pct = ((currentWizardStep - 1) / (TOTAL_WIZARD_STEPS - 1)) * 100;
+    connectorFill.style.width = `${pct}%`;
+  }
+
+  // Update mobile banner
+  const mobText = document.getElementById('wizard-mobile-step-text');
+  const mobPct = document.getElementById('wizard-mobile-pct-text');
+  const mobFill = document.getElementById('wizard-mobile-bar-fill');
+  const pctInt = Math.round((currentWizardStep / TOTAL_WIZARD_STEPS) * 100);
+
+  const isEn = (typeof currentLang !== 'undefined' && currentLang === 'en');
+  const titles = isEn ? STEP_TITLES_EN : STEP_TITLES_TE;
+  const prefix = isEn ? `Step ${currentWizardStep} of ${TOTAL_WIZARD_STEPS}: ` : `దశ ${currentWizardStep} / ${TOTAL_WIZARD_STEPS}: `;
+
+  if (mobText) {
+    mobText.textContent = prefix + titles[currentWizardStep - 1];
+  }
+  if (mobPct) mobPct.textContent = `${pctInt}%`;
+  if (mobFill) mobFill.style.width = `${pctInt}%`;
+
+  // Update nav buttons
+  const prevBtn = document.getElementById('wizard-prev-btn');
+  const nextBtn = document.getElementById('wizard-next-btn');
+  const saveBtn = document.getElementById('profile-save-btn');
+
+  if (prevBtn) prevBtn.style.display = currentWizardStep > 1 ? 'inline-flex' : 'none';
+  if (nextBtn) nextBtn.style.display = currentWizardStep < TOTAL_WIZARD_STEPS ? 'inline-flex' : 'none';
+  if (saveBtn) saveBtn.style.display = currentWizardStep === TOTAL_WIZARD_STEPS ? 'inline-flex' : 'none';
+
+  // If entering step 6, populate the Review Summary card
+  if (currentWizardStep === 6) {
+    updateWizardReviewSummary();
+  }
+
+  // Scroll smoothly to top of wizard card on mobile
+  const wizardCard = document.querySelector('.wizard-card');
+  if (wizardCard && window.innerWidth < 768) {
+    wizardCard.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+}
+
+function navigateWizardStep(delta) {
+  if (delta > 0) {
+    if (!validateWizardStep(currentWizardStep)) {
+      return;
+    }
+  }
+  setWizardStep(currentWizardStep + delta);
+}
+
+function jumpToWizardStep(targetStep) {
+  if (targetStep > currentWizardStep) {
+    if (!validateWizardStep(currentWizardStep)) {
+      return;
+    }
+  }
+  setWizardStep(targetStep);
+}
+
+function validateWizardStep(step) {
+  if (step === 1) {
+    const nameField = document.getElementById('prof-fullname');
+    const nameVal = (nameField?.value || '').trim();
+    if (!nameVal || nameVal.length < 2) {
+      showInlineError('prof-fullname', 'prof-fullname-error');
+      return false;
+    }
+  } else if (step === 3) {
+    const acresField = document.getElementById('prof-acres');
+    const acresVal = parseFloat(acresField?.value);
+    if (acresField?.value && (isNaN(acresVal) || acresVal <= 0)) {
+      showInlineError('prof-acres', 'prof-acres-error');
+      return false;
+    }
+  }
+  return true;
+}
+
+function showInlineError(fieldId, errorId) {
+  const field = document.getElementById(fieldId);
+  const err = document.getElementById(errorId);
+  if (field) {
+    field.classList.add('input-field-error');
+    field.focus();
+  }
+  if (err) {
+    err.classList.add('show');
+  }
+}
+
+function clearInlineError(fieldId) {
+  const field = document.getElementById(fieldId);
+  if (field) {
+    field.classList.remove('input-field-error');
+  }
+  const err = document.getElementById(`${fieldId}-error`);
+  if (err) {
+    err.classList.remove('show');
+  }
+}
+
+function updateWizardReviewSummary() {
+  const name = document.getElementById('prof-fullname')?.value || '—';
+  const state = document.getElementById('prof-state')?.value;
+  const dist = document.getElementById('prof-district')?.value;
+  const village = document.getElementById('prof-village')?.value;
+  const acres = document.getElementById('prof-acres')?.value;
+  const soil = document.getElementById('prof-soil')?.value;
+  const water = document.getElementById('prof-water')?.value;
+  const season = document.getElementById('prof-season')?.value;
+  const budget = document.getElementById('prof-budget')?.value;
+
+  const revName = document.getElementById('rev-fullname');
+  const revLoc = document.getElementById('rev-location');
+  const revLand = document.getElementById('rev-land');
+  const revSoil = document.getElementById('rev-soil');
+  const revWater = document.getElementById('rev-water');
+  const revBudget = document.getElementById('rev-budget');
+
+  const isEn = (typeof currentLang !== 'undefined' && currentLang === 'en');
+
+  if (revName) revName.textContent = name;
+  if (revLoc) {
+    const parts = [village, dist, state].filter(Boolean);
+    revLoc.textContent = parts.length ? parts.join(', ') : (isEn ? '— (Not set)' : '— (నమోదు కాలేదు)');
+  }
+  if (revLand) revLand.textContent = acres ? (isEn ? `${acres} Acres` : `${acres} ఎకరాలు`) : (isEn ? '— (Not set)' : '— (నమోదు కాలేదు)');
+  if (revSoil) revSoil.textContent = soil ? soil.toUpperCase() : (isEn ? '— (Not set)' : '— (నమోదు కాలేదు)');
+  if (revWater) {
+    const parts = [water, season].filter(Boolean);
+    revWater.textContent = parts.length ? parts.join(' / ').toUpperCase() : '—';
+  }
+  if (revBudget) revBudget.textContent = budget ? `₹ ${Number(budget).toLocaleString('en-IN')}` : '—';
+}
+
+
+    // Export global handlers for HTML onclick attributes
+    window.toggleSpeechRecognition = toggleSpeechRecognition;
+    window.startSpeechRecognition = startSpeechRecognition;
+    window.stopSpeechRecognition = stopSpeechRecognition;
+    window.speakMessage = speakMessage;
+    window.stopSpeech = stopSpeech;
+    window.sendMessage = sendMessage;
+    window.fillPrompt = fillPrompt;
+    window.handleKey = handleKey;
+    window.switchCategory = switchCategory;
+
     // Keep baseInputText synced with manual edits when not actively recording
-    window.addEventListener('DOMContentLoaded', function() {
-      initSpeech();
+    window.addEventListener('DOMContentLoaded', function () {
+      if (typeof applyLanguage === 'function') { applyLanguage(currentLang || 'te'); }
+      recognition = initSpeech();
       renderSuggestions();
       checkOllamaStatus();
 
       const inputEl = document.getElementById('user-input');
       if (inputEl) {
-        inputEl.addEventListener('input', function() {
+        inputEl.addEventListener('input', function () {
           if (!isRecording) {
             baseInputText = this.value;
           }
@@ -2162,6 +3015,7 @@
       }
     });
   </script>
-  <script src="/js/portal.js"></script>
+  <script src="js/portal.js"></script>
 </body>
+
 </html>
