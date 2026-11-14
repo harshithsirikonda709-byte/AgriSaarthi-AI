@@ -192,6 +192,34 @@ def main():
         status, _ = run_http_request("GET", "/api/farmer/profile", token=valid_token)
         record("/api/farmer/profile (revoked)", "GET", 401, status, "Revoked token rejected with 401")
 
+        # =====================================================================
+        # DAY 3 AUDITS: Location-Aware Crop Intelligence
+        # =====================================================================
+        # 16. Crop Observation Submission: POST /api/crops/observations
+        obs_payload = {
+            "crop_name": "Cotton",
+            "latitude": 16.3067,
+            "longitude": 80.4365,
+            "sowing_date": "2026-06-15",
+            "crop_growth_stage": "vegetative",
+            "consent_shared": True,
+            "field_notes": "Sown in black soil with canal irrigation.",
+        }
+        status, obs_body = run_http_request("POST", "/api/crops/observations", obs_payload)
+        record("/api/crops/observations", "POST", 201, status, f"Submitted observation (ID: {obs_body.get('observation', {}).get('id')})")
+
+        # 17. Nearby Crop Intelligence (2.5 km Radius): GET /api/crops/nearby
+        status, nearby_body = run_http_request(
+            "GET",
+            "/api/crops/nearby?latitude=16.3067&longitude=80.4365&radius_km=2.5"
+        )
+        count = nearby_body.get("count", 0)
+        record("/api/crops/nearby (2.5km)", "GET", 200, status, f"Nearby 2.5km query returned {count} observation(s)")
+
+        # 18. Safe Fallback without GPS: GET /api/crops/nearby
+        status, no_gps_body = run_http_request("GET", "/api/crops/nearby")
+        record("/api/crops/nearby (no GPS)", "GET", 200, status, f"Safe degraded response: {no_gps_body.get('message', '')[:40]}...")
+
         print("=" * 70)
         total = len(results)
         passed = sum(1 for r in results if r[4])

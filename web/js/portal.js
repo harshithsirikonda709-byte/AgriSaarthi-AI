@@ -331,15 +331,44 @@
     if (sowingEl) sowingEl.value = currentFarmer.sowing_date || '';
     const growthEl = document.getElementById('prof-growth-stage');
     if (growthEl) growthEl.value = currentFarmer.crop_growth_stage || '';
+    const latEl = document.getElementById('prof-lat');
+    if (latEl) latEl.value = currentFarmer.latitude != null ? currentFarmer.latitude : '';
+    const lonEl = document.getElementById('prof-lon');
+    if (lonEl) lonEl.value = currentFarmer.longitude != null ? currentFarmer.longitude : '';
     const langPref = document.getElementById('prof-lang-pref');
     if (langPref && currentFarmer.preferred_language) {
       langPref.value = currentFarmer.preferred_language;
     }
   }
 
+  window.detectCurrentGPS = function (latId = 'prof-lat', lonId = 'prof-lon', msgId = 'gps-detect-status') {
+    const statusEl = document.getElementById(msgId);
+    if (!navigator.geolocation) {
+      if (statusEl) statusEl.textContent = t('మీ బ్రౌజర్ లొకేషన్‌ను సపోర్ట్ చేయదు.', 'Geolocation is not supported by your browser.');
+      return;
+    }
+    if (statusEl) statusEl.textContent = t('లొకేషన్ గుర్తిస్తున్నాము...', 'Detecting GPS location...');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        const latEl = document.getElementById(latId);
+        const lonEl = document.getElementById(lonId);
+        if (latEl) latEl.value = pos.coords.latitude.toFixed(6);
+        if (lonEl) lonEl.value = pos.coords.longitude.toFixed(6);
+        if (statusEl) statusEl.textContent = `📍 ${pos.coords.latitude.toFixed(4)}, ${pos.coords.longitude.toFixed(4)}`;
+      },
+      (err) => {
+        if (statusEl) statusEl.textContent = t('లొకేషన్ యాక్సెస్ నిరాకరించబడింది.', 'GPS location access denied or unavailable.');
+      },
+      { timeout: 10000, enableHighAccuracy: true }
+    );
+  };
+
   window.handleProfileSubmit = async function (ev) {
     if (ev) ev.preventDefault();
     showStatusAlert('profile-alert', '');
+
+    const latVal = (document.getElementById('prof-lat')?.value || '').trim();
+    const lonVal = (document.getElementById('prof-lon')?.value || '').trim();
 
     const payload = {
       full_name: (document.getElementById('prof-fullname').value || '').trim(),
@@ -352,6 +381,8 @@
       season: document.getElementById('prof-season').value,
       sowing_date: (document.getElementById('prof-sowing-date')?.value || '').trim(),
       crop_growth_stage: (document.getElementById('prof-growth-stage')?.value || '').trim(),
+      latitude: latVal ? parseFloat(latVal) : null,
+      longitude: lonVal ? parseFloat(lonVal) : null,
       budget_inr: document.getElementById('prof-budget').value,
       risk_tolerance: document.getElementById('prof-risk').value || 'moderate',
       primary_crops_grown: (document.getElementById('prof-crops').value || '').trim(),
@@ -509,6 +540,12 @@
         <div class="metric-box">
           <div class="m-label">${t('విత్తిన తేదీ & దశ', 'Sowing Date & Stage')}</div>
           <div class="m-val">${escapeHtml((farmer.sowing_date || '—') + (farmer.crop_growth_stage ? ' • ' + farmer.crop_growth_stage.toUpperCase() : ''))}</div>
+        </div>
+        ` : ''}
+        ${(farmer.latitude != null && farmer.longitude != null) ? `
+        <div class="metric-box">
+          <div class="m-label">${t('జీపీఎస్ లొకేషన్', 'GPS Location')}</div>
+          <div class="m-val">📍 ${farmer.latitude.toFixed(4)}, ${farmer.longitude.toFixed(4)}</div>
         </div>
         ` : ''}
       </div>

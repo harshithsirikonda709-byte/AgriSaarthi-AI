@@ -67,6 +67,8 @@ class FarmerProfile(Model):
     season: Optional[Season] = Field(default=None, description="Target planting season")
     sowing_date: Optional[str] = Field(default="", description="Date of sowing or transplanting (YYYY-MM-DD)")
     crop_growth_stage: Optional[CropGrowthStage] = Field(default=None, description="Current growth stage of primary crop")
+    latitude: Optional[float] = Field(default=None, ge=-90.0, le=90.0, description="Farm GPS latitude (-90 to +90)")
+    longitude: Optional[float] = Field(default=None, ge=-180.0, le=180.0, description="Farm GPS longitude (-180 to +180)")
     budget_inr: Optional[float] = Field(default=None, ge=0.0, description="Total planned investment budget in INR")
     risk_tolerance: Optional[RiskTolerance] = Field(default=RiskTolerance.MODERATE, description="Farmer risk preference")
     primary_crops_grown: Optional[str] = Field(default="", description="Comma-separated crops currently cultivated")
@@ -129,6 +131,8 @@ class FarmerRegistrationRequest(Model):
     preferred_language: str = Field(default="te", description="Preferred language code ('te' or 'en')")
     sowing_date: Optional[str] = Field(default="", description="Date of sowing or transplanting (YYYY-MM-DD)")
     crop_growth_stage: Optional[CropGrowthStage] = Field(default=None, description="Current growth stage of primary crop")
+    latitude: Optional[float] = Field(default=None, ge=-90.0, le=90.0, description="Farm GPS latitude")
+    longitude: Optional[float] = Field(default=None, ge=-180.0, le=180.0, description="Farm GPS longitude")
 
     @validator("password")
     def validate_pw(cls, v: str) -> str:
@@ -168,6 +172,8 @@ class FarmerProfileUpdateRequest(Model):
     season: Optional[Season] = None
     sowing_date: Optional[str] = None
     crop_growth_stage: Optional[CropGrowthStage] = None
+    latitude: Optional[float] = Field(default=None, ge=-90.0, le=90.0)
+    longitude: Optional[float] = Field(default=None, ge=-180.0, le=180.0)
     budget_inr: Optional[float] = Field(default=None, ge=0.0)
     risk_tolerance: Optional[RiskTolerance] = None
     primary_crops_grown: Optional[str] = None
@@ -193,6 +199,8 @@ class FarmerProfileRequest(Model):
     season: Season = Field(..., description="Target planting season")
     budget_inr: float = Field(..., ge=0.0, description="Total planned investment budget in INR for the season")
     risk_tolerance: RiskTolerance = Field(default=RiskTolerance.MODERATE, description="Farmer risk preference")
+    latitude: Optional[float] = Field(default=None, ge=-90.0, le=90.0, description="Farm GPS latitude (-90 to +90)")
+    longitude: Optional[float] = Field(default=None, ge=-180.0, le=180.0, description="Farm GPS longitude (-180 to +180)")
 
     @validator("state")
     def validate_state(cls, v: str) -> str:
@@ -243,3 +251,51 @@ class RecommendationResponse(Model):
     def to_dict(self) -> Dict[str, Any]:
         """Serialize response to python dictionary."""
         return self.dict()
+
+
+class CropObservationSubmission(Model):
+    """
+    Farmer crop observation submission payload (Day 3 - Tasks 3 & 4).
+    Enables farmers and extension workers to log real ground observations
+    with GPS coordinates, sowing date, current growth stage, and community consent.
+    """
+    crop_name: str = Field(..., min_length=2, max_length=100, description="Name of crop observed")
+    latitude: float = Field(..., ge=-90.0, le=90.0, description="GPS latitude in decimal degrees")
+    longitude: float = Field(..., ge=-180.0, le=180.0, description="GPS longitude in decimal degrees")
+    sowing_date: str = Field(..., description="Sowing or planting date (YYYY-MM-DD)")
+    crop_growth_stage: CropGrowthStage = Field(..., description="Current physiological growth stage")
+    consent_shared: bool = Field(default=True, description="Consent to share anonymous agronomic observation with nearby peer farmers")
+    field_notes: Optional[str] = Field(default="", max_length=500, description="Optional field observations or notes")
+    observed_at: Optional[str] = Field(default=None, description="ISO timestamp of observation")
+
+    @validator("crop_name")
+    def validate_crop_name(cls, v: str) -> str:
+        cleaned = (v or "").strip().title()
+        if len(cleaned) < 2:
+            raise ValueError("Crop name must be at least 2 characters long.")
+        return cleaned
+
+    @validator("sowing_date")
+    def validate_sowing_date(cls, v: str) -> str:
+        cleaned = (v or "").strip()
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", cleaned):
+            raise ValueError("Sowing date must be in YYYY-MM-DD format (e.g. 2026-10-15).")
+        return cleaned
+
+
+class NearbyCropObservation(Model):
+    """
+    Consolidated nearby observation model returned by GET /api/crops/nearby within 2.5 km.
+    """
+    id: int
+    crop_name: str
+    crop_growth_stage: str
+    sowing_date: str
+    latitude: float
+    longitude: float
+    distance_km: float
+    consent_shared: bool
+    observed_at: str
+    field_notes: str = ""
+    is_stale: bool = False
+

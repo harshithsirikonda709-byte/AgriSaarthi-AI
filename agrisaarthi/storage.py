@@ -12,6 +12,7 @@ Uses Python standard library only (sqlite3, hashlib, hmac, secrets) — zero ext
 import os
 import re
 import json
+import math
 import hmac
 import hashlib
 import secrets
@@ -31,6 +32,24 @@ VALID_WATERS = {w.value for w in WaterAvailability}
 VALID_SEASONS = {s.value for s in Season}
 VALID_RISKS = {r.value for r in RiskTolerance}
 VALID_GROWTH_STAGES = {g.value for g in CropGrowthStage}
+
+
+def haversine_distance_km(lat1: float, lon1: float, lat2: float, lon2: float) -> float:
+    """
+    Calculate the great-circle distance between two GPS coordinates in kilometers
+    using the Haversine formula (Day 3 - Task 2).
+    Mean Earth radius R = 6371.0 km.
+    """
+    r = 6371.0
+    phi1 = math.radians(lat1)
+    phi2 = math.radians(lat2)
+    delta_phi = math.radians(lat2 - lat1)
+    delta_lambda = math.radians(lon2 - lon1)
+
+    a = (math.sin(delta_phi / 2.0) ** 2 +
+         math.cos(phi1) * math.cos(phi2) * math.sin(delta_lambda / 2.0) ** 2)
+    c = 2.0 * math.atan2(math.sqrt(a), math.sqrt(max(0.0, 1.0 - a)))
+    return round(r * c, 3)
 
 
 class AuthValidationError(ValueError):
@@ -101,6 +120,8 @@ class FarmerStorage:
                     season TEXT NOT NULL DEFAULT '',
                     sowing_date TEXT NOT NULL DEFAULT '',
                     crop_growth_stage TEXT NOT NULL DEFAULT '',
+                    latitude REAL,
+                    longitude REAL,
                     budget_inr REAL,
                     risk_tolerance TEXT NOT NULL DEFAULT 'moderate',
                     primary_crops_grown TEXT NOT NULL DEFAULT '',
@@ -127,6 +148,26 @@ class FarmerStorage:
                     created_at TEXT NOT NULL,
                     FOREIGN KEY (farmer_id) REFERENCES farmers(id) ON DELETE CASCADE
                 );
+
+                CREATE TABLE IF NOT EXISTS crop_observations (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    farmer_id INTEGER,
+                    farmer_name TEXT NOT NULL DEFAULT '',
+                    crop_name TEXT NOT NULL,
+                    latitude REAL NOT NULL,
+                    longitude REAL NOT NULL,
+                    sowing_date TEXT NOT NULL,
+                    crop_growth_stage TEXT NOT NULL,
+                    consent_shared INTEGER NOT NULL DEFAULT 1,
+                    field_notes TEXT NOT NULL DEFAULT '',
+                    observed_at TEXT NOT NULL,
+                    created_at TEXT NOT NULL,
+                    FOREIGN KEY (farmer_id) REFERENCES farmers(id) ON DELETE SET NULL
+                );
+
+                CREATE INDEX IF NOT EXISTS idx_obs_coords ON crop_observations(latitude, longitude);
+                CREATE INDEX IF NOT EXISTS idx_obs_crop ON crop_observations(crop_name);
+                CREATE INDEX IF NOT EXISTS idx_obs_consent ON crop_observations(consent_shared);
                 """
             )
 
@@ -143,11 +184,19 @@ class FarmerStorage:
                 conn.execute("ALTER TABLE farmers ADD COLUMN sowing_date TEXT NOT NULL DEFAULT '';")
             if "crop_growth_stage" not in existing_cols:
                 conn.execute("ALTER TABLE farmers ADD COLUMN crop_growth_stage TEXT NOT NULL DEFAULT '';")
+            if "latitude" not in existing_cols:
+                conn.execute("ALTER TABLE farmers ADD COLUMN latitude REAL DEFAULT NULL;")
+            if "longitude" not in existing_cols:
+                conn.execute("ALTER TABLE farmers ADD COLUMN longitude REAL DEFAULT NULL;")
 
-            # Normalized Relational Views (Task 4 Database Design)
-            # Exposes users, farmer_profiles, and farm_details without data duplication or migration overwrites
+            # Normalized Relational Views (Task 4 & Day 3 Database Design)
+            # Recreate views so new columns (latitude, longitude) are visible
             conn.executescript(
                 """
+                DROP VIEW IF EXISTS users;
+                DROP VIEW IF EXISTS farmer_profiles;
+                DROP VIEW IF EXISTS farm_details;
+
                 CREATE VIEW IF NOT EXISTS users AS
                     SELECT 
                         id,
@@ -170,6 +219,8 @@ class FarmerStorage:
                         district,
                         mandal,
                         village,
+                        latitude,
+                        longitude,
                         profile_completed,
                         created_at,
                         updated_at
@@ -185,6 +236,8 @@ class FarmerStorage:
                         season,
                         sowing_date,
                         crop_growth_stage,
+                        latitude,
+                        longitude,
                         budget_inr,
                         risk_tolerance,
                         primary_crops_grown,
@@ -232,6 +285,8 @@ class FarmerStorage:
             "season": row["season"],
             "sowing_date": row["sowing_date"] if "sowing_date" in keys else "",
             "crop_growth_stage": row["crop_growth_stage"] if "crop_growth_stage" in keys else "",
+            "latitude": row["latitude"] if "latitude" in keys and row["latitude"] is not None else None,
+            "longitude": row["longitude"] if "longitude" in keys and row["longitude"] is not None else None,
             "budget_inr": row["budget_inr"],
             "risk_tolerance": row["risk_tolerance"],
             "primary_crops_grown": row["primary_crops_grown"],
@@ -257,6 +312,8 @@ class FarmerStorage:
         state: Optional[str] = None,
         sowing_date: Optional[str] = None,
         crop_growth_stage: Optional[str] = None,
+        latitude: Optional[float] = None,
+        longitude: Optional[float] = None,
     ) -> Tuple[Dict[str, Any], str]:
         """Register a new farmer account with server-side validation and return (farmer_dict, session_token)."""
         clean_name = (full_name or "").strip()
@@ -322,6 +379,26 @@ class FarmerStorage:
         if clean_water and clean_water not in VALID_WATERS:
             raise AuthValidationError(f"Unsupported water availability '{clean_water}'.")
 
+        parsed_lat: Optional[float] = None
+        if latitude not in (None, ""):
+            try:
+                parsed_lat = float(latitude)
+            except (ValueError, TypeError):
+                raise AuthValidationError("Latitude must be a valid decimal number.")
+            if not (-90.0 <= parsed_lat <= 90.0):
+                raise AuthValidationError("Latitude must be between -90.0 and 90.0 degrees.")
+            parsed_lat = round(parsed_lat, 6)
+
+        parsed_lon: Optional[float] = None
+        if longitude not in (None, ""):
+            try:
+                parsed_lon = float(longitude)
+            except (ValueError, TypeError):
+                raise AuthValidationError("Longitude must be a valid decimal number.")
+            if not (-180.0 <= parsed_lon <= 180.0):
+                raise AuthValidationError("Longitude must be between -180.0 and 180.0 degrees.")
+            parsed_lon = round(parsed_lon, 6)
+
         profile_completed = 1 if (clean_dist and clean_village and parsed_land and clean_soil) else 0
 
         lang = preferred_language if preferred_language in ("te", "en") else "te"
@@ -349,8 +426,8 @@ class FarmerStorage:
                     full_name, identifier, email, phone_number, password_hash, password_salt,
                     preferred_language, state, district, mandal, village, land_size_acres,
                     soil_type, water_availability, sowing_date, crop_growth_stage,
-                    profile_completed, created_at, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                    latitude, longitude, profile_completed, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
                 (
                     clean_name,
@@ -369,6 +446,8 @@ class FarmerStorage:
                     clean_water,
                     clean_sowing,
                     clean_stage,
+                    parsed_lat,
+                    parsed_lon,
                     profile_completed,
                     now_iso,
                     now_iso,
@@ -559,6 +638,37 @@ class FarmerStorage:
                         raise AuthValidationError(f"Unsupported crop growth stage '{stg_str}'.")
                     current["crop_growth_stage"] = stg_str
 
+            if "latitude" not in current:
+                current["latitude"] = None
+            if "longitude" not in current:
+                current["longitude"] = None
+
+            if "latitude" in updates:
+                lat_val = updates["latitude"]
+                if lat_val in (None, ""):
+                    current["latitude"] = None
+                else:
+                    try:
+                        plat = float(lat_val)
+                    except (ValueError, TypeError):
+                        raise AuthValidationError("Latitude must be a valid decimal number.")
+                    if not (-90.0 <= plat <= 90.0):
+                        raise AuthValidationError("Latitude must be between -90.0 and 90.0 degrees.")
+                    current["latitude"] = round(plat, 6)
+
+            if "longitude" in updates:
+                lon_val = updates["longitude"]
+                if lon_val in (None, ""):
+                    current["longitude"] = None
+                else:
+                    try:
+                        plon = float(lon_val)
+                    except (ValueError, TypeError):
+                        raise AuthValidationError("Longitude must be a valid decimal number.")
+                    if not (-180.0 <= plon <= 180.0):
+                        raise AuthValidationError("Longitude must be between -180.0 and 180.0 degrees.")
+                    current["longitude"] = round(plon, 6)
+
             if "budget_inr" in updates:
                 val = updates["budget_inr"]
                 if val in (None, ""):
@@ -605,6 +715,8 @@ class FarmerStorage:
                     season = ?,
                     sowing_date = ?,
                     crop_growth_stage = ?,
+                    latitude = ?,
+                    longitude = ?,
                     budget_inr = ?,
                     risk_tolerance = ?,
                     primary_crops_grown = ?,
@@ -627,6 +739,8 @@ class FarmerStorage:
                     current["season"],
                     current.get("sowing_date", ""),
                     current.get("crop_growth_stage", ""),
+                    current.get("latitude"),
+                    current.get("longitude"),
                     current["budget_inr"],
                     current["risk_tolerance"],
                     current["primary_crops_grown"],
@@ -700,4 +814,225 @@ class FarmerStorage:
                     }
                 )
             return items
+
+    def record_crop_observation(
+        self,
+        crop_name: str,
+        latitude: float,
+        longitude: float,
+        sowing_date: str,
+        crop_growth_stage: str,
+        consent_shared: bool = True,
+        farmer_id: Optional[int] = None,
+        farmer_name: str = "",
+        field_notes: str = "",
+        observed_at: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """
+        Record a ground crop observation (Day 3 - Tasks 3 & 4).
+        Stores crop name, location, sowing date, growth stage, and community sharing consent.
+        """
+        clean_crop = (crop_name or "").strip().title()
+        if len(clean_crop) < 2:
+            raise AuthValidationError("Crop name must be at least 2 characters long.")
+
+        try:
+            plat = float(latitude)
+            plon = float(longitude)
+        except (ValueError, TypeError):
+            raise AuthValidationError("Valid GPS latitude and longitude numbers are required.")
+
+        if not (-90.0 <= plat <= 90.0):
+            raise AuthValidationError("Latitude must be between -90.0 and 90.0 degrees.")
+        if not (-180.0 <= plon <= 180.0):
+            raise AuthValidationError("Longitude must be between -180.0 and 180.0 degrees.")
+
+        clean_sowing = (sowing_date or "").strip()
+        if not re.match(r"^\d{4}-\d{2}-\d{2}$", clean_sowing):
+            raise AuthValidationError("Sowing date must be in YYYY-MM-DD format (e.g. 2026-10-15).")
+
+        clean_stage = (crop_growth_stage or "").strip().lower()
+        if clean_stage not in VALID_GROWTH_STAGES:
+            raise AuthValidationError(f"Unsupported crop growth stage '{clean_stage}'.")
+
+        now_iso = datetime.now(timezone.utc).isoformat()
+        obs_time = (observed_at or "").strip() or now_iso
+        consent_int = 1 if consent_shared else 0
+
+        with self._connect() as conn:
+            cur = conn.execute(
+                """
+                INSERT INTO crop_observations (
+                    farmer_id, farmer_name, crop_name, latitude, longitude,
+                    sowing_date, crop_growth_stage, consent_shared,
+                    field_notes, observed_at, created_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (
+                    farmer_id,
+                    farmer_name.strip() if farmer_name else "",
+                    clean_crop,
+                    round(plat, 6),
+                    round(plon, 6),
+                    clean_sowing,
+                    clean_stage,
+                    consent_int,
+                    (field_notes or "").strip(),
+                    obs_time,
+                    now_iso,
+                ),
+            )
+            obs_id = cur.lastrowid
+            row = conn.execute("SELECT * FROM crop_observations WHERE id = ?", (obs_id,)).fetchone()
+            return {
+                "id": row["id"],
+                "farmer_id": row["farmer_id"],
+                "farmer_name": row["farmer_name"],
+                "crop_name": row["crop_name"],
+                "latitude": row["latitude"],
+                "longitude": row["longitude"],
+                "sowing_date": row["sowing_date"],
+                "crop_growth_stage": row["crop_growth_stage"],
+                "consent_shared": bool(row["consent_shared"]),
+                "field_notes": row["field_notes"],
+                "observed_at": row["observed_at"],
+                "created_at": row["created_at"],
+            }
+
+    def get_nearby_crop_observations(
+        self,
+        latitude: Optional[float],
+        longitude: Optional[float],
+        radius_km: float = 2.5,
+        max_age_days: int = 180,
+        require_consent: bool = True,
+        include_stale: bool = False,
+    ) -> List[Dict[str, Any]]:
+        """
+        Query nearby crop observations within a specified radius (default 2.5 km) using Haversine distance (Day 3 - Task 2, 6, 7).
+        Enforces:
+          - Spatial filter: Great-circle distance <= radius_km (2.5 km).
+          - Consent filter: Excludes non-consented records (consent_shared = 0) unless require_consent is False.
+          - Staleness filter: Excludes observations older than max_age_days (default 180 days) unless include_stale is True.
+          - Validity filter: Excludes invalid coordinates, nulls, and null-island (0.0, 0.0).
+          - Safety fallback: Missing GPS (None) returns empty list [] safely without errors.
+        """
+        if latitude is None or longitude is None:
+            return []
+        try:
+            target_lat = float(latitude)
+            target_lon = float(longitude)
+        except (ValueError, TypeError):
+            return []
+
+        if not (-90.0 <= target_lat <= 90.0) or not (-180.0 <= target_lon <= 180.0):
+            return []
+
+        # Approximate bounding box to utilize SQLite spatial indexes efficiently
+        lat_delta = (radius_km / 110.0) + 0.01
+        cos_lat = max(0.01, math.cos(math.radians(target_lat)))
+        lon_delta = (radius_km / (110.0 * cos_lat)) + 0.01
+
+        min_lat = max(-90.0, target_lat - lat_delta)
+        max_lat = min(90.0, target_lat + lat_delta)
+        min_lon = max(-180.0, target_lon - lon_delta)
+        max_lon = min(180.0, target_lon + lon_delta)
+
+        sql = """
+            SELECT * FROM crop_observations
+            WHERE latitude BETWEEN ? AND ?
+              AND longitude BETWEEN ? AND ?
+        """
+        params: List[Any] = [min_lat, max_lat, min_lon, max_lon]
+        if require_consent:
+            sql += " AND consent_shared = 1"
+
+        now_utc = datetime.now(timezone.utc)
+        results = []
+
+        with self._connect() as conn:
+            rows = conn.execute(sql, tuple(params)).fetchall()
+            for r in rows:
+                obs_lat = r["latitude"]
+                obs_lon = r["longitude"]
+
+                if obs_lat is None or obs_lon is None:
+                    continue
+                # Exclude null island coordinates
+                if abs(obs_lat) < 0.000001 and abs(obs_lon) < 0.000001:
+                    continue
+                if not (-90.0 <= obs_lat <= 90.0) or not (-180.0 <= obs_lon <= 180.0):
+                    continue
+
+                dist = haversine_distance_km(target_lat, target_lon, obs_lat, obs_lon)
+                if dist > radius_km:
+                    continue
+
+                # Determine staleness based on observed_at or sowing_date
+                is_stale = False
+                obs_time_str = r["observed_at"] or r["sowing_date"]
+                if obs_time_str:
+                    try:
+                        if "T" in obs_time_str:
+                            obs_dt = datetime.fromisoformat(obs_time_str.replace("Z", "+00:00"))
+                        else:
+                            obs_dt = datetime.strptime(obs_time_str[:10], "%Y-%m-%d").replace(tzinfo=timezone.utc)
+                        age_days = (now_utc - obs_dt).total_seconds() / 86400.0
+                        if age_days > max_age_days:
+                            is_stale = True
+                    except Exception:
+                        pass
+
+                if is_stale and not include_stale:
+                    continue
+
+                results.append(
+                    {
+                        "id": r["id"],
+                        "farmer_id": r["farmer_id"],
+                        "farmer_name": r["farmer_name"] if r["farmer_name"] else "Anonymous Farmer",
+                        "crop_name": r["crop_name"],
+                        "crop_growth_stage": r["crop_growth_stage"],
+                        "sowing_date": r["sowing_date"],
+                        "latitude": obs_lat,
+                        "longitude": obs_lon,
+                        "distance_km": dist,
+                        "consent_shared": bool(r["consent_shared"]),
+                        "field_notes": r["field_notes"],
+                        "observed_at": r["observed_at"],
+                        "is_stale": is_stale,
+                    }
+                )
+
+        results.sort(key=lambda item: item["distance_km"])
+        return results
+
+    def get_farmer_observations(self, farmer_id: int) -> List[Dict[str, Any]]:
+        """Retrieve all observations submitted by a specific farmer."""
+        with self._connect() as conn:
+            rows = conn.execute(
+                """
+                SELECT * FROM crop_observations
+                WHERE farmer_id = ?
+                ORDER BY id DESC
+                """,
+                (farmer_id,),
+            ).fetchall()
+            return [
+                {
+                    "id": r["id"],
+                    "farmer_id": r["farmer_id"],
+                    "crop_name": r["crop_name"],
+                    "crop_growth_stage": r["crop_growth_stage"],
+                    "sowing_date": r["sowing_date"],
+                    "latitude": r["latitude"],
+                    "longitude": r["longitude"],
+                    "consent_shared": bool(r["consent_shared"]),
+                    "field_notes": r["field_notes"],
+                    "observed_at": r["observed_at"],
+                    "created_at": r["created_at"],
+                }
+                for r in rows
+            ]
+
 
