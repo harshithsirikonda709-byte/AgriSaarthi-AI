@@ -45,6 +45,7 @@ from agrisaarthi.storage import (
     FarmerStorage,
     AuthValidationError,
     InvalidCredentialsError,
+    get_storage,
 )
 from agrisaarthi.weather_service import fetch_weather_and_alerts
 
@@ -54,16 +55,6 @@ logger = logging.getLogger("agrisaarthi.ui_server")
 PORT = int(os.getenv("AGRI_UI_PORT", "8080"))
 WEB_DIR = os.path.join(PROJECT_ROOT, "web")
 
-_STORAGE_INSTANCE: Optional[FarmerStorage] = None
-
-
-def get_storage() -> FarmerStorage:
-    """Return a singleton or test-configured FarmerStorage instance."""
-    global _STORAGE_INSTANCE
-    db_path = os.getenv("AGRI_DB_PATH")
-    if _STORAGE_INSTANCE is None or (db_path and _STORAGE_INSTANCE.db_path != db_path):
-        _STORAGE_INSTANCE = FarmerStorage(db_path=db_path)
-    return _STORAGE_INSTANCE
 
 
 class AgriFarmerUIHandler(BaseHTTPRequestHandler):

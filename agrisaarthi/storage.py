@@ -1036,3 +1036,33 @@ class FarmerStorage:
             ]
 
 
+_STORAGE_INSTANCE = None
+
+
+def get_storage(db_path: Optional[str] = None) -> Any:
+    """
+    Intelligent Storage Factory:
+    - If SUPABASE_URL and SUPABASE_KEY are provided in environment -> connects to Supabase Cloud Database.
+    - Otherwise -> falls back smoothly to local SQLite (agrisaarthi_farmers.db).
+    """
+    global _STORAGE_INSTANCE
+    supabase_url = os.getenv("SUPABASE_URL", "").strip()
+    supabase_key = os.getenv("SUPABASE_KEY", "").strip()
+
+    if supabase_url and supabase_key:
+        try:
+            from agrisaarthi.supabase_storage import SupabaseStorage
+            if _STORAGE_INSTANCE is None or not isinstance(_STORAGE_INSTANCE, SupabaseStorage):
+                _STORAGE_INSTANCE = SupabaseStorage(supabase_url=supabase_url, supabase_key=supabase_key)
+            return _STORAGE_INSTANCE
+        except Exception as e:
+            # Fall back to SQLite if cloud connection initialization fails
+            pass
+
+    target_path = db_path or os.getenv("AGRI_DB_PATH", DEFAULT_DB_PATH)
+    if _STORAGE_INSTANCE is None or getattr(_STORAGE_INSTANCE, "db_path", None) != target_path:
+        _STORAGE_INSTANCE = FarmerStorage(db_path=target_path)
+    return _STORAGE_INSTANCE
+
+
+
