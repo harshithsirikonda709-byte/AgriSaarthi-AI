@@ -1889,6 +1889,21 @@
               </select>
             </div>
             <div class="form-group">
+              <label for="prof-sowing-date" data-i18n="wiz_step5_sowing_lbl">📅 విత్తిన తేదీ (Sowing Date)</label>
+              <input type="date" id="prof-sowing-date" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="prof-growth-stage" data-i18n="wiz_step5_growth_lbl">🌿 పంట పెరుగుదల దశ (Crop Growth Stage)</label>
+              <select id="prof-growth-stage" class="form-control">
+                <option value="" data-i18n="opt_growth_select">-- దశ ఎంచుకోండి --</option>
+                <option value="germination" data-i18n="opt_growth_germination">మొలక / నాటు దశ (Germination / Seedling)</option>
+                <option value="vegetative" data-i18n="opt_growth_vegetative">శాకీయ ఎదుగుదల దశ (Vegetative)</option>
+                <option value="flowering" data-i18n="opt_growth_flowering">పూత దశ (Flowering)</option>
+                <option value="grain_filling" data-i18n="opt_growth_grain">గింజ / కాయ దశ (Grain Filling / Pods)</option>
+                <option value="maturity" data-i18n="opt_growth_maturity">కోత / పరిపక్వత దశ (Maturity / Harvest)</option>
+              </select>
+            </div>
+            <div class="form-group">
               <label for="prof-budget" data-i18n="wiz_step5_budget_lbl">💰 సీజన్ పెట్టుబడి బడ్జెట్ (రూపాయల్లో)</label>
               <input type="number" id="prof-budget" class="form-control" step="500" min="0" data-i18n-ph="wiz_step5_budget_ph" placeholder="ఉదా: 100000">
             </div>

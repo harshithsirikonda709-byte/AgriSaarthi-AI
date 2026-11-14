@@ -327,6 +327,10 @@
     document.getElementById('prof-budget').value = currentFarmer.budget_inr != null ? currentFarmer.budget_inr : '';
     document.getElementById('prof-risk').value = currentFarmer.risk_tolerance || 'moderate';
     document.getElementById('prof-crops').value = currentFarmer.primary_crops_grown || '';
+    const sowingEl = document.getElementById('prof-sowing-date');
+    if (sowingEl) sowingEl.value = currentFarmer.sowing_date || '';
+    const growthEl = document.getElementById('prof-growth-stage');
+    if (growthEl) growthEl.value = currentFarmer.crop_growth_stage || '';
     const langPref = document.getElementById('prof-lang-pref');
     if (langPref && currentFarmer.preferred_language) {
       langPref.value = currentFarmer.preferred_language;
@@ -346,6 +350,8 @@
       soil_type: document.getElementById('prof-soil').value,
       water_availability: document.getElementById('prof-water').value,
       season: document.getElementById('prof-season').value,
+      sowing_date: (document.getElementById('prof-sowing-date')?.value || '').trim(),
+      crop_growth_stage: (document.getElementById('prof-growth-stage')?.value || '').trim(),
       budget_inr: document.getElementById('prof-budget').value,
       risk_tolerance: document.getElementById('prof-risk').value || 'moderate',
       primary_crops_grown: (document.getElementById('prof-crops').value || '').trim(),
@@ -499,6 +505,12 @@
           <div class="m-label">${t('సీజన్ & బడ్జెట్', 'Season & Budget')}</div>
           <div class="m-val">${escapeHtml((farmer.season || '—').toUpperCase())} ${farmer.budget_inr ? '• ₹' + Number(farmer.budget_inr).toLocaleString('en-IN') : ''}</div>
         </div>
+        ${(farmer.sowing_date || farmer.crop_growth_stage) ? `
+        <div class="metric-box">
+          <div class="m-label">${t('విత్తిన తేదీ & దశ', 'Sowing Date & Stage')}</div>
+          <div class="m-val">${escapeHtml((farmer.sowing_date || '—') + (farmer.crop_growth_stage ? ' • ' + farmer.crop_growth_stage.toUpperCase() : ''))}</div>
+        </div>
+        ` : ''}
       </div>
       <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:10px;">
         <button type="button" class="btn-primary-agri" onclick="navigateTo('advisory')">

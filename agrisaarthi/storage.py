@@ -10,6 +10,7 @@ Uses Python standard library only (sqlite3, hashlib, hmac, secrets) — zero ext
 """
 
 import os
+import re
 import json
 import hmac
 import hashlib
@@ -18,7 +19,7 @@ import sqlite3
 from datetime import datetime, timedelta, timezone
 from typing import Optional, Dict, Any, List, Tuple
 
-from agrisaarthi.models import Season, SoilType, WaterAvailability, RiskTolerance
+from agrisaarthi.models import Season, SoilType, WaterAvailability, RiskTolerance, CropGrowthStage
 
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DEFAULT_DB_PATH = os.path.join(PROJECT_ROOT, "agrisaarthi_farmers.db")
@@ -29,6 +30,7 @@ VALID_SOILS = {s.value for s in SoilType}
 VALID_WATERS = {w.value for w in WaterAvailability}
 VALID_SEASONS = {s.value for s in Season}
 VALID_RISKS = {r.value for r in RiskTolerance}
+VALID_GROWTH_STAGES = {g.value for g in CropGrowthStage}
 
 
 class AuthValidationError(ValueError):
@@ -84,16 +86,21 @@ class FarmerStorage:
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     full_name TEXT NOT NULL,
                     identifier TEXT UNIQUE NOT NULL,
+                    email TEXT NOT NULL DEFAULT '',
+                    phone_number TEXT NOT NULL DEFAULT '',
                     password_hash TEXT NOT NULL,
                     password_salt TEXT NOT NULL,
                     preferred_language TEXT NOT NULL DEFAULT 'te',
                     state TEXT NOT NULL DEFAULT '',
                     district TEXT NOT NULL DEFAULT '',
+                    mandal TEXT NOT NULL DEFAULT '',
                     village TEXT NOT NULL DEFAULT '',
                     land_size_acres REAL,
                     soil_type TEXT NOT NULL DEFAULT '',
                     water_availability TEXT NOT NULL DEFAULT '',
                     season TEXT NOT NULL DEFAULT '',
+                    sowing_date TEXT NOT NULL DEFAULT '',
+                    crop_growth_stage TEXT NOT NULL DEFAULT '',
                     budget_inr REAL,
                     risk_tolerance TEXT NOT NULL DEFAULT 'moderate',
                     primary_crops_grown TEXT NOT NULL DEFAULT '',
@@ -123,6 +130,70 @@ class FarmerStorage:
                 """
             )
 
+            # Safe automated schema migration: Add missing columns if upgrading an existing DB
+            cursor = conn.execute("PRAGMA table_info(farmers);")
+            existing_cols = {row["name"] for row in cursor.fetchall()}
+            if "email" not in existing_cols:
+                conn.execute("ALTER TABLE farmers ADD COLUMN email TEXT NOT NULL DEFAULT '';")
+            if "phone_number" not in existing_cols:
+                conn.execute("ALTER TABLE farmers ADD COLUMN phone_number TEXT NOT NULL DEFAULT '';")
+            if "mandal" not in existing_cols:
+                conn.execute("ALTER TABLE farmers ADD COLUMN mandal TEXT NOT NULL DEFAULT '';")
+            if "sowing_date" not in existing_cols:
+                conn.execute("ALTER TABLE farmers ADD COLUMN sowing_date TEXT NOT NULL DEFAULT '';")
+            if "crop_growth_stage" not in existing_cols:
+                conn.execute("ALTER TABLE farmers ADD COLUMN crop_growth_stage TEXT NOT NULL DEFAULT '';")
+
+            # Normalized Relational Views (Task 4 Database Design)
+            # Exposes users, farmer_profiles, and farm_details without data duplication or migration overwrites
+            conn.executescript(
+                """
+                CREATE VIEW IF NOT EXISTS users AS
+                    SELECT 
+                        id,
+                        identifier,
+                        password_hash,
+                        password_salt,
+                        created_at,
+                        updated_at
+                    FROM farmers;
+
+                CREATE VIEW IF NOT EXISTS farmer_profiles AS
+                    SELECT 
+                        id,
+                        id AS user_id,
+                        full_name,
+                        email,
+                        phone_number,
+                        preferred_language,
+                        state,
+                        district,
+                        mandal,
+                        village,
+                        profile_completed,
+                        created_at,
+                        updated_at
+                    FROM farmers;
+
+                CREATE VIEW IF NOT EXISTS farm_details AS
+                    SELECT 
+                        id,
+                        id AS user_id,
+                        land_size_acres,
+                        soil_type,
+                        water_availability,
+                        season,
+                        sowing_date,
+                        crop_growth_stage,
+                        budget_inr,
+                        risk_tolerance,
+                        primary_crops_grown,
+                        created_at,
+                        updated_at
+                    FROM farmers;
+                """
+            )
+
     @staticmethod
     def _normalize_identifier(identifier: str) -> str:
         """Normalize mobile number or username consistently."""
@@ -138,18 +209,29 @@ class FarmerStorage:
     @staticmethod
     def _row_to_farmer_dict(row: sqlite3.Row) -> Dict[str, Any]:
         """Convert a database farmer row into a safe dictionary (never exposing password hashes)."""
+        keys = set(row.keys())
+        phone_val = row["phone_number"] if "phone_number" in keys and row["phone_number"] else ""
+        if not phone_val and row["identifier"] and row["identifier"].isdigit():
+            phone_val = row["identifier"]
+
         return {
             "id": row["id"],
+            "farmer_id": row["id"],
             "full_name": row["full_name"],
             "identifier": row["identifier"],
+            "email": row["email"] if "email" in keys else "",
+            "phone_number": phone_val,
             "preferred_language": row["preferred_language"],
             "state": row["state"],
             "district": row["district"],
+            "mandal": row["mandal"] if "mandal" in keys else "",
             "village": row["village"],
             "land_size_acres": row["land_size_acres"],
             "soil_type": row["soil_type"],
             "water_availability": row["water_availability"],
             "season": row["season"],
+            "sowing_date": row["sowing_date"] if "sowing_date" in keys else "",
+            "crop_growth_stage": row["crop_growth_stage"] if "crop_growth_stage" in keys else "",
             "budget_inr": row["budget_inr"],
             "risk_tolerance": row["risk_tolerance"],
             "primary_crops_grown": row["primary_crops_grown"],
@@ -161,23 +243,86 @@ class FarmerStorage:
     def register_farmer(
         self,
         full_name: str,
-        identifier: str,
-        password: str,
+        identifier: str = "",
+        password: str = "",
         preferred_language: str = "te",
+        email: Optional[str] = None,
+        phone_number: Optional[str] = None,
+        district: Optional[str] = None,
+        mandal: Optional[str] = None,
+        village: Optional[str] = None,
+        land_size_acres: Optional[float] = None,
+        soil_type: Optional[str] = None,
+        water_availability: Optional[str] = None,
+        state: Optional[str] = None,
+        sowing_date: Optional[str] = None,
+        crop_growth_stage: Optional[str] = None,
     ) -> Tuple[Dict[str, Any], str]:
         """Register a new farmer account with server-side validation and return (farmer_dict, session_token)."""
         clean_name = (full_name or "").strip()
         if len(clean_name) < 2:
             raise AuthValidationError("Full name must be at least 2 characters long.")
 
-        norm_id = self._normalize_identifier(identifier)
+        clean_phone = (phone_number or "").strip()
+        if clean_phone:
+            digits = re.sub(r"[^\d]", "", clean_phone)
+            if digits.startswith("91") and len(digits) == 12:
+                digits = digits[2:]
+            if len(digits) != 10:
+                raise AuthValidationError("Phone number must be a valid 10-digit mobile number.")
+            clean_phone = digits
+
+        clean_email = (email or "").strip().lower()
+        if clean_email and not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", clean_email):
+            raise AuthValidationError("Invalid email address format.")
+
+        raw_id = (identifier or "").strip()
+        if not raw_id:
+            raw_id = clean_phone or clean_email
+
+        norm_id = self._normalize_identifier(raw_id)
         if len(norm_id) < 3:
             raise AuthValidationError("Mobile number or username must be at least 3 characters long.")
         if norm_id.isdigit() and len(norm_id) != 10:
             raise AuthValidationError("Please enter a valid 10-digit mobile number or an alphanumeric username.")
 
+        if not clean_phone and norm_id.isdigit():
+            clean_phone = norm_id
+
         if not password or len(password) < 6:
             raise AuthValidationError("Password must be at least 6 characters long.")
+
+        clean_dist = (district or "").strip().title()
+        clean_mandal = (mandal or "").strip().title()
+        clean_village = (village or "").strip().title()
+        clean_state = (state or "").strip().title()
+
+        clean_sowing = str(sowing_date).strip() if sowing_date else ""
+        if clean_sowing and not re.match(r"^\d{4}-\d{2}-\d{2}$", clean_sowing):
+            raise AuthValidationError("Sowing date must be in YYYY-MM-DD format (e.g. 2026-10-15).")
+
+        clean_stage = str(crop_growth_stage).strip().lower() if crop_growth_stage else ""
+        if clean_stage and clean_stage not in VALID_GROWTH_STAGES:
+            raise AuthValidationError(f"Unsupported crop growth stage '{clean_stage}'.")
+
+        parsed_land: Optional[float] = None
+        if land_size_acres not in (None, ""):
+            try:
+                parsed_land = round(float(land_size_acres), 2)
+            except (ValueError, TypeError):
+                raise AuthValidationError("Land size must be a valid number.")
+            if parsed_land <= 0 or parsed_land > 5000:
+                raise AuthValidationError("Land size must be between 0.1 and 5000 acres.")
+
+        clean_soil = (soil_type or "").strip().lower().replace(" ", "_")
+        if clean_soil and clean_soil not in VALID_SOILS:
+            raise AuthValidationError(f"Unsupported soil type '{clean_soil}'.")
+
+        clean_water = (water_availability or "").strip().lower()
+        if clean_water and clean_water not in VALID_WATERS:
+            raise AuthValidationError(f"Unsupported water availability '{clean_water}'.")
+
+        profile_completed = 1 if (clean_dist and clean_village and parsed_land and clean_soil) else 0
 
         lang = preferred_language if preferred_language in ("te", "en") else "te"
         pw_hash, pw_salt = hash_password(password)
@@ -185,21 +330,49 @@ class FarmerStorage:
 
         with self._connect() as conn:
             existing = conn.execute(
-                "SELECT id FROM farmers WHERE identifier = ?", (norm_id,)
+                """
+                SELECT id FROM farmers
+                WHERE identifier = ?
+                   OR (phone_number != '' AND phone_number = ?)
+                   OR (email != '' AND email = ?)
+                """,
+                (norm_id, clean_phone if clean_phone else norm_id, clean_email if clean_email else "__none__"),
             ).fetchone()
             if existing:
                 raise AuthValidationError(
-                    "An account with this mobile number or username is already registered."
+                    "An account with this mobile number, username, or email is already registered."
                 )
 
             cursor = conn.execute(
                 """
                 INSERT INTO farmers (
-                    full_name, identifier, password_hash, password_salt,
-                    preferred_language, created_at, updated_at
-                ) VALUES (?, ?, ?, ?, ?, ?, ?)
+                    full_name, identifier, email, phone_number, password_hash, password_salt,
+                    preferred_language, state, district, mandal, village, land_size_acres,
+                    soil_type, water_availability, sowing_date, crop_growth_stage,
+                    profile_completed, created_at, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """,
-                (clean_name, norm_id, pw_hash, pw_salt, lang, now_iso, now_iso),
+                (
+                    clean_name,
+                    norm_id,
+                    clean_email,
+                    clean_phone,
+                    pw_hash,
+                    pw_salt,
+                    lang,
+                    clean_state,
+                    clean_dist,
+                    clean_mandal,
+                    clean_village,
+                    parsed_land,
+                    clean_soil,
+                    clean_water,
+                    clean_sowing,
+                    clean_stage,
+                    profile_completed,
+                    now_iso,
+                    now_iso,
+                ),
             )
             farmer_id = cursor.lastrowid
             token = self._create_session_in_tx(conn, farmer_id)
@@ -207,14 +380,22 @@ class FarmerStorage:
             return self._row_to_farmer_dict(row), token
 
     def authenticate_farmer(self, identifier: str, password: str) -> Tuple[Dict[str, Any], str]:
-        """Authenticate a farmer by mobile number/username and password."""
+        """Authenticate a farmer by mobile number/username/email and password."""
         norm_id = self._normalize_identifier(identifier)
+        clean_raw = (identifier or "").strip().lower()
         if not norm_id or not password:
             raise InvalidCredentialsError("Please enter both your mobile number/username and password.")
 
         with self._connect() as conn:
             row = conn.execute(
-                "SELECT * FROM farmers WHERE identifier = ?", (norm_id,)
+                """
+                SELECT * FROM farmers 
+                WHERE identifier = ? 
+                   OR phone_number = ?
+                   OR (email != '' AND LOWER(email) = ?)
+                LIMIT 1
+                """,
+                (norm_id, norm_id, clean_raw),
             ).fetchone()
             if not row or not verify_password(password, row["password_hash"], row["password_salt"]):
                 raise InvalidCredentialsError("Invalid mobile number/username or password.")
@@ -275,12 +456,33 @@ class FarmerStorage:
                 raise InvalidCredentialsError("Farmer account not found.")
 
             current = dict(row)
+            if "email" not in current:
+                current["email"] = ""
+            if "phone_number" not in current:
+                current["phone_number"] = ""
+            if "mandal" not in current:
+                current["mandal"] = ""
 
             if "full_name" in updates and updates["full_name"] is not None:
                 name = str(updates["full_name"]).strip()
                 if len(name) < 2:
                     raise AuthValidationError("Full name must be at least 2 characters.")
                 current["full_name"] = name
+
+            if "email" in updates and updates["email"] is not None:
+                em = str(updates["email"]).strip().lower()
+                if em and not re.match(r"^[^@\s]+@[^@\s]+\.[^@\s]+$", em):
+                    raise AuthValidationError("Please enter a valid email address.")
+                current["email"] = em
+
+            if "phone_number" in updates and updates["phone_number"] is not None:
+                ph = str(updates["phone_number"]).strip()
+                digits = re.sub(r"[^\d]", "", ph)
+                if digits.startswith("91") and len(digits) == 12:
+                    digits = digits[2:]
+                if digits and len(digits) != 10:
+                    raise AuthValidationError("Phone number must be a valid 10-digit mobile number.")
+                current["phone_number"] = digits
 
             if "preferred_language" in updates and updates["preferred_language"] in ("te", "en"):
                 current["preferred_language"] = updates["preferred_language"]
@@ -292,6 +494,10 @@ class FarmerStorage:
             if "district" in updates and updates["district"] is not None:
                 dist = str(updates["district"]).strip()
                 current["district"] = dist.title() if dist else ""
+
+            if "mandal" in updates and updates["mandal"] is not None:
+                man = str(updates["mandal"]).strip()
+                current["mandal"] = man.title() if man else ""
 
             if "village" in updates and updates["village"] is not None:
                 vil = str(updates["village"]).strip()
@@ -328,6 +534,31 @@ class FarmerStorage:
                     raise AuthValidationError(f"Unsupported season '{season}'.")
                 current["season"] = season
 
+            if "sowing_date" not in current:
+                current["sowing_date"] = ""
+            if "crop_growth_stage" not in current:
+                current["crop_growth_stage"] = ""
+
+            if "sowing_date" in updates:
+                sd = updates["sowing_date"]
+                if sd in (None, ""):
+                    current["sowing_date"] = ""
+                else:
+                    sd_str = str(sd).strip()
+                    if not re.match(r"^\d{4}-\d{2}-\d{2}$", sd_str):
+                        raise AuthValidationError("Sowing date must be in YYYY-MM-DD format (e.g. 2026-10-15).")
+                    current["sowing_date"] = sd_str
+
+            if "crop_growth_stage" in updates:
+                stg = updates["crop_growth_stage"]
+                if stg in (None, ""):
+                    current["crop_growth_stage"] = ""
+                else:
+                    stg_str = str(stg).strip().lower()
+                    if stg_str and stg_str not in VALID_GROWTH_STAGES:
+                        raise AuthValidationError(f"Unsupported crop growth stage '{stg_str}'.")
+                    current["crop_growth_stage"] = stg_str
+
             if "budget_inr" in updates:
                 val = updates["budget_inr"]
                 if val in (None, ""):
@@ -353,7 +584,7 @@ class FarmerStorage:
             # Mark profile_completed if explicitly passed or if core farm fields exist
             if "profile_completed" in updates:
                 current["profile_completed"] = 1 if updates["profile_completed"] else 0
-            elif current.get("state") and current.get("land_size_acres") and current.get("soil_type"):
+            elif current.get("district") and current.get("village") and current.get("land_size_acres") and current.get("soil_type"):
                 current["profile_completed"] = 1
 
             now_iso = datetime.now(timezone.utc).isoformat()
@@ -361,14 +592,19 @@ class FarmerStorage:
                 """
                 UPDATE farmers SET
                     full_name = ?,
+                    email = ?,
+                    phone_number = ?,
                     preferred_language = ?,
                     state = ?,
                     district = ?,
+                    mandal = ?,
                     village = ?,
                     land_size_acres = ?,
                     soil_type = ?,
                     water_availability = ?,
                     season = ?,
+                    sowing_date = ?,
+                    crop_growth_stage = ?,
                     budget_inr = ?,
                     risk_tolerance = ?,
                     primary_crops_grown = ?,
@@ -378,14 +614,19 @@ class FarmerStorage:
                 """,
                 (
                     current["full_name"],
+                    current.get("email", ""),
+                    current.get("phone_number", ""),
                     current["preferred_language"],
                     current["state"],
                     current["district"],
+                    current.get("mandal", ""),
                     current["village"],
                     current["land_size_acres"],
                     current["soil_type"],
                     current["water_availability"],
                     current["season"],
+                    current.get("sowing_date", ""),
+                    current.get("crop_growth_stage", ""),
                     current["budget_inr"],
                     current["risk_tolerance"],
                     current["primary_crops_grown"],

@@ -343,9 +343,20 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
                 data = self._read_json_body()
                 farmer, token = get_storage().register_farmer(
                     full_name=data.get("full_name", ""),
-                    identifier=data.get("identifier", ""),
+                    identifier=data.get("identifier", "") or data.get("phone_number", ""),
                     password=data.get("password", ""),
                     preferred_language=data.get("preferred_language", "te"),
+                    email=data.get("email"),
+                    phone_number=data.get("phone_number"),
+                    district=data.get("district"),
+                    mandal=data.get("mandal"),
+                    village=data.get("village"),
+                    land_size_acres=data.get("land_size_acres"),
+                    soil_type=data.get("soil_type"),
+                    water_availability=data.get("water_availability"),
+                    state=data.get("state"),
+                    sowing_date=data.get("sowing_date"),
+                    crop_growth_stage=data.get("crop_growth_stage"),
                 )
                 self._send_json(201, {"farmer": farmer, "token": token})
             except AuthValidationError as e:
@@ -358,7 +369,7 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
             try:
                 data = self._read_json_body()
                 farmer, token = get_storage().authenticate_farmer(
-                    identifier=data.get("identifier", ""),
+                    identifier=data.get("identifier", "") or data.get("phone_number", "") or data.get("email", ""),
                     password=data.get("password", ""),
                 )
                 self._send_json(200, {"farmer": farmer, "token": token})
