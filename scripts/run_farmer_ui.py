@@ -45,6 +45,7 @@ from agrisaarthi.storage import (
     FarmerStorage,
     AuthValidationError,
     InvalidCredentialsError,
+    get_storage,
 )
 from agrisaarthi.weather_service import fetch_weather_and_alerts
 
@@ -54,16 +55,6 @@ logger = logging.getLogger("agrisaarthi.ui_server")
 PORT = int(os.getenv("AGRI_UI_PORT", "8080"))
 WEB_DIR = os.path.join(PROJECT_ROOT, "web")
 
-_STORAGE_INSTANCE: Optional[FarmerStorage] = None
-
-
-def get_storage() -> FarmerStorage:
-    """Return a singleton or test-configured FarmerStorage instance."""
-    global _STORAGE_INSTANCE
-    db_path = os.getenv("AGRI_DB_PATH")
-    if _STORAGE_INSTANCE is None or (db_path and _STORAGE_INSTANCE.db_path != db_path):
-        _STORAGE_INSTANCE = FarmerStorage(db_path=db_path)
-    return _STORAGE_INSTANCE
 
 
 class AgriFarmerUIHandler(BaseHTTPRequestHandler):
@@ -294,6 +285,89 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
                 },
             )
 
+        elif route == "/api/crops/nearby":
+            lat_str = query.get("latitude", [""])[0] or query.get("lat", [""])[0]
+            lon_str = query.get("longitude", [""])[0] or query.get("lon", [""])[0]
+            radius_str = query.get("radius_km", ["2.5"])[0] or query.get("radius", ["2.5"])[0]
+            max_age_str = query.get("max_age_days", ["180"])[0]
+
+            lat: Optional[float] = None
+            lon: Optional[float] = None
+            if lat_str and lon_str:
+                try:
+                    lat = float(lat_str)
+                    lon = float(lon_str)
+                except ValueError:
+                    lat, lon = None, None
+
+            # Fall back to authenticated farmer profile coordinates if not in query params
+            token = self._extract_bearer_token()
+            farmer = get_storage().get_farmer_by_token(token) if token else None
+            if (lat is None or lon is None) and farmer:
+                lat = farmer.get("latitude")
+                lon = farmer.get("longitude")
+
+            if lat is None or lon is None:
+                self._send_json(
+                    200,
+                    {
+                        "success": True,
+                        "count": 0,
+                        "radius_km": 2.5,
+                        "center": None,
+                        "observations": [],
+                        "message": "GPS coordinates not provided or unavailable.",
+                        "message_te": "GPS లొకేషన్ వివరాలు అందుబాటులో లేవు.",
+                    },
+                )
+                return
+
+            try:
+                rad = float(radius_str) if radius_str else 2.5
+            except ValueError:
+                rad = 2.5
+            rad = max(0.1, min(50.0, rad))
+
+            try:
+                max_age = int(max_age_str) if max_age_str else 180
+            except ValueError:
+                max_age = 180
+
+            nearby = get_storage().get_nearby_crop_observations(
+                latitude=lat,
+                longitude=lon,
+                radius_km=rad,
+                max_age_days=max_age,
+                require_consent=True,
+                include_stale=False,
+            )
+
+            # Localize crop names in Telugu
+            for obs in nearby:
+                te_meta = TELUGU_CROPS.get(obs["crop_name"], {})
+                obs["crop_name_te"] = te_meta.get("name_te", obs["crop_name"])
+
+            self._send_json(
+                200,
+                {
+                    "success": True,
+                    "count": len(nearby),
+                    "radius_km": rad,
+                    "center": {"latitude": lat, "longitude": lon},
+                    "observations": nearby,
+                },
+            )
+
+        elif route == "/api/crops/observations/my":
+            farmer = self._require_authenticated_farmer()
+            if not farmer:
+                return
+            obs_list = get_storage().get_farmer_observations(farmer["id"])
+            for obs in obs_list:
+                te_meta = TELUGU_CROPS.get(obs["crop_name"], {})
+                obs["crop_name_te"] = te_meta.get("name_te", obs["crop_name"])
+            self._send_json(200, {"observations": obs_list})
+
         else:
             self.send_error(404, "Not Found")
 
@@ -343,9 +417,22 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
                 data = self._read_json_body()
                 farmer, token = get_storage().register_farmer(
                     full_name=data.get("full_name", ""),
-                    identifier=data.get("identifier", ""),
+                    identifier=data.get("identifier", "") or data.get("phone_number", ""),
                     password=data.get("password", ""),
                     preferred_language=data.get("preferred_language", "te"),
+                    email=data.get("email"),
+                    phone_number=data.get("phone_number"),
+                    district=data.get("district"),
+                    mandal=data.get("mandal"),
+                    village=data.get("village"),
+                    land_size_acres=data.get("land_size_acres"),
+                    soil_type=data.get("soil_type"),
+                    water_availability=data.get("water_availability"),
+                    state=data.get("state"),
+                    sowing_date=data.get("sowing_date"),
+                    crop_growth_stage=data.get("crop_growth_stage"),
+                    latitude=data.get("latitude"),
+                    longitude=data.get("longitude"),
                 )
                 self._send_json(201, {"farmer": farmer, "token": token})
             except AuthValidationError as e:
@@ -354,11 +441,61 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
                 logger.exception(f"Registration error: {e}")
                 self._send_json(500, {"error": "Server error during registration."})
 
+        elif route == "/api/crops/observations":
+            try:
+                data = self._read_json_body()
+                token = self._extract_bearer_token()
+                farmer = get_storage().get_farmer_by_token(token) if token else None
+
+                f_id = farmer["id"] if farmer else None
+                f_name = farmer["full_name"] if farmer else str(data.get("farmer_name", "")).strip()
+
+                lat_val = data.get("latitude")
+                lon_val = data.get("longitude")
+                if (lat_val is None or lon_val is None) and farmer:
+                    lat_val = farmer.get("latitude")
+                    lon_val = farmer.get("longitude")
+
+                if lat_val is None or lon_val is None or str(lat_val).strip() == "" or str(lon_val).strip() == "":
+                    self._send_json(
+                        400,
+                        {
+                            "error": "GPS latitude and longitude are required to submit an observation.",
+                            "error_te": "పంట వివరాలను నమోదు చేయడానికి GPS లొకేషన్ తప్పనిసరి.",
+                        },
+                    )
+                    return
+
+                consent = bool(data.get("consent_shared", True))
+
+                obs = get_storage().record_crop_observation(
+                    crop_name=str(data.get("crop_name", "")),
+                    latitude=float(lat_val),
+                    longitude=float(lon_val),
+                    sowing_date=str(data.get("sowing_date", "")),
+                    crop_growth_stage=str(data.get("crop_growth_stage", "")),
+                    consent_shared=consent,
+                    farmer_id=f_id,
+                    farmer_name=f_name,
+                    field_notes=str(data.get("field_notes", "")),
+                    observed_at=data.get("observed_at"),
+                )
+
+                te_meta = TELUGU_CROPS.get(obs["crop_name"], {})
+                obs["crop_name_te"] = te_meta.get("name_te", obs["crop_name"])
+
+                self._send_json(201, {"success": True, "observation": obs})
+            except AuthValidationError as e:
+                self._send_json(400, {"error": str(e)})
+            except Exception as e:
+                logger.exception(f"Error submitting crop observation: {e}")
+                self._send_json(500, {"error": "Failed to record crop observation."})
+
         elif route == "/api/auth/login":
             try:
                 data = self._read_json_body()
                 farmer, token = get_storage().authenticate_farmer(
-                    identifier=data.get("identifier", ""),
+                    identifier=data.get("identifier", "") or data.get("phone_number", "") or data.get("email", ""),
                     password=data.get("password", ""),
                 )
                 self._send_json(200, {"farmer": farmer, "token": token})
@@ -412,6 +549,26 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
             token = self._extract_bearer_token()
             farmer = get_storage().get_farmer_by_token(token) if token else None
 
+            lat_val = data.get("latitude")
+            lon_val = data.get("longitude")
+            if (lat_val is None or lon_val is None) and farmer:
+                lat_val = farmer.get("latitude")
+                lon_val = farmer.get("longitude")
+
+            parsed_lat: Optional[float] = None
+            if lat_val not in (None, ""):
+                try:
+                    parsed_lat = float(lat_val)
+                except (ValueError, TypeError):
+                    parsed_lat = None
+
+            parsed_lon: Optional[float] = None
+            if lon_val not in (None, ""):
+                try:
+                    parsed_lon = float(lon_val)
+                except (ValueError, TypeError):
+                    parsed_lon = None
+
             req_payload = {
                 "farmer_id": str(farmer["id"]) if farmer else data.get("farmer_id", "portal_farmer"),
                 "state": str(data.get("state", "")).strip(),
@@ -422,6 +579,8 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
                 "season": str(data.get("season", "")).strip().lower(),
                 "budget_inr": float(data.get("budget_inr", 0)),
                 "risk_tolerance": str(data.get("risk_tolerance", "moderate")).strip().lower(),
+                "latitude": parsed_lat,
+                "longitude": parsed_lon,
             }
             req_model = FarmerProfileRequest(**req_payload)
             rec_resp = AgriSaarthiEngine.execute(req_model)

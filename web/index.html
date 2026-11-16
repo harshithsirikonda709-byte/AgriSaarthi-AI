@@ -1798,6 +1798,20 @@
               <label for="prof-village" data-i18n="wiz_step2_vill_lbl">🏡 గ్రామం / మండలం</label>
               <input type="text" id="prof-village" class="form-control" data-i18n-ph="wiz_step2_vill_ph" placeholder="ఉదా: పరకాల">
             </div>
+            <div class="form-group">
+              <label for="prof-lat">🌐 పొలం అక్షాంశం (Latitude)</label>
+              <input type="number" id="prof-lat" class="form-control" step="0.000001" placeholder="ఉదా: 16.306700">
+            </div>
+            <div class="form-group">
+              <label for="prof-lon">🌐 పొలం రేఖాంశం (Longitude)</label>
+              <input type="number" id="prof-lon" class="form-control" step="0.000001" placeholder="ఉదా: 80.436500">
+            </div>
+            <div class="form-group" style="grid-column: 1 / -1; margin-top: -6px;">
+              <button type="button" class="btn-secondary-agri" style="padding: 7px 16px; font-size: 13px;" onclick="detectCurrentGPS('prof-lat', 'prof-lon', 'gps-detect-status')">
+                📍 నా GPS లొకేషన్ గుర్తించండి (Auto-Detect GPS)
+              </button>
+              <span id="gps-detect-status" style="margin-left: 10px; font-size: 12px; color: var(--forest-700); font-weight: 500;"></span>
+            </div>
           </div>
         </div>
 
@@ -1886,6 +1900,21 @@
                 <option value="rabi" data-i18n="opt_season_rabi">రబీ (యాసంగి)</option>
                 <option value="zaid" data-i18n="opt_season_zaid">జైద్ (వేసవి)</option>
                 <option value="year_round" data-i18n="opt_season_year">వార్షిక పంట</option>
+              </select>
+            </div>
+            <div class="form-group">
+              <label for="prof-sowing-date" data-i18n="wiz_step5_sowing_lbl">📅 విత్తిన తేదీ (Sowing Date)</label>
+              <input type="date" id="prof-sowing-date" class="form-control">
+            </div>
+            <div class="form-group">
+              <label for="prof-growth-stage" data-i18n="wiz_step5_growth_lbl">🌿 పంట పెరుగుదల దశ (Crop Growth Stage)</label>
+              <select id="prof-growth-stage" class="form-control">
+                <option value="" data-i18n="opt_growth_select">-- దశ ఎంచుకోండి --</option>
+                <option value="germination" data-i18n="opt_growth_germination">మొలక / నాటు దశ (Germination / Seedling)</option>
+                <option value="vegetative" data-i18n="opt_growth_vegetative">శాకీయ ఎదుగుదల దశ (Vegetative)</option>
+                <option value="flowering" data-i18n="opt_growth_flowering">పూత దశ (Flowering)</option>
+                <option value="grain_filling" data-i18n="opt_growth_grain">గింజ / కాయ దశ (Grain Filling / Pods)</option>
+                <option value="maturity" data-i18n="opt_growth_maturity">కోత / పరిపక్వత దశ (Maturity / Harvest)</option>
               </select>
             </div>
             <div class="form-group">

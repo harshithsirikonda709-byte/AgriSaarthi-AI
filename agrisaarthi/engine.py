@@ -8,7 +8,7 @@ Executes four disciplined steps:
 """
 
 from datetime import datetime, timezone
-from typing import List, Tuple, Dict, Any
+from typing import List, Tuple, Dict, Any, Optional
 from agrisaarthi.models import (
     FarmerProfileRequest,
     RecommendationResponse,
@@ -25,8 +25,12 @@ class AgriSaarthiEngine:
     """Core recommendation pipeline."""
 
     @classmethod
-    def execute(cls, request: FarmerProfileRequest) -> RecommendationResponse:
-        """Run the complete 4-step decision workflow."""
+    def execute(
+        cls,
+        request: FarmerProfileRequest,
+        nearby_observations: Optional[List[Dict[str, Any]]] = None,
+    ) -> RecommendationResponse:
+        """Run the complete 4-step decision workflow with Location-Aware Crop Intelligence (Day 3)."""
         warnings: List[str] = []
         reasoning: List[str] = []
         now_iso = datetime.now(timezone.utc).isoformat()
@@ -63,8 +67,51 @@ class AgriSaarthiEngine:
             f"budget: ₹{request.budget_inr:,.0f} (₹{budget_per_acre:,.0f}/acre)."
         )
 
-        # Step 2: Crop Suitability Evaluation
-        scored_candidates = cls._step2_evaluate_suitability(request)
+        # Location-Aware Peer Intelligence (Day 3 - Tasks 5, 6, 7)
+        # Excludes non-consented, stale, or invalid records, and handles missing GPS safely
+        valid_nearby: List[Dict[str, Any]] = []
+        if nearby_observations is not None:
+            valid_nearby = [
+                obs for obs in nearby_observations
+                if obs.get("consent_shared", True) and not obs.get("is_stale", False)
+            ]
+        elif request.latitude is not None and request.longitude is not None:
+            try:
+                from agrisaarthi.storage import FarmerStorage
+                storage = FarmerStorage()
+                valid_nearby = storage.get_nearby_crop_observations(
+                    latitude=request.latitude,
+                    longitude=request.longitude,
+                    radius_km=2.5,
+                    max_age_days=180,
+                    require_consent=True,
+                    include_stale=False,
+                )
+            except Exception:
+                valid_nearby = []
+
+        if request.latitude is None or request.longitude is None:
+            reasoning.append(
+                "Step 2 Location Intelligence: Farm GPS coordinates not provided; "
+                "evaluated based on district agro-climate without 2.5 km peer cluster adjustments."
+            )
+        elif not valid_nearby:
+            reasoning.append(
+                f"Step 2 Location Intelligence: GPS ({request.latitude:.4f}, {request.longitude:.4f}) verified. "
+                "No peer crop observations recorded within 2.5 km radius. Evaluated on agro-climatic baseline."
+            )
+        else:
+            crops_found = ", ".join(
+                f"{obs['crop_name']} ({obs.get('crop_growth_stage', 'active')})"
+                for obs in valid_nearby[:4]
+            )
+            reasoning.append(
+                f"Step 2 Location Intelligence: GPS ({request.latitude:.4f}, {request.longitude:.4f}) matched "
+                f"{len(valid_nearby)} consented observation(s) within 2.5 km: {crops_found}."
+            )
+
+        # Step 2: Crop Suitability Evaluation (with Peer Validation Bonus)
+        scored_candidates = cls._step2_evaluate_suitability(request, valid_nearby)
         reasoning.append(
             f"Step 2 Evaluated: Assessed {len(CROP_DATABASE)} reference crops against local agro-climate. "
             f"{len(scored_candidates)} candidates matched seasonal criteria."
@@ -85,15 +132,15 @@ class AgriSaarthiEngine:
                 timestamp=now_iso,
             )
 
-        # Step 3: Candidate Comparison & Economic Feasibility
-        ranked_items = cls._step3_compare_candidates(request, scored_candidates)
+        # Step 3: Candidate Comparison & Economic Feasibility (with Peer Strengths & Monoculture Risk)
+        ranked_items = cls._step3_compare_candidates(request, scored_candidates, valid_nearby)
         reasoning.append(
             f"Step 3 Economic Analysis: Ranked candidates based on combined agronomic fit, "
             f"budget headroom, and projected net profitability."
         )
 
         # Step 4: Decision Synthesis, Primary vs Alternative Segregation & Advisories
-        primary, alternatives, limitations = cls._step4_synthesize_decision(request, ranked_items)
+        primary, alternatives, limitations = cls._step4_synthesize_decision(request, ranked_items, valid_nearby)
         reasoning.append(
             f"Step 4 Synthesized: Selected {len(primary)} primary recommendation(s) "
             f"and {len(alternatives)} diversified/hedging alternative(s)."
@@ -141,10 +188,13 @@ class AgriSaarthiEngine:
     # -------------------------------------------------------------------------
     @classmethod
     def _step2_evaluate_suitability(
-        cls, req: FarmerProfileRequest
+        cls,
+        req: FarmerProfileRequest,
+        nearby_obs: Optional[List[Dict[str, Any]]] = None,
     ) -> List[Tuple[CropProfile, float, str, str]]:
         """
         Filters by season and scores agronomic compatibility.
+        Applies peer validation bonus if nearby farmers within 2.5 km are cultivating the crop.
         Returns list of (CropProfile, agronomic_score, soil_status, water_status).
         """
         results = []
@@ -183,8 +233,19 @@ class AgriSaarthiEngine:
             elif req.risk_tolerance == RiskTolerance.LOW and crop.risk_level == RiskTolerance.HIGH:
                 risk_bonus = -15.0
 
+            # Peer validation bonus (Day 3 - Task 5)
+            # If neighboring farms within 2.5 km are cultivating this crop, empirical evidence boosts score
+            peer_bonus = 0.0
+            if nearby_obs:
+                matching_obs = [
+                    o for o in nearby_obs
+                    if cls._crop_names_match(o.get("crop_name", ""), crop.name)
+                ]
+                if matching_obs:
+                    peer_bonus = min(8.0, 3.0 * len(matching_obs))
+
             # Base agronomic suitability score (0 to 100)
-            agronomic_score = (soil_score * 0.45) + (water_score * 0.45) + regional_bonus + risk_bonus
+            agronomic_score = (soil_score * 0.45) + (water_score * 0.45) + regional_bonus + risk_bonus + peer_bonus
             agronomic_score = max(0.0, min(100.0, agronomic_score))
 
             results.append((crop, agronomic_score, soil_status, water_status))
@@ -216,6 +277,21 @@ class AgriSaarthiEngine:
                 return 10.0, "Severe Water Inadequacy"
         return 50.0, "Moderate"
 
+    @classmethod
+    def _crop_names_match(cls, obs_crop: str, db_crop_name: str) -> bool:
+        """Fuzzy/substring check for matching logged observation crop with database crop name."""
+        import re
+        c1 = (obs_crop or "").strip().lower()
+        c2 = (db_crop_name or "").strip().lower()
+        if not c1 or not c2:
+            return False
+        if c1 == c2 or c1 in c2 or c2 in c1:
+            return True
+        words1 = set(re.findall(r"[a-z0-9]+", c1))
+        words2 = set(re.findall(r"[a-z0-9]+", c2))
+        return bool(words1 & words2)
+
+
     # -------------------------------------------------------------------------
     # Step 3: Candidate Comparison & Economic Feasibility
     # -------------------------------------------------------------------------
@@ -224,9 +300,11 @@ class AgriSaarthiEngine:
         cls,
         req: FarmerProfileRequest,
         candidates: List[Tuple[CropProfile, float, str, str]],
+        nearby_obs: Optional[List[Dict[str, Any]]] = None,
     ) -> List[Tuple[CropProfile, float, CropRecommendationItem]]:
         """
         Computes economic metrics and builds CropRecommendationItem for each candidate.
+        Incorporates nearby peer validation in strengths and monoculture risk in vulnerabilities.
         Returns sorted list of (crop, overall_score, item).
         """
         evaluated_candidates = []
@@ -245,7 +323,6 @@ class AgriSaarthiEngine:
                 budget_score = 70.0
             else:
                 budget_status = "Exceeds Budget"
-                # Penalize proportional to overrun
                 overrun_ratio = total_cost / max(req.budget_inr, 1.0)
                 budget_score = max(10.0, 100.0 - (overrun_ratio - 1.0) * 80.0)
 
@@ -266,12 +343,37 @@ class AgriSaarthiEngine:
                 if surplus > 0:
                     strengths.append(f"Provides a working capital safety margin of ₹{surplus:,.0f}/acre")
 
+            # Peer observations strength (Day 3)
+            matching_obs: List[Dict[str, Any]] = []
+            if nearby_obs:
+                matching_obs = [
+                    o for o in nearby_obs
+                    if cls._crop_names_match(o.get("crop_name", ""), crop.name)
+                ]
+                if matching_obs:
+                    stages = [o.get("crop_growth_stage", "") for o in matching_obs if o.get("crop_growth_stage")]
+                    stage_str = f" ({stages[0]} stage)" if stages else ""
+                    strengths.insert(
+                        0,
+                        f"Peer Verified: {len(matching_obs)} neighboring farm(s) within 2.5 km are currently growing {crop.name}{stage_str}."
+                    )
+
             # Build risks
             risks = list(crop.vulnerabilities)
             if budget_status != "Within Budget":
                 risks.insert(0, f"Requires ₹{cost_per_acre - budget_per_acre:,.0f}/acre more than allocated budget")
             if water_status in ["Irrigation Deficit Risk", "Severe Water Inadequacy"]:
                 risks.insert(0, f"High risk: Farm water availability is '{req.water_availability.value}', crop requires '{crop.water_requirement.value}'")
+
+            # Monoculture vulnerability warning if crop dominates nearby cluster
+            if nearby_obs and len(nearby_obs) >= 3 and matching_obs:
+                dominance_count = len(matching_obs)
+                dominance_pct = (dominance_count / len(nearby_obs)) * 100.0
+                if dominance_pct >= 60.0:
+                    risks.insert(
+                        0,
+                        f"Local Monoculture Alert: {dominance_pct:.0f}% of nearby fields within 2.5 km are growing {crop.name}. High localized pest cluster risk."
+                    )
 
             item = CropRecommendationItem(
                 crop_name=crop.name,
@@ -304,12 +406,12 @@ class AgriSaarthiEngine:
         cls,
         req: FarmerProfileRequest,
         ranked_items: List[Tuple[CropProfile, float, CropRecommendationItem]],
+        nearby_obs: Optional[List[Dict[str, Any]]] = None,
     ) -> Tuple[List[CropRecommendationItem], List[CropRecommendationItem], List[str]]:
         """
         Separates into top recommendations (primary) and viable alternatives / hedges.
-        Appends transparent agricultural limitations.
+        Appends transparent agricultural limitations and local monoculture advisories.
         """
-        # Primary recommendations: items with score >= 60 and within or near budget
         primary: List[CropRecommendationItem] = []
         alternatives: List[CropRecommendationItem] = []
 
@@ -332,5 +434,20 @@ class AgriSaarthiEngine:
             "Pest & Weather Contingency: Maintain at least a 10-15% cash contingency reserve for unexpected pest outbreaks or sudden unseasonal rains during crop maturity.",
             "Certified Seeds: Always procure certified seeds from authorized state agricultural corporations or registered seed dealers with lot numbers."
         ]
+
+        # Area-level monoculture advisory
+        if nearby_obs and len(nearby_obs) >= 3:
+            crop_counts: Dict[str, int] = {}
+            for o in nearby_obs:
+                c_name = o.get("crop_name", "").strip().title()
+                if c_name:
+                    crop_counts[c_name] = crop_counts.get(c_name, 0) + 1
+            for c_name, count in crop_counts.items():
+                pct = (count / len(nearby_obs)) * 100.0
+                if pct >= 60.0:
+                    limitations.insert(
+                        0,
+                        f"Nearby Area Monoculture Advisory: {count}/{len(nearby_obs)} nearby farms within 2.5 km are cultivating {c_name} ({pct:.0f}% density). Implement crop rotation or trap cropping to disrupt pest vectors."
+                    )
 
         return primary, alternatives, limitations
