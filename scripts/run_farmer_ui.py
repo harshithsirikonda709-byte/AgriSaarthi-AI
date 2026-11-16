@@ -12,12 +12,21 @@ Uses Python standard library (http.server, sqlite3, urllib, hashlib) — zero ex
 
 import os
 import sys
+import io
+import re
 import json
 import logging
 import mimetypes
+import urllib.parse
+import urllib.request
 from urllib.parse import urlparse, parse_qs
 from http.server import HTTPServer, ThreadingHTTPServer, BaseHTTPRequestHandler
 from typing import Optional, Dict, Any
+
+try:
+    from gtts import gTTS
+except ImportError:
+    gTTS = None
 
 # Ensure project root is in sys.path
 PROJECT_ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -40,6 +49,10 @@ from agrisaarthi.chat_protocol import (
     TELUGU_SOIL_MAP,
     TELUGU_SEASON_MAP,
     TELUGU_WATER_MAP,
+    HINDI_CROPS,
+    HINDI_SOIL_MAP,
+    HINDI_SEASON_MAP,
+    HINDI_WATER_MAP,
 )
 from agrisaarthi.storage import (
     FarmerStorage,
@@ -51,7 +64,11 @@ from agrisaarthi.weather_service import fetch_weather_and_alerts
 logging.basicConfig(level=logging.INFO, format="%(asctime)s [%(levelname)s] %(message)s")
 logger = logging.getLogger("agrisaarthi.ui_server")
 
-PORT = int(os.getenv("AGRI_UI_PORT", "8080"))
+port_env = os.getenv("AGRI_UI_PORT") or os.getenv("AGRI_PORT")
+PORT = int(port_env) if port_env else 8080
+for _idx, _arg in enumerate(sys.argv):
+    if _arg == "--port" and _idx + 1 < len(sys.argv):
+        PORT = int(sys.argv[_idx + 1])
 WEB_DIR = os.path.join(PROJECT_ROOT, "web")
 
 _STORAGE_INSTANCE: Optional[FarmerStorage] = None
@@ -64,6 +81,93 @@ def get_storage() -> FarmerStorage:
     if _STORAGE_INSTANCE is None or (db_path and _STORAGE_INSTANCE.db_path != db_path):
         _STORAGE_INSTANCE = FarmerStorage(db_path=db_path)
     return _STORAGE_INSTANCE
+
+
+def sanitize_ai_reply_for_farmer(reply: str) -> str:
+    """
+    Sanitize AI reply so farmers only see verified, professional recommendations.
+    Strips internal Ollama notices, model availability debug banners, and LLM headers.
+    """
+    if not reply:
+        return ""
+    # Strip [Ollama Notice: ...] or ⚠️ *[Ollama Notice: ...]*
+    cleaned = re.sub(r'⚠️\s*\*\[Ollama Notice:[^\]]*\]\*\s*\n*', '', reply, flags=re.IGNORECASE)
+    cleaned = re.sub(r'\[Ollama Notice:[^\]]*\]\s*\n*', '', cleaned, flags=re.IGNORECASE)
+    # Strip 🤖 **[Ollama: ...]** headers
+    cleaned = re.sub(r'🤖\s*\*\*\[Ollama:[^\]]*\]\*\*\s*\n*', '', cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r'\*\*\[Ollama:[^\]]*\]\*\*\s*\n*', '', cleaned, flags=re.IGNORECASE)
+    # Strip model fallback notices or Ollama availability messages
+    cleaned = re.sub(r'⚠️\s*\*\[[^\]]*unavailable[^\]]*\]\*\s*\n*', '', cleaned, flags=re.IGNORECASE)
+    cleaned = re.sub(r'\[Notice:[^\]]*\]\s*\n*', '', cleaned, flags=re.IGNORECASE)
+    # Clean any leftover divider if it was separating LLM header from advisory
+    cleaned = re.sub(r'^\s*---\s*\n+', '', cleaned)
+    return cleaned.strip()
+
+
+def generate_tts_audio(text: str, lang: str = "te") -> bytes:
+    """
+    Generate natural Text-to-Speech MP3 audio for agricultural queries.
+    Uses gTTS with automatic chunking and fallback to direct Google TTS stream.
+    Supports Telugu ('te'), Hindi ('hi'), and English ('en').
+    """
+    clean = sanitize_ai_reply_for_farmer(text)
+    clean = re.sub(r"<[^>]+>", " ", clean)
+    clean = re.sub(r"[*_#`~>]", "", clean)
+    clean = re.sub(r"https?://\S+", "", clean)
+    clean = re.sub(r"\{[^\}]*\}", "", clean)
+    clean = re.sub(r"\s+", " ", clean).strip()
+
+    if not clean:
+        raise ValueError("Text cannot be empty for TTS synthesis.")
+
+    lang_code = "te"
+    if lang:
+        l = str(lang).lower().split("-")[0]
+        if l in ("te", "hi", "en"):
+            lang_code = l
+
+    # 1. Try gTTS first
+    if gTTS is not None:
+        try:
+            fp = io.BytesIO()
+            tts = gTTS(text=clean, lang=lang_code, slow=False)
+            tts.write_to_fp(fp)
+            data = fp.getvalue()
+            if data:
+                return data
+        except Exception as e:
+            logger.warning(f"gTTS error: {e}, falling back to direct stream")
+
+    # 2. Fallback to direct chunked Google Translate TTS HTTP stream
+    words = clean.split()
+    chunks = []
+    cur = ""
+    for w in words:
+        if len(cur) + len(w) + 1 <= 160:
+            cur = (cur + " " + w).strip()
+        else:
+            if cur:
+                chunks.append(cur)
+            cur = w
+    if cur:
+        chunks.append(cur)
+
+    audio_bytes = bytearray()
+    for chunk in chunks[:15]:
+        url = f"https://translate.google.com/translate_tts?ie=UTF-8&tl={lang_code}&client=tw-ob&q={urllib.parse.quote(chunk)}"
+        req = urllib.request.Request(
+            url,
+            headers={
+                "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36"
+            },
+        )
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            audio_bytes.extend(resp.read())
+
+    if not audio_bytes:
+        raise RuntimeError(f"Unable to generate TTS audio for language {lang_code}.")
+
+    return bytes(audio_bytes)
 
 
 class AgriFarmerUIHandler(BaseHTTPRequestHandler):
@@ -80,11 +184,25 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
 
     def _read_json_body(self) -> Dict[str, Any]:
         headers = getattr(self, "headers", None) or {}
-        content_length = int(headers.get("Content-Length", 0))
+        try:
+            content_length = int(headers.get("Content-Length", 0))
+        except (ValueError, TypeError):
+            content_length = 0
         if content_length <= 0:
             return {}
-        raw = self.rfile.read(content_length).decode("utf-8")
-        return json.loads(raw) if raw.strip() else {}
+        try:
+            raw = self.rfile.read(content_length).decode("utf-8")
+        except UnicodeDecodeError:
+            raise AuthValidationError("Request body must be valid UTF-8 text.")
+        if not raw.strip():
+            return {}
+        try:
+            parsed = json.loads(raw)
+        except (json.JSONDecodeError, ValueError) as e:
+            raise AuthValidationError(f"Invalid JSON in request body: {e}")
+        if not isinstance(parsed, dict):
+            raise AuthValidationError("Request payload must be a JSON object.")
+        return parsed
 
     def _extract_bearer_token(self) -> Optional[str]:
         headers = getattr(self, "headers", None) or {}
@@ -280,11 +398,27 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
             farmer = self._require_authenticated_farmer()
             if not farmer:
                 return
-            history = get_storage().get_advisory_history(farmer["id"], limit=10)
-            weather = fetch_weather_and_alerts(
-                state=farmer.get("state", ""),
-                district=farmer.get("district", ""),
-            )
+            try:
+                history = get_storage().get_advisory_history(farmer["id"], limit=10)
+            except Exception as e:
+                logger.warning(f"Failed to fetch advisory history: {e}")
+                history = []
+            try:
+                weather = fetch_weather_and_alerts(
+                    state=farmer.get("state", ""),
+                    district=farmer.get("district", ""),
+                )
+            except Exception as e:
+                logger.warning(f"Failed to fetch weather: {e}")
+                weather = {
+                    "available": False,
+                    "is_live": False,
+                    "state": farmer.get("state", ""),
+                    "district": farmer.get("district", ""),
+                    "message": "Weather service temporarily unavailable.",
+                    "current": None,
+                    "daily_forecast": [],
+                }
             self._send_json(
                 200,
                 {
@@ -293,6 +427,27 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
                     "weather": weather,
                 },
             )
+
+        elif route == "/api/tts":
+            try:
+                query = parse_qs(parsed.query)
+                text = (query.get("text", [""])[0] or "").strip()
+                lang = (query.get("lang", ["te"])[0] or "te").strip()
+                if not text:
+                    self._send_json(400, {"error": "Text parameter is required for speech synthesis."})
+                    return
+
+                audio_data = generate_tts_audio(text=text, lang=lang)
+                self.send_response(200)
+                self.send_header("Content-Type", "audio/mpeg")
+                self.send_header("Content-Length", str(len(audio_data)))
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.send_header("Cache-Control", "public, max-age=86400")
+                self.end_headers()
+                self.wfile.write(audio_data)
+            except Exception as e:
+                logger.exception(f"TTS GET endpoint error: {e}")
+                self._send_json(500, {"error": f"TTS synthesis failed: {e}"})
 
         else:
             self.send_error(404, "Not Found")
@@ -305,38 +460,95 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
             headers = getattr(self, "headers", None) or {}
             content_length = int(headers.get("Content-Length", 0))
             body = self.rfile.read(content_length).decode("utf-8")
+            norm_lang = None
             try:
                 data = json.loads(body)
-                text = data.get("text", "")
+                text = (data.get("text") or data.get("message") or "").strip()
                 sender = data.get("sender", "farmer_voice_demo")
+                req_lang = data.get("lang") or data.get("language") or data.get("response_language")
 
-                logger.info(f"Received query from UI: '{text[:60]}...' (sender={sender})")
-                reply = process_chat_message(text=text, sender=sender)
+                if req_lang:
+                    code = str(req_lang).lower().strip()
+                    if code.startswith("te") or "telugu" in code:
+                        norm_lang = "te"
+                    elif code.startswith("hi") or "hindi" in code:
+                        norm_lang = "hi"
+                    elif code.startswith("en") or "english" in code:
+                        norm_lang = "en"
+
+                from agrisaarthi.chat_protocol import get_session
+                session = get_session(sender)
+                if norm_lang:
+                    session.set_language(norm_lang)
+
+                logger.info(f"Received query from UI: '{text[:60]}...' (sender={sender}, lang={norm_lang})")
+                raw_reply = process_chat_message(text=text, sender=sender, language=norm_lang)
+                effective_lang = norm_lang or getattr(session, "preferred_language", "en")
                 model_name = os.getenv("OLLAMA_MODEL", "qwen2.5:0.5b")
+                clean_reply = sanitize_ai_reply_for_farmer(raw_reply)
 
                 # If authenticated farmer is using voice/chat, store in their advisory history
                 token = self._extract_bearer_token()
-                if token and text.strip():
+                if token and text:
                     farmer = get_storage().get_farmer_by_token(token)
                     if farmer:
                         get_storage().add_advisory_history(
                             farmer_id=farmer["id"],
                             advisory_type="voice_chat",
-                            query_summary=text.strip(),
-                            result_summary=reply[:240],
-                            payload={"sender": sender, "model": model_name},
+                            query_summary=text,
+                            result_summary=clean_reply[:240],
+                            payload={"sender": sender, "model": model_name, "language": effective_lang},
                         )
 
-                self._send_json(200, {"reply": reply, "model": model_name})
+                self._send_json(200, {
+                    "reply": clean_reply,
+                    "model": model_name,
+                    "language": effective_lang,
+                    "debug_info": {
+                        "model": model_name,
+                        "raw_length": len(raw_reply),
+                        "sender": sender,
+                        "language": effective_lang
+                    }
+                })
             except Exception as e:
                 logger.exception(f"Error handling UI chat request: {e}")
-                err_msg = str(e)
-                friendly_reply = (
-                    f"⚠️ **గమనిక (System Notice)**: క్షమించండి, విశ్లేషణ సమయంలో లోపం ఏర్పడింది: {err_msg}."
-                    f"\n\nదయచేసి మీ ప్రశ్నను మళ్ళీ పంపండి లేదా Ollama రన్ అవుతుందో లేదో సరిచూసుకోండి."
-                    f"\n\n*(Error processing query: {err_msg}. Please retry or check that Ollama is running.)*"
-                )
-                self._send_json(200, {"reply": friendly_reply, "error": err_msg})
+                err_lang = norm_lang or (str(req_lang).lower() if req_lang else "en")
+                if "te" in err_lang:
+                    friendly_reply = "మీ పంట సలహా సహాయకుడు ప్రస్తుతం అందుబాటులో లేదు. దయచేసి కాసేపటి తర్వాత మళ్ళీ ప్రయత్నించండి."
+                elif "hi" in err_lang:
+                    friendly_reply = "आपका फसल सलाह सहायक अस्थायी रूप से अनुपलब्ध है। कृपया कुछ समय बाद पुनः प्रयास करें।"
+                else:
+                    friendly_reply = "Your crop advisory assistant is temporarily unavailable. Please try again shortly."
+
+                self._send_json(200, {
+                    "reply": friendly_reply,
+                    "debug_info": {
+                        "error": str(e),
+                        "language": err_lang
+                    }
+                })
+
+        elif route == "/api/tts":
+            try:
+                data = self._read_json_body()
+                text = (data.get("text") or "").strip()
+                lang = (data.get("lang") or data.get("language") or "te").strip()
+                if not text:
+                    self._send_json(400, {"error": "Text is required for speech synthesis."})
+                    return
+
+                audio_data = generate_tts_audio(text=text, lang=lang)
+                self.send_response(200)
+                self.send_header("Content-Type", "audio/mpeg")
+                self.send_header("Content-Length", str(len(audio_data)))
+                self.send_header("Access-Control-Allow-Origin", "*")
+                self.send_header("Cache-Control", "public, max-age=86400")
+                self.end_headers()
+                self.wfile.write(audio_data)
+            except Exception as e:
+                logger.exception(f"TTS POST endpoint error: {e}")
+                self._send_json(500, {"error": f"TTS synthesis failed: {e}"})
 
         elif route == "/api/auth/register":
             try:
@@ -346,6 +558,9 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
                     identifier=data.get("identifier", ""),
                     password=data.get("password", ""),
                     preferred_language=data.get("preferred_language", "te"),
+                    email=data.get("email"),
+                    phone_number=data.get("phone_number") or data.get("phone"),
+                    confirm_password=data.get("confirm_password"),
                 )
                 self._send_json(201, {"farmer": farmer, "token": token})
             except AuthValidationError as e:
@@ -364,6 +579,8 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
                 self._send_json(200, {"farmer": farmer, "token": token})
             except InvalidCredentialsError as e:
                 self._send_json(401, {"error": str(e)})
+            except AuthValidationError as e:
+                self._send_json(400, {"error": str(e)})
             except Exception as e:
                 logger.exception(f"Login error: {e}")
                 self._send_json(500, {"error": "Server error during login."})
@@ -372,6 +589,76 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
             token = self._extract_bearer_token()
             get_storage().revoke_session(token)
             self._send_json(200, {"logged_out": True})
+
+        elif route == "/api/auth/send-otp":
+            try:
+                data = self._read_json_body()
+                identifier = (data.get("identifier") or "").strip()
+                if not identifier:
+                    raise AuthValidationError("Please enter your mobile number, username, or email.")
+                otp_code = get_storage().create_otp(identifier)
+                self._send_json(200, {
+                    "success": True,
+                    "message": "OTP sent successfully.",
+                    "otp": otp_code,
+                    "identifier": identifier,
+                })
+            except AuthValidationError as e:
+                self._send_json(400, {"error": str(e)})
+            except Exception as e:
+                logger.exception(f"Send OTP error: {e}")
+                self._send_json(500, {"error": "Server error while sending OTP."})
+
+        elif route == "/api/auth/verify-otp":
+            try:
+                data = self._read_json_body()
+                identifier = (data.get("identifier") or "").strip()
+                otp = (data.get("otp") or data.get("otp_code") or "").strip()
+                if not identifier:
+                    raise AuthValidationError("Please enter your mobile number, username, or email.")
+                if not otp:
+                    raise AuthValidationError("Please enter the 6-digit verification OTP.")
+                farmer, token = get_storage().verify_otp_and_login(identifier, otp)
+                self._send_json(200, {
+                    "success": True,
+                    "farmer": farmer,
+                    "token": token,
+                    "message": "OTP verified successfully.",
+                })
+            except AuthValidationError as e:
+                self._send_json(400, {"error": str(e)})
+            except InvalidCredentialsError as e:
+                self._send_json(401, {"error": str(e)})
+            except Exception as e:
+                logger.exception(f"Verify OTP error: {e}")
+                self._send_json(500, {"error": "Server error during OTP verification."})
+
+        elif route in ("/api/auth/reset-password", "/api/auth/set-password", "/api/auth/change-password"):
+            try:
+                data = self._read_json_body()
+                new_password = (data.get("new_password") or data.get("password") or "").strip()
+                identifier = (data.get("identifier") or "").strip()
+                token = self._extract_bearer_token()
+                farmer = get_storage().get_farmer_by_token(token) if token else None
+
+                if farmer:
+                    get_storage().update_farmer_password(farmer["id"], new_password)
+                elif identifier:
+                    get_storage().reset_farmer_password(identifier, new_password)
+                else:
+                    raise AuthValidationError("Authentication or user identifier is required to reset password.")
+
+                self._send_json(200, {
+                    "success": True,
+                    "message": "Password updated successfully."
+                })
+            except AuthValidationError as e:
+                self._send_json(400, {"error": str(e)})
+            except InvalidCredentialsError as e:
+                self._send_json(401, {"error": str(e)})
+            except Exception as e:
+                logger.exception(f"Password update error: {e}")
+                self._send_json(500, {"error": "Server error while updating password."})
 
         elif route == "/api/farmer/profile":
             self._handle_update_profile()
@@ -427,15 +714,27 @@ class AgriFarmerUIHandler(BaseHTTPRequestHandler):
             rec_resp = AgriSaarthiEngine.execute(req_model)
             rec_dict = rec_resp.to_dict()
 
-            # Attach Telugu localized metadata for each crop
+            # Attach English, Telugu, and Hindi localized metadata for each crop
             for group_key in ("primary_recommendations", "alternative_recommendations"):
                 for item in rec_dict.get(group_key, []):
-                    te_meta = TELUGU_CROPS.get(item["crop_name"], {})
-                    item["name_te"] = te_meta.get("name_te", item["crop_name"])
-                    item["category_te"] = te_meta.get("category_te", item["category"])
+                    cname = item.get("crop_name", "")
+                    te_meta = TELUGU_CROPS.get(cname, {})
+                    hi_meta = HINDI_CROPS.get(cname, {})
+                    item["name_en"] = cname
+                    item["name_te"] = te_meta.get("name_te", cname)
+                    item["name_hi"] = hi_meta.get("name_hi", item.get("hindi_name") or cname)
+                    item["category_en"] = item.get("category", "")
+                    item["category_te"] = te_meta.get("category_te", item.get("category", ""))
+                    item["category_hi"] = hi_meta.get("category_hi", item.get("category", ""))
+                    item["sowing_notes_en"] = item.get("sowing_notes", "") or "Follow recommended local sowing window and balanced NPK fertilizer schedule."
                     item["sowing_notes_te"] = te_meta.get("sowing_notes", "")
+                    item["sowing_notes_hi"] = hi_meta.get("sowing_notes_hi", "")
+                    item["advantage_en"] = (item.get("key_strengths") or ["High regional suitability and market demand."])[0]
                     item["advantage_te"] = te_meta.get("advantage_te", "")
+                    item["advantage_hi"] = hi_meta.get("advantage_hi", "")
+                    item["risk_en"] = (item.get("risk_factors") or ["Standard pest and weather monitoring recommended."])[0]
                     item["risk_te"] = te_meta.get("risk_te", "")
+                    item["risk_hi"] = hi_meta.get("risk_hi", "")
 
             # Save to farmer history if authenticated
             if farmer:

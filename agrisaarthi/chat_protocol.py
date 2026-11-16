@@ -158,6 +158,112 @@ TELUGU_WATER_MAP: Dict[WaterAvailability, str] = {
     WaterAvailability.HIGH: "సమృద్ధిగా నీరు (కాలువ నీరు)",
 }
 
+# =============================================================================
+# Trilingual Support: Hindi Mappings & Knowledge
+# =============================================================================
+
+HINDI_CROPS: Dict[str, Dict[str, Any]] = {
+    "Paddy / Rice": {
+        "name_hi": "धान / चावल",
+        "category_hi": "अनाज",
+        "sowing_notes": "पानी की प्रचुर उपलब्धता होने पर ही रोपाई करें। यदि पानी कम हो तो सीधी बुवाई (DSR) तकनीक अपनाएं।",
+        "advantage_hi": "सरकारी न्यूनतम समर्थन मूल्य (MSP) और सुनिश्चित मंडी खरीद।",
+        "risk_hi": "अधिक जल खपत, तना छेदक और शीथ ब्लाइट कीट का खतरा।",
+    },
+    "Wheat": {
+        "name_hi": "गेहूं",
+        "category_hi": "अनाज",
+        "sowing_notes": "1 से 20 नवंबर के बीच बुवाई करें। पहली सिंचाई (CRI अवस्था - 21 दिन) बेहद जरूरी है।",
+        "advantage_hi": "सरकारी खरीद की गारंटी, कम विपणन जोखिम और गुणवत्तापूर्ण भूसा।",
+        "risk_hi": "मार्च में तेज गर्मी और पछुआ हवाओं से उपज प्रभावित होने का जोखिम।",
+    },
+    "Cotton (Bt Cotton)": {
+        "name_hi": "कपास",
+        "category_hi": "व्यावसायिक फसल",
+        "sowing_notes": "काली भारी मिट्टी के लिए सर्वोत्तम। शुरुआत में ही फेरोमोन ट्रैप लगाएं।",
+        "advantage_hi": "उच्च बाजार मांग और अधिक शुद्ध लाभ की संभावना।",
+        "risk_hi": "गुलाबी सुंडी (पिंक बॉलवर्म) का प्रकोप और कीटनाशक का अधिक खर्च।",
+    },
+    "Mustard / Rapeseed": {
+        "name_hi": "सरसों",
+        "category_hi": "तिलहन",
+        "sowing_notes": "रबी मौसम में कम सिंचाई (2-3 हल्की सिंचाई) में तैयार होती है।",
+        "advantage_hi": "कम पानी की आवश्यकता, कम लागत और जल्दी पकने वाली फसल।",
+        "risk_hi": "बादल छाए रहने पर माहू (एफिड्स) कीट का प्रकोप हो सकता है।",
+    },
+    "Chickpea / Bengal Gram (Chana)": {
+        "name_hi": "चना",
+        "category_hi": "दलहन",
+        "sowing_notes": "बुवाई से पहले राइजोबियम कल्चर से बीज उपचार अवश्य करें।",
+        "advantage_hi": "मिट्टी में नाइट्रोजन स्थिर कर भूमि की उर्वरता बढ़ाता है, सूखा सहने में सक्षम।",
+        "risk_hi": "फली छेदक कीट का प्रकोप और जलभराव वाली मिट्टी में नुकसान।",
+    },
+    "Pearl Millet (Bajra)": {
+        "name_hi": "बाजरा",
+        "category_hi": "मोटा अनाज",
+        "sowing_notes": "कम वर्षा और हल्की रेतीली-दोमट मिट्टी में आसानी से उगाया जा सकता है।",
+        "advantage_hi": "उत्कृष्ट सूखा सहनशीलता और बहुत कम लागत।",
+        "risk_hi": "व्यावसायिक नकदी फसलों की तुलना में प्रति क्विंटल सीमित आय।",
+    },
+    "Soybean": {
+        "name_hi": "सोयाबीन",
+        "category_hi": "तिलहन",
+        "sowing_notes": "जल निकासी हेतु चौड़ी क्यारी और कूंड़ (BBF) विधि से बुवाई करें।",
+        "advantage_hi": "कम अवधि (90-100 दिन) की फसल, रबी की अगली फसल के लिए खेत जल्दी खाली होता है।",
+        "risk_hi": "फली बनते समय लंबे समय तक सूखा रहने पर उत्पादन में भारी गिरावट।",
+    },
+    "Groundnut / Peanut": {
+        "name_hi": "मूंगफली",
+        "category_hi": "तिलहन",
+        "sowing_notes": "रेतीली दोमट या हल्की लाल मिट्टी उत्तम है। भारी चिकनी मिट्टी में सुइयां (पेग्स) नहीं धंस पातीं।",
+        "advantage_hi": "बाजार में अच्छा भाव और पशुओं के लिए पौष्टिक हरा चारा।",
+        "risk_hi": "बीज की अधिक लागत और सफेद लट (व्हाइट ग्रब) की समस्या।",
+    },
+    "Maize / Corn": {
+        "name_hi": "मक्का",
+        "category_hi": "अनाज",
+        "sowing_notes": "पोल्ट्री दाना और स्टार्च उद्योगों में सालभर भारी मांग। खेत में जलभराव न होने दें।",
+        "advantage_hi": "अधिक बायोमास उपज और खरीफ व रबी दोनों मौसमों के लिए उपयुक्त।",
+        "risk_hi": "फॉल आर्मीवॉर्म कीट का प्रकोप, यदि समय पर उपचार न किया जाए।",
+    },
+    "Green Gram / Moong": {
+        "name_hi": "मूंग",
+        "category_hi": "दलहन",
+        "sowing_notes": "ग्रीष्मकालीन और खरीफ दोनों में उपयुक्त। 60-65 दिनों में तैयार।",
+        "advantage_hi": "अति अल्पकालिक फसल, मिट्टी की उर्वरता में सुधार और बढ़िया दाल का भाव।",
+        "risk_hi": "पीला मोज़ेक वायरस और फूल आते समय तेज बारिश से नुकसान।",
+    },
+    "Sugarcane": {
+        "name_hi": "गन्ना",
+        "category_hi": "व्यावसायिक फसल",
+        "sowing_notes": "गहरी उपजाऊ मिट्टी और सालभर प्रचुर पानी की व्यवस्था जरूरी है।",
+        "advantage_hi": "एफआरपी (FRP) मूल्य समर्थन और पेड़ी (रेटून) फसल से अगले वर्ष बिना बुवाई लाभ।",
+        "risk_hi": "लंबी अवधि (10-14 माह) तक खेत बंधा रहता है और अत्यधिक जल की आवश्यकता होती है।",
+    },
+}
+
+HINDI_SOIL_MAP: Dict[SoilType, str] = {
+    SoilType.BLACK: "काली मिट्टी",
+    SoilType.RED: "लाल मिट्टी",
+    SoilType.ALLUVIAL: "जलोढ़ मिट्टी",
+    SoilType.SANDY_LOAM: "बलुई दोमट मिट्टी",
+    SoilType.CLAYEY: "चिकनी मिट्टी",
+    SoilType.LATERITE: "लेटराइट मिट्टी",
+}
+
+HINDI_SEASON_MAP: Dict[Season, str] = {
+    Season.KHARIF: "खरीफ (मानसून)",
+    Season.RABI: "रबी (शीतकाल)",
+    Season.ZAID: "जायद (ग्रीष्मकाल)",
+    Season.YEAR_ROUND: "वार्षिक (वर्षपर्यंत)",
+}
+
+HINDI_WATER_MAP: Dict[WaterAvailability, str] = {
+    WaterAvailability.LOW: "सीमित / वर्षा आधारित",
+    WaterAvailability.MODERATE: "मध्यम / नलकूप व बोरवेल",
+    WaterAvailability.HIGH: "प्रचुर / नहर सिंचाई",
+}
+
 TELUGU_TO_ASCII_DIGITS = str.maketrans("౦౧౨౩౪౫౬౭౮౯", "0123456789")
 
 TELUGU_WORD_TO_NUMBER: Dict[str, float] = {
@@ -238,8 +344,15 @@ class SessionContext:
         self.active_crop_problem = None
 
     def set_language(self, lang: str) -> None:
-        if lang in ("en", "te"):
-            self.preferred_language = lang
+        if not lang:
+            return
+        code = str(lang).lower().strip()
+        if code.startswith("te") or "telugu" in code:
+            self.preferred_language = "te"
+        elif code.startswith("hi") or "hindi" in code:
+            self.preferred_language = "hi"
+        elif code.startswith("en") or "english" in code:
+            self.preferred_language = "en"
 
 
 _SESSIONS: Dict[str, SessionContext] = {}
@@ -267,10 +380,15 @@ def is_telugu_script(text: str) -> bool:
     return bool(re.search(r"[\u0C00-\u0C7F]", text))
 
 
+def is_hindi_script(text: str) -> bool:
+    """Check if string contains any Devanagari Unicode characters (\u0900-\u097F)."""
+    return bool(re.search(r"[\u0900-\u097F]", text))
+
+
 def detect_language(text: str, session: Optional[SessionContext] = None) -> str:
     """
-    Detect whether text is in Telugu ('te') or English ('en').
-    Prioritizes explicit language directives, Telugu script, and transliterated terms.
+    Detect whether text is in Telugu ('te'), Hindi ('hi'), or English ('en').
+    Prioritizes explicit language directives, native scripts, and transliterated terms.
     Falls back to active session preference.
     """
     lower = text.lower().strip()
@@ -292,9 +410,22 @@ def detect_language(text: str, session: Optional[SessionContext] = None) -> str:
     if any(t in lower for t in telugu_triggers):
         return "te"
 
+    # Explicit switch to Hindi
+    hindi_triggers = [
+        "हिंदी में उत्तर दें", "हिंदी में बताएं", "हिंदी में बोलें", "हिंदी में",
+        "हिंदी", "reply in hindi", "speak in hindi", "hindi please", "in hindi",
+        "switch to hindi", "answer in hindi",
+    ]
+    if any(t in lower for t in hindi_triggers):
+        return "hi"
+
     # Telugu script detection
     if is_telugu_script(text):
         return "te"
+
+    # Hindi / Devanagari script detection
+    if is_hindi_script(text):
+        return "hi"
 
     # Transliterated Telugu phrases
     telugu_transliterated = [
@@ -304,9 +435,17 @@ def detect_language(text: str, session: Optional[SessionContext] = None) -> str:
     if any(w in lower for w in telugu_transliterated):
         return "te"
 
-    # Fallback to session preference if set and user didn't write purely English sentence
-    if session and session.preferred_language == "te":
-        return "te"
+    # Transliterated Hindi phrases
+    hindi_transliterated = [
+        "bataiye", "batao", "fasal", "kisan", "kheti", "mitti", "paani",
+        "kharif me", "rabi me", "lagat", "munafa",
+    ]
+    if any(w in lower for w in hindi_transliterated):
+        return "hi"
+
+    # Fallback to session preference if set
+    if session and session.preferred_language in ("te", "hi"):
+        return session.preferred_language
 
     return "en"
 
@@ -323,6 +462,11 @@ def is_pure_language_switch(text: str) -> Optional[str]:
         "తెలుగులో", "తెలుగు", "reply in telugu", "speak in telugu", "in telugu",
         "telugu please", "switch to telugu", "telugu lo cheppandi", "telugu lo",
     ]
+    hi_phrases = [
+        "हिंदी में उत्तर दें", "हिंदी में बताएं", "हिंदी में बोलें", "हिंदी में",
+        "हिंदी", "reply in hindi", "speak in hindi", "in hindi", "hindi please",
+        "switch to hindi",
+    ]
 
     for p in en_phrases:
         if lower == p or (lower.startswith(p) and len(lower.replace(p, "").strip(" .,!?:-")) == 0):
@@ -330,6 +474,9 @@ def is_pure_language_switch(text: str) -> Optional[str]:
     for p in te_phrases:
         if lower == p or (lower.startswith(p) and len(lower.replace(p, "").strip(" .,!?:-")) == 0):
             return "te"
+    for p in hi_phrases:
+        if lower == p or (lower.startswith(p) and len(lower.replace(p, "").strip(" .,!?:-")) == 0):
+            return "hi"
 
     return None
 
@@ -356,6 +503,7 @@ def is_greeting(text: str) -> bool:
         "hi", "hello", "hey", "namaste", "namaskar", "help", "start",
         "who are you", "what can you do", "introduce yourself", "greetings",
         "నమస్కారం", "నమస్తే", "హలో", "సహాయం", "స్వాగతం", "బాగున్నారా",
+        "नमस्ते", "नमस्कार", "प्रणाम", "राम राम", "मदद", "स्वागत", "हैलो",
     ]
     return clean in greetings or (len(words) <= 3 and any(words[0] == g for g in greetings))
 
@@ -1014,6 +1162,18 @@ def _handle_follow_up_query_deterministic(query: str, session: SessionContext, l
                 "- **సీజన్** (ఖరీఫ్/వానాకాలం, రబీ/యాసంగి, జైద్/వేసవి)\n"
                 "- **పెట్టుబడి బడ్జెట్** (రూపాయల్లో)"
             )
+        if lang == "hi":
+            return (
+                "🌾 **सक्रिय खेत प्रोफ़ाइल नहीं मिली**\n\n"
+                "इस सत्र में आपकी पूर्व फसल सिफारिशों का विवरण उपलब्ध नहीं है।\n\n"
+                "सटीक और व्यक्तिगत सिफारिशों के लिए, कृपया अपने खेत का विवरण साझा करें:\n"
+                "- **राज्य / जिला** (उदा: मध्य प्रदेश, उत्तर प्रदेश, पंजाब आदि)\n"
+                "- **भूमि का आकार** (एकड़ में)\n"
+                "- **मिट्टी का प्रकार** (काली मिट्टी, लाल मिट्टी, जलोढ़, बलुई दोमट)\n"
+                "- **सिंचाई सुविधा** (कम/वर्षा आधारित, मध्यम/बोरवेल, उच्च/नहर)\n"
+                "- **फसल मौसम** (खरीफ, रबी, जायद)\n"
+                "- **बजट** (रुपये में)"
+            )
 
         return (
             "🌾 **No Active Farm Profile Found**\n\n"
@@ -1247,7 +1407,7 @@ def format_acp_recommendation_telugu(response: RecommendationResponse, req: Farm
             sowing_notes = crop_meta.get("sowing_notes", "")
 
             lines.extend([
-                f"**{idx}. {name_te}** ({crop.crop_name}) — *అనుకూలత స్కోర్: {crop.suitability_score}/100*",
+                f"**{idx}. {name_te}** — *అనుకూలత స్కోర్: {crop.suitability_score}/100*",
                 f"- **పంట వర్గం**: {category_te} | **బడ్జెట్ సాధ్యత**: అనుకూలం",
                 f"- **ఎకరానికి ఖర్చు (అంచనా)**: ₹{crop.estimated_cost_per_acre_inr:,.0f} *(మొత్తం {req.land_size_acres:.1f} ఎకరాలకు: ₹{crop.total_estimated_cost_inr:,.0f})*",
                 f"- **ఆశించే దిగుబడి**: {crop.expected_yield_range_quintals_per_acre[0]} - {crop.expected_yield_range_quintals_per_acre[1]} క్వింటాళ్లు/ఎకరానికి",
@@ -1266,7 +1426,7 @@ def format_acp_recommendation_telugu(response: RecommendationResponse, req: Farm
             alt_meta = TELUGU_CROPS.get(alt.crop_name, {})
             alt_name_te = alt_meta.get("name_te", alt.crop_name)
             lines.append(
-                f"- **{alt_name_te}** ({alt.crop_name}): స్కోర్ `{alt.suitability_score}/100`, "
+                f"- **{alt_name_te}**: స్కోర్ `{alt.suitability_score}/100`, "
                 f"ఎకరానికి ఖర్చు: ₹{alt.estimated_cost_per_acre_inr:,.0f}, అంచనా నికర లాభం: ₹{alt.estimated_net_profit_per_acre_inr:,.0f}/ఎకరం"
             )
         lines.append("")
@@ -1284,14 +1444,81 @@ def format_acp_recommendation_telugu(response: RecommendationResponse, req: Farm
     return "\n".join(lines)
 
 
+def format_acp_recommendation_hindi(response: RecommendationResponse, req: FarmerProfileRequest) -> str:
+    """Formats the decision response into simple, farmer-friendly Hindi for ACP."""
+    budget_per_acre = req.budget_inr / req.land_size_acres
+    soil_hi = HINDI_SOIL_MAP.get(req.soil_type, req.soil_type.value)
+    season_hi = HINDI_SEASON_MAP.get(req.season, req.season.value)
+    water_hi = HINDI_WATER_MAP.get(req.water_availability, req.water_availability.value)
+
+    lines = [
+        f"### 🌾 अग्रिसारथी फसल सिफारिश: {req.state}",
+        f"**खेत का विवरण**: {req.land_size_acres:.1f} एकड़ | **मौसम**: {season_hi} | **मिट्टी**: {soil_hi} | **पानी**: {water_hi}",
+        f"**कुल बजट**: ₹{req.budget_inr:,.0f} (प्रति एकड़ ₹{budget_per_acre:,.0f})",
+        "",
+        "---",
+        "#### 🏆 मुख्य अनुशंसित फसलें",
+    ]
+
+    if not response.primary_recommendations:
+        lines.append("*आपकी मिट्टी और पानी की परिस्थितियों के अनुसार बिना जोखिम वाली कोई उपयुक्त फसल नहीं मिली।*")
+    else:
+        for idx, crop in enumerate(response.primary_recommendations, 1):
+            crop_meta = HINDI_CROPS.get(crop.crop_name, {})
+            name_hi = crop_meta.get("name_hi", crop.hindi_name or crop.crop_name)
+            category_hi = crop_meta.get("category_hi", crop.category)
+            adv_hi = crop_meta.get("advantage_hi", crop.key_strengths[0] if crop.key_strengths else "स्थानीय परिस्थितियों के अनुकूल")
+            risk_hi = crop_meta.get("risk_hi", crop.risk_factors[0] if crop.risk_factors else "सामान्य कीट व मौसम निगरानी आवश्यक")
+            sowing_notes_hi = crop_meta.get("sowing_notes_hi", "")
+
+            lines.extend([
+                f"**{idx}. {name_hi}** — *उपयुक्तता स्कोर: {crop.suitability_score}/100*",
+                f"- **फसल श्रेणी**: {category_hi} | **बजट स्थिति**: उपयुक्त",
+                f"- **लागत / एकड़**: ₹{crop.estimated_cost_per_acre_inr:,.0f} *(कुल {req.land_size_acres:.1f} एकड़: ₹{crop.total_estimated_cost_inr:,.0f})*",
+                f"- **अनुमानित पैदावार**: {crop.expected_yield_range_quintals_per_acre[0]} - {crop.expected_yield_range_quintals_per_acre[1]} क्विंटल/एकड़",
+                f"- **अनुमानित शुद्ध लाभ**: ₹{crop.estimated_net_profit_per_acre_inr:,.0f}/एकड़",
+                f"- **पानी की आवश्यकता**: {water_hi} के साथ संगत",
+                f"- **मुख्य लाभ**: {adv_hi}",
+                f"- **संभावित जोखिम**: {risk_hi}",
+            ])
+            if sowing_notes_hi:
+                lines.append(f"- **बुवाई व प्रबंधन सुझाव**: {sowing_notes_hi}")
+            lines.append("")
+
+    if response.alternative_recommendations:
+        lines.append("#### 🔄 वैकल्पिक फसल विकल्प")
+        for alt in response.alternative_recommendations:
+            alt_meta = HINDI_CROPS.get(alt.crop_name, {})
+            alt_name_hi = alt_meta.get("name_hi", alt.hindi_name or alt.crop_name)
+            lines.append(
+                f"- **{alt_name_hi}**: स्कोर `{alt.suitability_score}/100`, "
+                f"लागत: ₹{alt.estimated_cost_per_acre_inr:,.0f}/एकड़, अनुमानित लाभ: ₹{alt.estimated_net_profit_per_acre_inr:,.0f}/एकड़"
+            )
+        lines.append("")
+
+    lines.append("#### 🧠 निर्णय विश्लेषण व कारण")
+    for step in response.step_by_step_reasoning:
+        lines.append(f"- {step}")
+
+    lines.append("")
+    lines.append("#### ⚠️ किसानों के लिए महत्वपूर्ण सलाह व सीमाएं")
+    lines.append("- **मृदा परीक्षण**: बुवाई से पूर्व सॉइल हेल्थ कार्ड (SHC) से मिट्टी की जांच कराएं और पोषक तत्वों की पूर्ति करें।")
+    lines.append("- **मंडी भाव**: स्थानीय मंडियों में कीमतें गुणवत्ता और मांग पर निर्भर करती हैं। यह सरकारी MSP पर आधारित अनुमान है।")
+    lines.append("- **मौसम पूर्वानुमान**: बुवाई की तारीखें स्थानीय मौसम विभाग (IMD) की वर्षा चेतावनियों के अनुसार तय करें।")
+
+    return "\n".join(lines)
+
+
 def format_acp_recommendation(
     response: RecommendationResponse,
     req: FarmerProfileRequest,
     lang: str = "en",
 ) -> str:
-    """Formats the decision response into structured Markdown for ACP (English or Telugu)."""
+    """Formats the decision response into structured Markdown for ACP (English, Telugu, or Hindi)."""
     if lang == "te":
         return format_acp_recommendation_telugu(response, req)
+    if lang == "hi":
+        return format_acp_recommendation_hindi(response, req)
 
     budget_per_acre = req.budget_inr / req.land_size_acres
     lines = [
@@ -1308,7 +1535,7 @@ def format_acp_recommendation(
     else:
         for idx, crop in enumerate(response.primary_recommendations, 1):
             lines.extend([
-                f"**{idx}. {crop.crop_name}** ({crop.hindi_name}) — *Suitability Score: {crop.suitability_score}/100*",
+                f"**{idx}. {crop.crop_name}** — *Suitability Score: {crop.suitability_score}/100*",
                 f"- **Category**: {crop.category} | **Budget Status**: {crop.budget_feasibility}",
                 f"- **Cost / Acre**: ₹{crop.estimated_cost_per_acre_inr:,.0f} *(Total for {req.land_size_acres:.1f} ac: ₹{crop.total_estimated_cost_inr:,.0f})*",
                 f"- **Expected Yield**: {crop.expected_yield_range_quintals_per_acre[0]} - {crop.expected_yield_range_quintals_per_acre[1]} quintals/acre",
@@ -1323,7 +1550,7 @@ def format_acp_recommendation(
         lines.append("#### 🔄 Diversification & Hedging Options")
         for alt in response.alternative_recommendations:
             lines.append(
-                f"- **{alt.crop_name}** ({alt.hindi_name}): Score `{alt.suitability_score}/100`, "
+                f"- **{alt.crop_name}**: Score `{alt.suitability_score}/100`, "
                 f"Cost: ₹{alt.estimated_cost_per_acre_inr:,.0f}/ac, Est. Net Profit: ₹{alt.estimated_net_profit_per_acre_inr:,.0f}/ac"
             )
         lines.append("")
@@ -1381,6 +1608,19 @@ def _generate_welcome_message(lang: str = "en") -> str:
             "*'తెలంగాణలో 4 ఎకరాల నల్ల నేల ఉంది, ఖరీఫ్ సీజన్, బోరు బావి నీరు, బడ్జెట్ 1 లక్ష'*"
         )
 
+    if lang == "hi":
+        return (
+            "🌾 **नमस्ते! मैं अग्रिसारथी AI (AgriSaarthi AI) हूँ**, आपका विश्वसनीय कृषि निर्णय सलाहकार।\n\n"
+            "मैं भारतीय किसानों को उनकी भूमि के आकार, मिट्टी के प्रकार, सिंचाई सुविधा, फसल मौसम और बजट के अनुसार "
+            "सर्वाधिक उपयुक्त, जलवायु-सहिष्णु और लाभदायक फसलों का चयन करने में सहायता करता हूँ।\n\n"
+            "**आप मुझसे तीन तरह से बातचीत कर सकते हैं**:\n"
+            "1. **फसल सिफारिश**: अपने खेत का विवरण बताएं (राज्य/जिला, एकड़, मिट्टी, पानी, मौसम, बजट)।\n"
+            "2. **संदेह और प्रश्न**: फसलों की पैदावार, लागत, लाभ या जोखिम के बारे में पूछें।\n"
+            "3. **डेटा और मानक**: CACP/ICAR मानकों और गणना विधियों के बारे में जानें।\n\n"
+            "**उदाहरण संदेश**:\n"
+            "*'मध्य प्रदेश में 4 एकड़ काली मिट्टी है, खरीफ मौसम, बोरवेल सिंचाई, बजट 1 लाख'*"
+        )
+
     return (
         "🌾 **Namaste! I am AgriSaarthi AI**, your autonomous agricultural decision assistant.\n\n"
         "I assist Indian farmers in choosing the most suitable, climate-resilient, and profitable crops "
@@ -1407,6 +1647,15 @@ def _generate_missing_fields_message_deterministic(missing: List[str], original_
 
     clean_keys = [m.split()[0] for m in missing]
 
+    missing_hi_map = {
+        "state": "राज्य या ज़िला (उदा: मध्य प्रदेश, पंजाब, महाराष्ट्र, वारंगल)",
+        "season": "मौसम ('खरीफ' / मानसून, 'रबी' / शीतकाल, 'जायद' / ग्रीष्म)",
+        "soil_type": "मिट्टी का प्रकार ('काली मिट्टी', 'लाल मिट्टी', 'जलोढ़ मिट्टी', 'बलुई दोमट')",
+        "water_availability": "पानी की उपलब्धता ('सीमित / वर्षा आधारित', 'मध्यम / बोरवेल', 'प्रचुर / नहर')",
+        "land_size_acres": "भूमि का आकार एकड़ में (उदा: 2 एकड़)",
+        "budget_inr": "खेती का बजट (उदा: ₹40,000 या 1 लाख)",
+    }
+
     if lang == "te":
         if len(clean_keys) == 1:
             desc = missing_te_map.get(clean_keys[0], clean_keys[0])
@@ -1422,6 +1671,23 @@ def _generate_missing_fields_message_deterministic(missing: List[str], original_
             f"🌾 **అగ్రిసారథి AI — అసంపూర్ణ వ్యవసాయ వివరాలు**\n\n"
             f"మీ పొలానికి సరిగ్గా సరిపోయే పంటల సిఫార్సు కోసం, దయచేసి కింది వివరాలను తెలియజేయండి:\n{items_str}\n\n"
             f"**మీ సందేశం**: *\"{original_text}\"*"
+        )
+
+    if lang == "hi":
+        if len(clean_keys) == 1:
+            desc = missing_hi_map.get(clean_keys[0], clean_keys[0])
+            return (
+                f"🌾 **अग्रिसारथी AI — कृषि विवरण आवश्यक**\n\n"
+                f"आपके खेत के अन्य विवरण दर्ज कर लिए गए हैं। कृपया अपनी **{desc}** की जानकारी दें।\n\n"
+                f"यह जानकारी मिलते ही आपके खेत के लिए सर्वाधिक उपयुक्त फसल सिफारिश उपलब्ध करा दी जाएगी।"
+            )
+
+        missing_items = [f"- **{missing_hi_map.get(k, k)}**" for k in clean_keys]
+        items_str = "\n".join(missing_items)
+        return (
+            f"🌾 **अग्रिसारथी AI — अपूर्ण खेत विवरण**\n\n"
+            f"आपके खेत के लिए सही फसल चुनने हेतु कृपया निम्नलिखित शेष विवरण बताएं:\n{items_str}\n\n"
+            f"**आपका संदेश**: *\"{original_text}\"*"
         )
 
     # English friendly mappings
@@ -1731,6 +1997,7 @@ def process_chat_message(
     engine_cls=AgriSaarthiEngine,
     ctx: Optional[Context] = None,
     ollama_client: Optional[OllamaClient] = None,
+    language: Optional[str] = None,
 ) -> str:
     """
     Main entry point for ACP messages.
@@ -1744,12 +2011,28 @@ def process_chat_message(
     session = get_session(sender)
     client = ollama_client or OllamaClient()
 
-    if not clean_text:
-        return _generate_welcome_message(lang=session.preferred_language)
+    # Authoritative Language Resolution:
+    # 1. In-message language switch commands take precedence
+    pure_switch = is_pure_language_switch(clean_text)
+    if pure_switch:
+        lang = pure_switch
+    elif language:
+        # 2. Authoritative parameter from caller / UI selector takes strict priority
+        code = str(language).lower().strip()
+        if code.startswith("te") or "telugu" in code:
+            lang = "te"
+        elif code.startswith("hi") or "hindi" in code:
+            lang = "hi"
+        else:
+            lang = "en"
+    else:
+        # 3. Fallback to automated text detection and session preference
+        lang = detect_language(clean_text, session)
 
-    # 0. Check language detection and explicit language switches
-    lang = detect_language(clean_text, session)
     session.set_language(lang)
+
+    if not clean_text:
+        return _generate_welcome_message(lang=lang)
 
     # Check for pure language switch command
     pure_switch = is_pure_language_switch(clean_text)
@@ -1855,9 +2138,10 @@ def process_chat_message(
     is_ready, status_desc = client.check_availability()
     if is_ready:
         try:
+            target_lang_name = "Telugu (తెలుగు)" if lang == "te" else ("Hindi (हिंदी)" if lang == "hi" else "English")
             prompt = (
                 f"FARMER QUERY: \"{clean_text}\"\n\n"
-                f"TASK: Answer the farmer's question in {'Telugu (తెలుగు)' if lang == 'te' else 'English'}. "
+                f"TASK: Answer the farmer's question in {target_lang_name}. "
                 f"If they are asking what to grow, explain what farm information is needed (state, land size, soil, water, season, budget). "
                 f"If they describe a pest, disease, or symptom, state uncertainty openly and advise consulting the local Krishi Vigyan Kendra (KVK) or agricultural officer. "
                 f"Do NOT invent chemical fertilizer dosages or unverified market prices."

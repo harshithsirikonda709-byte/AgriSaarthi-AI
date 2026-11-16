@@ -247,13 +247,14 @@ def build_system_prompt(lang: str = "en") -> str:
       - Distinguishing verified retrieved reference evidence from general knowledge
       - Never hallucinating chemical pesticide dosages, prices, schemes, or sources
       - Transparently stating uncertainty and recommending KVK/expert physical inspection
-      - Telugu and English language instruction
+      - Telugu, Hindi, and English language instruction
     """
-    lang_instruction = (
-        "Respond in fluent, respectful, and simple Telugu (తెలుగు) easily understood by rural farmers. Avoid overly complex jargon."
-        if lang == "te"
-        else "Respond in clear, accessible, farmer-friendly English. Avoid academic jargon."
-    )
+    if lang == "te":
+        lang_instruction = "Respond in fluent, respectful, and simple Telugu (తెలుగు) easily understood by rural farmers. Avoid overly complex jargon."
+    elif lang == "hi":
+        lang_instruction = "Respond in fluent, respectful, and simple Hindi (हिंदी) easily understood by rural farmers. Avoid overly complex jargon."
+    else:
+        lang_instruction = "Respond in clear, accessible, farmer-friendly English. Avoid academic jargon."
 
     return f"""You are AgriSaarthi AI, a responsible, trustworthy agricultural decision assistant for Indian farmers.
 
